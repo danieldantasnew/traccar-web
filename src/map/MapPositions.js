@@ -113,7 +113,7 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
           'text-anchor': 'bottom',
           'text-offset': [0, -2 * iconScale],
           'text-font': findFonts(map),
-          'text-size': 12,
+          'text-size': 14,
         },
         paint: {
           'text-halo-color': 'white',
@@ -152,7 +152,7 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
         'icon-size': iconScale,
         'text-field': '{point_count_abbreviated}',
         'text-font': findFonts(map),
-        'text-size': 14,
+        'text-size': 16,
       },
     });
 

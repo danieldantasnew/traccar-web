@@ -68,6 +68,7 @@ const ServerPage = () => {
       body: JSON.stringify(item),
     });
 
+
     if (response.ok) {
       dispatch(sessionActions.updateServer(await response.json()));
       navigate(-1);
