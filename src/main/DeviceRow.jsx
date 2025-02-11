@@ -27,8 +27,8 @@ dayjs.extend(relativeTime);
 
 const useStyles = makeStyles((theme) => ({
   icon: {
-    width: '25px',
-    height: '25px',
+    width: '28px',
+    height: '28px',
     filter: 'brightness(0) invert(1)',
   },
   batteryText: {
@@ -48,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
   neutral: {
     color: theme.palette.neutral.main,
   },
+  attention: {
+    color: '#FFC200'
+  }
 }));
 
 const DeviceRow = ({ data, index, style }) => {
@@ -109,9 +112,9 @@ const DeviceRow = ({ data, index, style }) => {
               <Tooltip title={`${t('positionIgnition')}: ${formatBoolean(position.attributes.ignition, t)}`}>
                 <IconButton size="small">
                   {position.attributes.ignition ? (
-                    <EngineIcon width={20} height={20} className={classes.success} />
+                    <EngineIcon width={22} height={22} className={classes.success} />
                   ) : (
-                    <EngineIcon width={20} height={20} className={classes.neutral} />
+                    <EngineIcon width={22} height={22} className={classes.attention} />
                   )}
                 </IconButton>
               </Tooltip>

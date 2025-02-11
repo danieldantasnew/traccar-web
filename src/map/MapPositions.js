@@ -16,7 +16,7 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
 
   const theme = useTheme();
   const desktop = useMediaQuery(theme.breakpoints.up('md'));
-  const iconScale = useAttributePreference('iconScale', desktop ? 0.75 : 1);
+  const iconScale = useAttributePreference('iconScale', desktop ? 1 : 1.6);
 
   const devices = useSelector((state) => state.devices.items);
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
@@ -131,7 +131,7 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
         ],
         layout: {
           'icon-image': 'direction',
-          'icon-size': iconScale,
+          'icon-size': iconScale * 1.06,
           'icon-allow-overlap': true,
           'icon-rotate': ['get', 'rotation'],
           'icon-rotation-alignment': 'map',

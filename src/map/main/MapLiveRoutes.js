@@ -34,11 +34,12 @@ const MapLiveRoutes = () => {
         type: 'line',
         layout: {
           'line-join': 'round',
-          'line-cap': 'round',
+          'line-cap': 'square',
         },
         paint: {
           'line-color': ['get', 'color'],
-          'line-width': 2,
+          'line-width': 3.6,
+          'line-dasharray': [1, 1],
         },
       });
 
@@ -70,7 +71,7 @@ const MapLiveRoutes = () => {
             coordinates: history[deviceId],
           },
           properties: {
-            color: devices[deviceId].attributes['web.reportColor'] || theme.palette.geometry.main,
+            color: '#FF2000',
           },
         })),
       });
