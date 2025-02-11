@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
     width: "28px",
     height: "28px",
     filter: "brightness(0) invert(1)",
+    padding: '4px'
   },
   batteryText: {
     fontSize: "0.75rem",
