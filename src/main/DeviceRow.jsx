@@ -18,6 +18,7 @@ import BatteryCharging20Icon from "@mui/icons-material/BatteryCharging20";
 import ErrorIcon from "@mui/icons-material/Error";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import SpeedRoundedIcon from '@mui/icons-material/SpeedRounded';
 import { devicesActions } from "../store";
 import {
   formatAlarm,
@@ -30,7 +31,6 @@ import { useTranslation } from "../common/components/LocalizationProvider";
 import { mapIconKey, mapIcons } from "../map/core/preloadImages";
 import { useAdministrator } from "../common/util/permissions";
 import EngineIcon from "../resources/images/data/engine.svg?react";
-import SpeedIcon from "../resources/images/data/speed.svg?react";
 import { useAttributePreference } from "../common/util/preferences";
 
 dayjs.extend(relativeTime);
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     width: "28px",
     height: "28px",
     filter: "brightness(0) invert(1)",
-    padding: '4px'
+    padding: '4px',
   },
   batteryText: {
     fontSize: "0.75rem",
@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.neutral.main,
   },
   attention: {
-    color: "#FFC200",
+    color: theme.palette.warning.light,
   },
 }));
 
@@ -124,7 +124,7 @@ const DeviceRow = ({ data, index, style }) => {
                 title={`Em movimento`}
               >
                 <IconButton size="small">
-                  <SpeedIcon width={22} height={22} className={classes.error}/>
+                  <SpeedRoundedIcon width={22} height={22} className={classes.error}/>
                 </IconButton>
               </Tooltip>
             ) : (
