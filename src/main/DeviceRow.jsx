@@ -79,7 +79,7 @@ const DeviceRow = ({ data, index, style }) => {
   };
 
   return (
-    <div style={style}>
+    <div style={style} onClick={()=> console.log('sdsds')}>
       <ListItemButton
         key={item.id}
         onClick={() => dispatch(devicesActions.selectId(item.id))}

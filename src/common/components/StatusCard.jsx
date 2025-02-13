@@ -46,6 +46,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'flex-end',
     alignItems: 'flex-start',
+    minHeight: '240px',
+    objectFit: 'cover'
   },
   mediaButton: {
     color: theme.palette.primary.contrastText,
