@@ -27,6 +27,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PendingIcon from '@mui/icons-material/Pending';
 
+import AccessTimeFilledRoundedIcon from '@mui/icons-material/AccessTimeFilledRounded';
+import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded';
+import SpeedRoundedIcon from '@mui/icons-material/SpeedRounded';
+import SignpostRoundedIcon from '@mui/icons-material/SignpostRounded';
+import CropFreeRoundedIcon from '@mui/icons-material/CropFreeRounded';
+import GpsFixedRoundedIcon from '@mui/icons-material/GpsFixedRounded';
+import BatteryChargingFullRoundedIcon from '@mui/icons-material/BatteryChargingFullRounded';
+
 import { useTranslation } from './LocalizationProvider';
 import RemoveDialog from './RemoveDialog';
 import PositionValue from './PositionValue';
@@ -39,7 +47,11 @@ import { useAttributePreference } from '../util/preferences';
 const useStyles = makeStyles((theme) => ({
   card: {
     pointerEvents: 'auto',
-    width: theme.dimensions.popupMaxWidth,
+    minWidth: '420px',
+    [theme.breakpoints.down('sm')]: { 
+      minWidth: '0',
+      width: '80vw', // Para telas menores (celular)
+    },
   },
   media: {
     height: theme.dimensions.popupImageHeight,
@@ -102,16 +114,42 @@ const useStyles = makeStyles((theme) => ({
   }),
 }));
 
-const StatusRow = ({ name, content }) => {
+const getIcon = (name) => {
+  switch (name) {
+    case 'positionFixTime':
+      return <AccessTimeFilledRoundedIcon width={22} height={22} />
+    case 'positionAddress':
+      return <LocationOnRoundedIcon width={22} height={22} />
+    case 'positionSpeed':
+      return <SpeedRoundedIcon width={22} height={22} />
+    case 'deviceTotalDistance':
+      return <GpsFixedRoundedIcon width={22} height={22} />
+    case 'positionCourse':
+      return <SignpostRoundedIcon width={22} height={22} />
+    case 'deviceIdentifier':
+      return <CropFreeRoundedIcon width={22} height={22} />
+    case 'positionMotion':
+      return <SpeedRoundedIcon width={22} height={22} />
+    case 'positionBatteryLevel':
+      return <BatteryChargingFullRoundedIcon width={22} height={22} />
+    case 'positionIgnition':
+      return <AccessTimeFilledRoundedIcon width={22} height={22} />
+    default:
+      return '';
+  }
+}
+
+const StatusRow = ({ name, content, nameOriginal }) => {
   const classes = useStyles();
 
   return (
     <TableRow>
       <TableCell className={classes.cell}>
-        <Typography variant="body2">{name}</Typography>
+        <Typography variant="body2">{getIcon(nameOriginal)} {name}</Typography>
       </TableCell>
       <TableCell className={classes.cell}>
-        <Typography variant="body2" color="textSecondary">{content}</Typography>
+        <Typography variant="body2" color="textSecondary">{content}
+        </Typography>
       </TableCell>
     </TableRow>
   );
@@ -222,6 +260,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                         <StatusRow
                           key={key}
                           name={positionAttributes[key]?.name || key}
+                          nameOriginal={positionAttributes[key] ? positionAttributes[key]?.nameOriginal : ''}
                           content={(
                             <PositionValue
                               position={position}
