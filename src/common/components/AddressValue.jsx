@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from '@mui/material';
-import { useTranslation } from './LocalizationProvider';
 import { useCatch } from '../../reactHelper';
 
 const AddressValue = ({ latitude, longitude, originalAddress }) => {
-  const t = useTranslation();
 
   const addressEnabled = useSelector((state) => state.session.server.geocoderEnabled);
 

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
-import Draggable from 'react-draggable';
 import {
   Card,
   CardContent,
@@ -46,11 +45,14 @@ import { useAttributePreference } from '../util/preferences';
 const useStyles = makeStyles((theme) => ({
   card: {
     pointerEvents: 'auto',
+    position: 'fixed',
     height: '100vh',
-    minWidth: '500px',
+    width: '30vw',
+    [theme.breakpoints.down('lg')]: { 
+      width: '40vw',
+    },
     [theme.breakpoints.down('sm')]: { 
-      minWidth: '0',
-      width: '80vw', // Para telas menores (celular)
+      width: '100vw',
     },
   },
   media: {
@@ -99,18 +101,12 @@ const useStyles = makeStyles((theme) => ({
   root: ({ desktopPadding }) => ({
     pointerEvents: 'none',
     position: 'fixed',
-    zIndex: 5,
+    zIndex: 100,
     left: '0',
-    [theme.breakpoints.up('md')]: {
-      top: '0',
-      // left: `calc(50% + ${desktopPadding} / 2)`,
-      // bottom: theme.spacing(3),
-    },
+    top: '0',
     [theme.breakpoints.down('md')]: {
-      // left: '50%',
-      bottom: `calc(${theme.spacing(3)} + ${theme.dimensions.bottomBarHeight}px)`,
+
     },
-    // transform: 'translateX(-50%)',
   }),
 }));
 
@@ -221,9 +217,6 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
     <>
       <div className={classes.root}>
         {device && (
-          <Draggable
-            handle={`.${classes.media}, .${classes.header}`}
-          >
             <Card elevation={3} className={classes.card}>
               {deviceImage ? (
                 <CardMedia
@@ -329,7 +322,6 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                 </Tooltip>
               </CardActions>
             </Card>
-          </Draggable>
         )}
       </div>
       {position && (
