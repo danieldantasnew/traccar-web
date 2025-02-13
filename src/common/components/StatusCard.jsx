@@ -26,15 +26,14 @@ import PublishIcon from '@mui/icons-material/Publish';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PendingIcon from '@mui/icons-material/Pending';
-
 import AccessTimeFilledRoundedIcon from '@mui/icons-material/AccessTimeFilledRounded';
+import PowerSettingsNewRoundedIcon from '@mui/icons-material/PowerSettingsNewRounded';
 import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded';
 import SpeedRoundedIcon from '@mui/icons-material/SpeedRounded';
 import SignpostRoundedIcon from '@mui/icons-material/SignpostRounded';
 import CropFreeRoundedIcon from '@mui/icons-material/CropFreeRounded';
-import GpsFixedRoundedIcon from '@mui/icons-material/GpsFixedRounded';
+import MapIcon from '@mui/icons-material/Map';
 import BatteryChargingFullRoundedIcon from '@mui/icons-material/BatteryChargingFullRounded';
-
 import { useTranslation } from './LocalizationProvider';
 import RemoveDialog from './RemoveDialog';
 import PositionValue from './PositionValue';
@@ -47,7 +46,8 @@ import { useAttributePreference } from '../util/preferences';
 const useStyles = makeStyles((theme) => ({
   card: {
     pointerEvents: 'auto',
-    minWidth: '420px',
+    height: '100vh',
+    minWidth: '500px',
     [theme.breakpoints.down('sm')]: { 
       minWidth: '0',
       width: '80vw', // Para telas menores (celular)
@@ -58,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'flex-end',
     alignItems: 'flex-start',
+    minHeight: '240px',
   },
   mediaButton: {
     color: theme.palette.primary.contrastText,
@@ -99,39 +100,40 @@ const useStyles = makeStyles((theme) => ({
     pointerEvents: 'none',
     position: 'fixed',
     zIndex: 5,
-    left: '50%',
+    left: '0',
     [theme.breakpoints.up('md')]: {
-      left: `calc(50% + ${desktopPadding} / 2)`,
-      bottom: theme.spacing(3),
+      top: '0',
+      // left: `calc(50% + ${desktopPadding} / 2)`,
+      // bottom: theme.spacing(3),
     },
     [theme.breakpoints.down('md')]: {
-      left: '50%',
+      // left: '50%',
       bottom: `calc(${theme.spacing(3)} + ${theme.dimensions.bottomBarHeight}px)`,
     },
-    transform: 'translateX(-50%)',
+    // transform: 'translateX(-50%)',
   }),
 }));
 
 const getIcon = (name) => {
   switch (name) {
     case 'positionFixTime':
-      return <AccessTimeFilledRoundedIcon width={22} height={22} />
+      return <AccessTimeFilledRoundedIcon style={{fill: '#753F32'}} width={22} height={22} />
     case 'positionAddress':
-      return <LocationOnRoundedIcon width={22} height={22} />
+      return <LocationOnRoundedIcon style={{fill: 'red'}} width={22} height={22} />
     case 'positionSpeed':
-      return <SpeedRoundedIcon width={22} height={22} />
+      return <SpeedRoundedIcon style={{fill: '#283639'}} width={22} height={22} />
     case 'deviceTotalDistance':
-      return <GpsFixedRoundedIcon width={22} height={22} />
+      return <MapIcon style={{fill: 'brown'}} width={22} height={22} />
     case 'positionCourse':
-      return <SignpostRoundedIcon width={22} height={22} />
+      return <SignpostRoundedIcon style={{fill: 'blue'}} width={22} height={22} />
     case 'deviceIdentifier':
-      return <CropFreeRoundedIcon width={22} height={22} />
+      return <CropFreeRoundedIcon style={{fill: 'orange'}} width={22} height={22} />
     case 'positionMotion':
-      return <SpeedRoundedIcon width={22} height={22} />
+      return <SpeedRoundedIcon style={{fill: 'green'}} width={22} height={22} />
     case 'positionBatteryLevel':
-      return <BatteryChargingFullRoundedIcon width={22} height={22} />
+      return <BatteryChargingFullRoundedIcon style={{fill: '#005C53'}} width={22} height={22} />
     case 'positionIgnition':
-      return <AccessTimeFilledRoundedIcon width={22} height={22} />
+      return <PowerSettingsNewRoundedIcon style={{fill: '#042940'}} width={22} height={22} />
     default:
       return '';
   }
@@ -143,7 +145,7 @@ const StatusRow = ({ name, content, nameOriginal }) => {
   return (
     <TableRow>
       <TableCell className={classes.cell}>
-        <Typography variant="body2">{getIcon(nameOriginal)} {name}</Typography>
+        <Typography variant="body2" style={{display: 'flex', gap: '.3rem', alignItems: 'center'}}>{getIcon(nameOriginal)} {name}</Typography>
       </TableCell>
       <TableCell className={classes.cell}>
         <Typography variant="body2" color="textSecondary">{content}

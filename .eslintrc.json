@@ -14,6 +14,8 @@
   ],
   "ignorePatterns": ["legacy/", "build/", "switcher.js", "theme.js"],
   "rules": {
+    "allowTemplateLiterals": false,
+    "linebreak-style":"off",
     "max-len": [0],
     "no-shadow": [0],
     "no-return-assign": [0],
@@ -38,3 +40,4 @@
     "react/prop-types": [0]
   }
 }
+

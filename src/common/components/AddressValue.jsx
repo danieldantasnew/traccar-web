@@ -29,9 +29,9 @@ const AddressValue = ({ latitude, longitude, originalAddress }) => {
     return address;
   }
   if (addressEnabled) {
-    return (<Link href="#" onClick={showAddress}>{t('sharedShowAddress')}</Link>);
+    return showAddress();
   }
-  return '';
+  return address;
 };
 
 export default AddressValue;

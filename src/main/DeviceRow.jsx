@@ -1,6 +1,6 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import makeStyles from "@mui/styles/makeStyles";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import makeStyles from '@mui/styles/makeStyles';
 import {
   IconButton,
   Tooltip,
@@ -8,30 +8,30 @@ import {
   ListItemAvatar,
   ListItemText,
   ListItemButton,
-} from "@mui/material";
-import BatteryFullIcon from "@mui/icons-material/BatteryFull";
-import BatteryChargingFullIcon from "@mui/icons-material/BatteryChargingFull";
-import Battery60Icon from "@mui/icons-material/Battery60";
-import BatteryCharging60Icon from "@mui/icons-material/BatteryCharging60";
-import Battery20Icon from "@mui/icons-material/Battery20";
-import BatteryCharging20Icon from "@mui/icons-material/BatteryCharging20";
-import ErrorIcon from "@mui/icons-material/Error";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
+} from '@mui/material';
+import BatteryFullIcon from '@mui/icons-material/BatteryFull';
+import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull';
+import Battery60Icon from '@mui/icons-material/Battery60';
+import BatteryCharging60Icon from '@mui/icons-material/BatteryCharging60';
+import Battery20Icon from '@mui/icons-material/Battery20';
+import BatteryCharging20Icon from '@mui/icons-material/BatteryCharging20';
+import ErrorIcon from '@mui/icons-material/Error';
+import PowerSettingsNewRoundedIcon from '@mui/icons-material/PowerSettingsNewRounded';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import SpeedRoundedIcon from '@mui/icons-material/SpeedRounded';
-import { devicesActions } from "../store";
+import { devicesActions } from '../store';
 import {
   formatAlarm,
   formatBoolean,
   formatPercentage,
   formatStatus,
   getStatusColor,
-} from "../common/util/formatter";
-import { useTranslation } from "../common/components/LocalizationProvider";
-import { mapIconKey, mapIcons } from "../map/core/preloadImages";
-import { useAdministrator } from "../common/util/permissions";
-import EngineIcon from "../resources/images/data/engine.svg?react";
-import { useAttributePreference } from "../common/util/preferences";
+} from '../common/util/formatter';
+import { useTranslation } from '../common/components/LocalizationProvider';
+import { mapIconKey, mapIcons } from '../map/core/preloadImages';
+import { useAdministrator } from '../common/util/permissions';
+import { useAttributePreference } from '../common/util/preferences';
 
 dayjs.extend(relativeTime);
 
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
   error: {
     color: theme.palette.error.main,
-    fill: theme.palette.success.main
+    fill: theme.palette.error.main
   },
   neutral: {
     color: theme.palette.neutral.main,
@@ -124,7 +124,7 @@ const DeviceRow = ({ data, index, style }) => {
                 title={`Em movimento`}
               >
                 <IconButton size="small">
-                  <SpeedRoundedIcon width={22} height={22} className={classes.error}/>
+                  <SpeedRoundedIcon width={22} height={22} className={classes.success}/>
                 </IconButton>
               </Tooltip>
             ) : (
@@ -151,16 +151,16 @@ const DeviceRow = ({ data, index, style }) => {
               >
                 <IconButton size="small">
                   {position.attributes.ignition ? (
-                    <EngineIcon
+                    <PowerSettingsNewRoundedIcon
                       width={22}
                       height={22}
                       className={classes.success}
                     />
                   ) : (
-                    <EngineIcon
+                    <PowerSettingsNewRoundedIcon
                       width={22}
                       height={22}
-                      className={classes.attention}
+                      className={classes.error}
                     />
                   )}
                 </IconButton>

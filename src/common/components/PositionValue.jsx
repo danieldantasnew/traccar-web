@@ -43,6 +43,7 @@ const PositionValue = ({ position, property, attribute }) => {
   const volumeUnit = useAttributePreference('volumeUnit');
   const coordinateFormat = usePreference('coordinateFormat');
 
+
   const formatValue = () => {
     switch (key) {
       case 'fixTime':
