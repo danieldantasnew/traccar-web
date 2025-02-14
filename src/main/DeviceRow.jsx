@@ -96,7 +96,7 @@ const DeviceRow = ({ data, index, style }) => {
   };
 
   return (
-    <div style={style} onClick={()=> console.log('sdsds')}>
+    <div style={style}>
       <ListItemButton
         key={item.id}
         onClick={() => dispatch(devicesActions.selectId(item.id))}

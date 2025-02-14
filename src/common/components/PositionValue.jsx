@@ -29,7 +29,6 @@ import DriverValue from './DriverValue';
 
 const PositionValue = ({ position, property, attribute }) => {
   const t = useTranslation();
-
   const deviceReadonly = useDeviceReadonly();
 
   const device = useSelector((state) => state.devices.items[position.deviceId]);
@@ -95,11 +94,15 @@ const PositionValue = ({ position, property, attribute }) => {
   };
 
   if (key === 'address') {
-    return <AddressValue latitude={position.latitude} longitude={position.longitude} originalAddress={value} />;
+    return <AddressValue
+    latitude={position.latitude}
+    longitude={position.longitude}
+    originalAddress={position.address}
+  />;
   }
 
   if (value === undefined || value === null) {
-    return '';
+    return ' ';
   }
 
   switch (key) {
