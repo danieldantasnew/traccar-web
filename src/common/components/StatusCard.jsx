@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     pointerEvents: "auto",
     position: "fixed",
     height: "100vh",
-    width: "30vw",
+    width: "42vw",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
@@ -51,11 +51,10 @@ const useStyles = makeStyles((theme) => ({
     padding: '4px',
   },
   media: {
-    height: theme.dimensions.popupImageHeight,
     display: "flex",
     justifyContent: "flex-end",
     alignItems: "flex-start",
-    maxHeight: "30vh",
+    maxHeight: "35vh",
     height: "100%",
   },
   mediaButton: {
@@ -68,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "flex-start",
     padding: theme.spacing(1, 1, 0, 2),
     backgroundColor: "#e9e9e9",
-    maxHeight: "30vh",
+    maxHeight: "35vh",
     height: "100%",
     fontSize: "1.4rem",
   },
@@ -176,22 +175,22 @@ const StatusCard = ({
                 >
                   <Card className={classes.deviceName}>{device.name}</Card>
                   <IconButton
-                    size="small"
+                    size="medium"
                     onClick={onClose}
                     onTouchStart={onClose}
                   >
-                    <CloseIcon fontSize="small" className={classes.mediaButton} />
+                    <CloseIcon fontSize="medium" className={classes.mediaButton} />
                   </IconButton>
                 </CardMedia>
               ) : (
                 <div className={classes.header}>
                   <div>{device.name}</div>
                   <IconButton
-                    size="small"
+                    size="medium"
                     onClick={onClose}
                     onTouchStart={onClose}
                   >
-                    <CloseIcon fontSize="small" />
+                    <CloseIcon fontSize="medium" />
                   </IconButton>
                 </div>
               )}
