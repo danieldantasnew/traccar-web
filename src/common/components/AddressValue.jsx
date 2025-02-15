@@ -7,6 +7,7 @@ const AddressValue = ({ latitude, longitude, originalAddress }) => {
   const addressEnabled = useSelector((state) => state.session.server.geocoderEnabled);
 
   const [address, setAddress] = useState();
+  const [textWhileNoAddress, setTextWhileNoAddress] = useState(false)
 
   useEffect(() => {
     setAddress(originalAddress);
@@ -17,6 +18,12 @@ const AddressValue = ({ latitude, longitude, originalAddress }) => {
     const response = await fetch(`/api/server/geocode?${query.toString()}`);
     if (response.ok) {
       setAddress(await response.text());
+      if(!address) {
+        setTextWhileNoAddress('Não foi possível encontrar o endereço')
+      }
+      else {
+        setTextWhileNoAddress(false);
+      }
     } else {
       throw Error(await response.text());
     }
@@ -25,6 +32,7 @@ const AddressValue = ({ latitude, longitude, originalAddress }) => {
   if (address) {
     return address;
   }
+  if(textWhileNoAddress) return textWhileNoAddress;
   if (addressEnabled) {
     return showAddress();
   }
