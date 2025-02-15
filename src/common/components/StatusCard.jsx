@@ -168,37 +168,39 @@ const StatusCard = ({
       <div className={classes.root}>
         {device && (
           <Card elevation={3} className={classes.card}>
-            {deviceImage ? (
-              <CardMedia
-                className={classes.media}
-                image={`/api/media/${device.uniqueId}/${deviceImage}`}
-              >
-                <Card className={classes.deviceName}>{device.name}</Card>
-                <IconButton
-                  size="small"
-                  onClick={onClose}
-                  onTouchStart={onClose}
+            <div>
+              {deviceImage ? (
+                <CardMedia
+                  className={classes.media}
+                  image={`/api/media/${device.uniqueId}/${deviceImage}`}
                 >
-                  <CloseIcon fontSize="small" className={classes.mediaButton} />
-                </IconButton>
-              </CardMedia>
-            ) : (
-              <div className={classes.header}>
-                <div>{device.name}</div>
-                <IconButton
-                  size="small"
-                  onClick={onClose}
-                  onTouchStart={onClose}
-                >
-                  <CloseIcon fontSize="small" />
-                </IconButton>
-              </div>
-            )}
-            {position && (
-              <CardContent className={classes.content}>
-                <StatusCardDetails position={position} />
-              </CardContent>
-            )}
+                  <Card className={classes.deviceName}>{device.name}</Card>
+                  <IconButton
+                    size="small"
+                    onClick={onClose}
+                    onTouchStart={onClose}
+                  >
+                    <CloseIcon fontSize="small" className={classes.mediaButton} />
+                  </IconButton>
+                </CardMedia>
+              ) : (
+                <div className={classes.header}>
+                  <div>{device.name}</div>
+                  <IconButton
+                    size="small"
+                    onClick={onClose}
+                    onTouchStart={onClose}
+                  >
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+                </div>
+              )}
+              {position && (
+                <CardContent className={classes.content}>
+                  <StatusCardDetails position={position} />
+                </CardContent>
+              )}
+            </div>
             <CardActions classes={{ root: classes.actions }} disableSpacing>
               <Tooltip title={t("sharedExtra")}>
                 <IconButton
