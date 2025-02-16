@@ -3,40 +3,43 @@ import { useSelector } from 'react-redux';
 import { useCatch } from '../../reactHelper';
 
 const AddressValue = ({ latitude, longitude, originalAddress }) => {
-
   const addressEnabled = useSelector((state) => state.session.server.geocoderEnabled);
 
-  const [address, setAddress] = useState();
-  const [textWhileNoAddress, setTextWhileNoAddress] = useState(false)
+  const [address, setAddress] = useState(originalAddress);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     setAddress(originalAddress);
+    setErrorMessage("");
   }, [latitude, longitude, originalAddress]);
 
-  const showAddress = useCatch(async () => {
-    const query = new URLSearchParams({ latitude, longitude });
-    const response = await fetch(`/api/server/geocode?${query.toString()}`);
-    if (response.ok) {
-      setAddress(await response.text());
-      if(!address) {
-        setTextWhileNoAddress('Não foi possível encontrar o endereço')
+  useEffect(() => {
+    if (!address && addressEnabled) {
+      fetchAddress();
+    }
+  }, [address, addressEnabled]);
+
+  const fetchAddress = useCatch(async () => {
+    try {
+      const query = new URLSearchParams({ latitude, longitude });
+      const response = await fetch(`/api/server/geocode?${query.toString()}`);
+      
+      if (response.ok) {
+        const data = await response.text();
+        if (data) {
+          setAddress(data);
+        } else {
+          setErrorMessage("Não foi possível encontrar o endereço");
+        }
+      } else {
+        throw new Error("Erro ao buscar endereço");
       }
-      else {
-        setTextWhileNoAddress(false);
-      }
-    } else {
-      throw Error(await response.text());
+    } catch (error) {
+      setErrorMessage(error.message);
     }
   });
 
-  if (address) {
-    return address;
-  }
-  if(textWhileNoAddress) return textWhileNoAddress;
-  if (addressEnabled) {
-    return showAddress();
-  }
-  return address;
+  return <>{address || errorMessage || "Carregando endereço..."}</>;
 };
 
 export default AddressValue;
