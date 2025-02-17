@@ -26,6 +26,7 @@ import { devicesActions } from "../../store";
 import { useCatch, useCatchCallback } from "../../reactHelper";
 import { useAttributePreference } from "../util/preferences";
 import StatusCardDetails from "./StatusCardDetails";
+import PowerSettingsNewRoundedIcon from "@mui/icons-material/PowerSettingsNewRounded";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -44,11 +45,21 @@ const useStyles = makeStyles((theme) => ({
       width: "100vw",
     },
   },
-  deviceName: {
-    position: 'absolute',
-    left: '.5rem',
-    top: '.3rem',
-    padding: '4px',
+  ignitionState: {
+    position: "absolute",
+    left: "6px",
+    top: "6px",
+    padding: "6px",
+    display: "flex",
+    alignItems: "center",
+    gap: ".3rem",
+    backgroundColor: "transparent",
+    borderRadius: ".5rem",
+    boxShadow: "none",
+    "& p": {
+      fontWeight: "500",
+      fontSize: ".9rem",
+    },
   },
   media: {
     display: "flex",
@@ -57,18 +68,28 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: "35vh",
     height: "100%",
   },
+  red: {
+    fill: "red",
+    border: "2px solid red",
+    color: "red",
+  },
+  green: {
+    fill: "green",
+    border: "2px solid green",
+    color: "green",
+  },
   mediaButton: {
     color: theme.palette.primary.contrastText,
     mixBlendMode: "difference",
   },
   header: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     alignItems: "flex-start",
-    padding: theme.spacing(1, 1, 0, 2),
-    backgroundColor: "#e9e9e9",
     maxHeight: "35vh",
     height: "100%",
+    padding: theme.spacing(1, 1, 0, 2),
+    backgroundColor: "#e9e9e9",
     fontSize: "1.4rem",
   },
   content: {
@@ -91,6 +112,24 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("md")]: {},
   }),
 }));
+
+const IgnitionState = ({ position, classes }) => {
+  if (!position) return null;
+  if (position.attributes.ignition || position.attributes.motion)
+    return (
+      <Card className={`${classes.ignitionState} ${classes.green}`}>
+        <PowerSettingsNewRoundedIcon width={18} height={18} />
+        <Typography>Ligado</Typography>
+      </Card>
+    );
+
+  return (
+    <Card className={`${classes.ignitionState} ${classes.red}`}>
+      <PowerSettingsNewRoundedIcon width={18} height={18} />
+      <Typography>Desligado</Typography>
+    </Card>
+  );
+};
 
 const StatusCard = ({
   deviceId,
@@ -173,24 +212,31 @@ const StatusCard = ({
                   className={classes.media}
                   image={`/api/media/${device.uniqueId}/${deviceImage}`}
                 >
-                  <Card className={classes.deviceName}>{device.name}</Card>
+                  {position && (
+                    <IgnitionState position={position} classes={classes} />
+                  )}
+                  <IconButton
+                    size="medium"
+                    onClick={onClose}
+                    onTouchStart={onClose}
+                  >
+                    <CloseIcon
+                      fontSize="medium"
+                      className={classes.mediaButton}
+                    />
+                  </IconButton>
+                </CardMedia>
+              ) : (
+                <div className={classes.header}>
+                  {position && (
+                    <IgnitionState position={position} classes={classes} />
+                  )}
                   <IconButton
                     size="medium"
                     onClick={onClose}
                     onTouchStart={onClose}
                   >
                     <CloseIcon fontSize="medium" className={classes.mediaButton} />
-                  </IconButton>
-                </CardMedia>
-              ) : (
-                <div className={classes.header}>
-                  <div>{device.name}</div>
-                  <IconButton
-                    size="medium"
-                    onClick={onClose}
-                    onTouchStart={onClose}
-                  >
-                    <CloseIcon fontSize="medium" />
                   </IconButton>
                 </div>
               )}

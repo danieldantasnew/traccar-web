@@ -165,7 +165,7 @@ const getIcon = (name) => {
 const StatusRow = ({ position, keys, positionAttributes }) => {
   const classes = useStyles();
 
-  if (keys == "address") return null;
+  if (keys == "address" || keys == "fixTime") return null;
   return (
     <fieldset className={`${classes.fieldset} ${classes[getColor(keys)]}`}>
     <legend className={`${classes.legend}`}>
