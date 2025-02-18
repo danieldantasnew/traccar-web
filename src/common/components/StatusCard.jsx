@@ -236,13 +236,16 @@ const StatusCard = ({
                     onClick={onClose}
                     onTouchStart={onClose}
                   >
-                    <CloseIcon fontSize="medium" className={classes.mediaButton} />
+                    <CloseIcon
+                      fontSize="medium"
+                      className={classes.mediaButton}
+                    />
                   </IconButton>
                 </div>
               )}
               {position && (
                 <CardContent className={classes.content}>
-                  <StatusCardDetails position={position} />
+                  <StatusCardDetails position={position} device={device}/>
                 </CardContent>
               )}
             </div>

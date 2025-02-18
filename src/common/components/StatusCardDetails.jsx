@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
+import { formatTime } from "../util/formatter";
 import AccessTimeFilledRoundedIcon from "@mui/icons-material/AccessTimeFilledRounded";
 import makeStyles from "@mui/styles/makeStyles";
 import usePositionAttributes from "../attributes/usePositionAttributes";
@@ -61,6 +62,22 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("lg")]: {
       fontSize: ".8rem !important",
     },
+  },
+
+  infoCar: {
+    justifyContent: "space-between",
+    "& div:last-child": {
+      textAlign: 'right',
+      "& h2": {
+        fontSize: ".8rem",
+        margin: ".3rem 0",
+        color: "#cacaca",
+        fontWeight: "600",
+      },
+      "& p": {
+        fontSize: ".9rem"
+      },
+    }
   },
 
   red: {
@@ -162,6 +179,21 @@ const getIcon = (name) => {
   }
 };
 
+const InfoCar = ({ device, classes }) => {
+  return (
+    <div className={`${classes.box} ${classes.infoCar}`}>
+      <div>
+        <Typography>{device.name}</Typography>
+        <Typography>{device.model}</Typography>
+      </div>
+      <div>
+        <h2>Última atualização</h2>
+        <Typography>{formatTime(device.lastUpdate, "seconds")}</Typography>
+      </div>
+    </div>
+  );
+};
+
 const StatusRow = ({ position, keys, positionAttributes }) => {
   const classes = useStyles();
 
@@ -185,7 +217,7 @@ const StatusRow = ({ position, keys, positionAttributes }) => {
   );
 };
 
-const StatusCardDetails = ({ position }) => {
+const StatusCardDetails = ({ position, device }) => {
   const t = useTranslation();
   const positionAttributes = usePositionAttributes(t);
   const positionItems = useAttributePreference(
@@ -196,6 +228,7 @@ const StatusCardDetails = ({ position }) => {
 
   return (
     <div className={classes.cardDetails}>
+      <InfoCar device={device} classes={classes}/>
       <div>
         <h4>Endereço atual:</h4>
         <Typography>
