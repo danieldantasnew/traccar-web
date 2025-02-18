@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useCatch } from '../../reactHelper';
 
-const AddressValue = ({ latitude, longitude, originalAddress }) => {
+const AddressValue = ({ latitude, longitude, originalAddress, setStateAddress }) => {
   const addressEnabled = useSelector((state) => state.session.server.geocoderEnabled);
 
   const [address, setAddress] = useState(originalAddress);
@@ -28,6 +28,7 @@ const AddressValue = ({ latitude, longitude, originalAddress }) => {
         const data = await response.text();
         if (data) {
           setAddress(data);
+          if(setStateAddress) setStateAddress(data);
         } else {
           setErrorMessage("Não foi possível encontrar o endereço");
         }

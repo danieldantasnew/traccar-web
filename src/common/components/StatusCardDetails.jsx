@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { formatTime } from "../util/formatter";
 import AccessTimeFilledRoundedIcon from "@mui/icons-material/AccessTimeFilledRounded";
@@ -12,10 +12,21 @@ import CropFreeRoundedIcon from "@mui/icons-material/CropFreeRounded";
 import MapIcon from "@mui/icons-material/Map";
 import BatteryChargingFullRoundedIcon from "@mui/icons-material/BatteryChargingFullRounded";
 import PositionValue from "./PositionValue";
-import { Avatar, Link, ListItemAvatar, Typography } from "@mui/material";
+import {
+  Alert,
+  Avatar,
+  IconButton,
+  Link,
+  ListItemAvatar,
+  Snackbar,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import AddressValue from "./AddressValue";
 import { useTranslation } from "./LocalizationProvider";
+import StreetviewIcon from "@mui/icons-material/Streetview";
 import { mapIconKey, mapIcons } from "../../map/core/preloadImages";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 const useStyles = makeStyles((theme) => ({
   cardDetails: {
@@ -32,6 +43,19 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "1rem",
     },
   },
+  flexRow: {
+    display: "flex",
+    alignItems: "center",
+    flexWrap: "wrap", 
+    gap: "1rem",
+  },
+  flexColumn: {
+    display: "flex",
+    flexDirection: "column",
+    flexWrap: "wrap", 
+    alignItems: "center",
+    gap: "1rem",
+  },
   details: {
     display: "grid",
     gridTemplateColumns: "repeat(3, 1fr)",
@@ -44,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: ".5rem",
     border: "2px solid black",
     padding: "0px",
+    paddingLeft: ".5rem",
     height: "48px",
   },
   legend: {
@@ -58,11 +83,11 @@ const useStyles = makeStyles((theme) => ({
     padding: "2px 4px",
     "& svg": {
       width: "18px",
-    }
+    },
   },
 
   value: {
-    fontSize: ".8rem !important",
+    fontSize: ".9rem !important",
     fontWeight: "600",
     [theme.breakpoints.down("lg")]: {
       fontSize: ".8rem !important",
@@ -104,7 +129,11 @@ const useStyles = makeStyles((theme) => ({
     border: "2px solid red",
     color: "red",
   },
-
+  gray: {
+    fill: "gray",
+    border: "2px solid gray",
+    color: "gray",
+  },
   brownLight: {
     fill: "#753F32",
     border: "2px solid #753F32",
@@ -246,6 +275,16 @@ const StatusRow = ({ position, keys, positionAttributes }) => {
   );
 };
 
+const handleCopyAddress = (copiedAddress, setAlertCopied)=> {
+  if(copiedAddress) {
+    navigator.clipboard.writeText(copiedAddress);
+    setAlertCopied(true);
+    setTimeout(()=> {
+      setAlertCopied(false);
+    }, 3000)
+  }
+}
+
 const StatusCardDetails = ({ position, device }) => {
   const t = useTranslation();
   const positionAttributes = usePositionAttributes(t);
@@ -253,20 +292,50 @@ const StatusCardDetails = ({ position, device }) => {
     "positionItems",
     "fixTime,speed,totalDistance"
   );
+  const [copiedAddress, setAddress] = useState(null);
+  const [alertCopied, setAlertCopied] = useState(false);
   const classes = useStyles();
 
   return (
     <div className={classes.cardDetails}>
+      <Snackbar open={alertCopied} autoHideDuration={3000} anchorOrigin={{ vertical: "top", horizontal: "right" }} sx={{ mr: 4 }}>
+        <Alert color="success" onClose={()=> setAlertCopied(false)}>Endereço copiado para área de transferência</Alert>
+      </Snackbar>
       <InfoCar device={device} classes={classes} />
       <div>
         <h4>Endereço atual:</h4>
-        <Typography>
-          <AddressValue
-            latitude={position.latitude}
-            longitude={position.longitude}
-            originalAddress={position.address}
-          />
-        </Typography>
+        <div className={classes.flexRow} style={{justifyContent: "space-between"}}>
+          <Typography>
+            <AddressValue
+              latitude={position.latitude}
+              longitude={position.longitude}
+              originalAddress={position.address}
+              setStateAddress={setAddress}
+            />
+          </Typography>
+          <div>
+            <Tooltip title={"Copiar endereço"} onClick={()=> handleCopyAddress(copiedAddress, setAlertCopied)}>
+              <IconButton
+                component="a"
+                className={classes.gray}
+                style={{border: "1px solid transparent"}}
+              >
+                <ContentCopyIcon/>
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={t("linkStreetView")}>
+              <IconButton
+                component="a"
+                target="_blank"
+                href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${position.latitude}%2C${position.longitude}&heading=${position.course}`}
+                className={classes.orange}
+                style={{border: "1px solid transparent"}}
+              >
+                <StreetviewIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
+        </div>
       </div>
 
       <div className={classes.details}>

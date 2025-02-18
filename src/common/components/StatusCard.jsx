@@ -33,12 +33,15 @@ const useStyles = makeStyles((theme) => ({
     pointerEvents: "auto",
     position: "fixed",
     height: "100vh",
-    width: "42vw",
+    width: "35vw",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
     gap: ".5rem",
-    [theme.breakpoints.down("lg")]: {
+    [theme.breakpoints.down("md")]: {
+      width: "100vw",
+    },
+    [theme.breakpoints.down("md")]: {
       width: "100vw",
     },
   },
@@ -198,6 +201,7 @@ const StatusCard = ({
     }
   }, [navigate, position]);
 
+
   return (
     <>
       <div className={classes.root}>
@@ -310,20 +314,6 @@ const StatusCard = ({
             href={`https://www.google.com/maps/search/?api=1&query=${position.latitude}%2C${position.longitude}`}
           >
             {t("linkGoogleMaps")}
-          </MenuItem>
-          <MenuItem
-            component="a"
-            target="_blank"
-            href={`http://maps.apple.com/?ll=${position.latitude},${position.longitude}`}
-          >
-            {t("linkAppleMaps")}
-          </MenuItem>
-          <MenuItem
-            component="a"
-            target="_blank"
-            href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${position.latitude}%2C${position.longitude}&heading=${position.course}`}
-          >
-            {t("linkStreetView")}
           </MenuItem>
           {navigationAppTitle && (
             <MenuItem
