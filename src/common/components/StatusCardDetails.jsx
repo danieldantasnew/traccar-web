@@ -12,9 +12,10 @@ import CropFreeRoundedIcon from "@mui/icons-material/CropFreeRounded";
 import MapIcon from "@mui/icons-material/Map";
 import BatteryChargingFullRoundedIcon from "@mui/icons-material/BatteryChargingFullRounded";
 import PositionValue from "./PositionValue";
-import { Link, Typography } from "@mui/material";
+import { Avatar, Link, ListItemAvatar, Typography } from "@mui/material";
 import AddressValue from "./AddressValue";
 import { useTranslation } from "./LocalizationProvider";
+import { mapIconKey, mapIcons } from "../../map/core/preloadImages";
 
 const useStyles = makeStyles((theme) => ({
   cardDetails: {
@@ -22,13 +23,13 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     gap: "1rem",
     "& h4": {
-      fontSize: ".9rem",
+      fontSize: ".85rem",
       fontWeight: "500",
       color: "rgb(19, 9, 4)",
       margin: ".5rem 0 .2rem 0",
     },
     "& p": {
-      fontSize: "1.1rem",
+      fontSize: "1rem",
     },
   },
   details: {
@@ -40,9 +41,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   fieldset: {
-    borderRadius: "1rem",
+    borderRadius: ".5rem",
     border: "2px solid black",
-    padding: ".2rem",
+    padding: "0px",
+    height: "48px",
   },
   legend: {
     fontSize: ".8rem",
@@ -54,10 +56,13 @@ const useStyles = makeStyles((theme) => ({
     gap: ".3rem",
     justifyContent: "flex-start",
     padding: "2px 4px",
+    "& svg": {
+      width: "18px",
+    }
   },
 
   value: {
-    fontSize: ".9rem !important",
+    fontSize: ".8rem !important",
     fontWeight: "600",
     [theme.breakpoints.down("lg")]: {
       fontSize: ".8rem !important",
@@ -67,25 +72,39 @@ const useStyles = makeStyles((theme) => ({
   infoCar: {
     justifyContent: "space-between",
     "& div:last-child": {
-      textAlign: 'right',
+      textAlign: "right",
       "& h2": {
         fontSize: ".8rem",
         margin: ".3rem 0",
-        color: "#cacaca",
+        color: "gray",
         fontWeight: "600",
       },
       "& p": {
-        fontSize: ".9rem"
+        fontSize: ".9rem",
       },
-    }
+    },
+  },
+  icon: {
+    padding: ".5rem",
+    filter: "brightness(0) invert(1)",
   },
 
+  description: {
+    textAlign: "left !important",
+    "& p": {
+      fontSize: ".9rem !important",
+      color: "black",
+    },
+    "& p:first-child": {
+      fontWeight: "600",
+    },
+  },
   red: {
     fill: "red",
     border: "2px solid red",
     color: "red",
   },
-  
+
   brownLight: {
     fill: "#753F32",
     border: "2px solid #753F32",
@@ -159,21 +178,21 @@ const getColor = (attribute) => {
 const getIcon = (name) => {
   switch (name) {
     case "fixTime":
-      return <AccessTimeFilledRoundedIcon width={22} height={22} />;
+      return <AccessTimeFilledRoundedIcon />;
     case "speed":
-      return <SpeedRoundedIcon width={22} height={22} />;
+      return <SpeedRoundedIcon />;
     case "totalDistance":
-      return <MapIcon width={22} height={22} />;
+      return <MapIcon />;
     case "course":
-      return <SignpostRoundedIcon width={22} height={22} />;
+      return <SignpostRoundedIcon />;
     case "id":
-      return <CropFreeRoundedIcon width={22} height={22} />;
+      return <CropFreeRoundedIcon />;
     case "motion":
-      return <SpeedRoundedIcon width={22} height={22} />;
+      return <SpeedRoundedIcon />;
     case "batteryLevel":
-      return <BatteryChargingFullRoundedIcon width={22} height={22} />;
+      return <BatteryChargingFullRoundedIcon />;
     case "ignition":
-      return <PowerSettingsNewRoundedIcon width={22} height={22} />;
+      return <PowerSettingsNewRoundedIcon />;
     default:
       return "";
   }
@@ -182,9 +201,20 @@ const getIcon = (name) => {
 const InfoCar = ({ device, classes }) => {
   return (
     <div className={`${classes.box} ${classes.infoCar}`}>
-      <div>
-        <Typography>{device.name}</Typography>
-        <Typography>{device.model}</Typography>
+      <div className={`${classes.box}`} style={{ padding: "0" }}>
+        <ListItemAvatar style={{ minWidth: "initial" }}>
+          <Avatar style={{ backgroundColor: "#312F92" }}>
+            <img
+              className={classes.icon}
+              src={mapIcons[mapIconKey(device.category)]}
+              alt=""
+            />
+          </Avatar>
+        </ListItemAvatar>
+        <div className={classes.description}>
+          <Typography>{device.model}</Typography>
+          <Typography>{device.name}</Typography>
+        </div>
       </div>
       <div>
         <h2>Última atualização</h2>
@@ -199,7 +229,7 @@ const StatusRow = ({ position, keys, positionAttributes }) => {
   if (keys == "address" || keys == "fixTime") return null;
   return (
     <fieldset className={`${classes.fieldset} ${classes[getColor(keys)]}`}>
-    <legend className={`${classes.legend}`}>
+      <legend className={`${classes.legend}`}>
         {positionAttributes[keys].name}
       </legend>
       <div className={classes.box}>
@@ -227,7 +257,7 @@ const StatusCardDetails = ({ position, device }) => {
 
   return (
     <div className={classes.cardDetails}>
-      <InfoCar device={device} classes={classes}/>
+      <InfoCar device={device} classes={classes} />
       <div>
         <h4>Endereço atual:</h4>
         <Typography>

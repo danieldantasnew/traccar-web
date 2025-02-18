@@ -39,9 +39,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-between",
     gap: ".5rem",
     [theme.breakpoints.down("lg")]: {
-      width: "40vw",
-    },
-    [theme.breakpoints.down("sm")]: {
       width: "100vw",
     },
   },
