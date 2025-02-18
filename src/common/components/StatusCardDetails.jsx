@@ -196,7 +196,6 @@ const InfoCar = ({ device, classes }) => {
 
 const StatusRow = ({ position, keys, positionAttributes }) => {
   const classes = useStyles();
-
   if (keys == "address" || keys == "fixTime") return null;
   return (
     <fieldset className={`${classes.fieldset} ${classes[getColor(keys)]}`}>
