@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { formatTime } from "../util/formatter";
 import AccessTimeFilledRoundedIcon from "@mui/icons-material/AccessTimeFilledRounded";
@@ -26,7 +26,7 @@ import AddressValue from "./AddressValue";
 import { useTranslation } from "./LocalizationProvider";
 import StreetviewIcon from "@mui/icons-material/Streetview";
 import { mapIconKey, mapIcons } from "../../map/core/preloadImages";
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const useStyles = makeStyles((theme) => ({
   cardDetails: {
@@ -46,13 +46,13 @@ const useStyles = makeStyles((theme) => ({
   flexRow: {
     display: "flex",
     alignItems: "center",
-    flexWrap: "wrap", 
+    flexWrap: "wrap",
     gap: "1rem",
   },
   flexColumn: {
     display: "flex",
     flexDirection: "column",
-    flexWrap: "wrap", 
+    flexWrap: "wrap",
     alignItems: "center",
     gap: "1rem",
   },
@@ -275,17 +275,21 @@ const StatusRow = ({ position, keys, positionAttributes }) => {
   );
 };
 
-const handleCopyAddress = (copiedAddress, setAlertCopied)=> {
-  if(copiedAddress) {
+const handleCopyAddress = (copiedAddress, setAlertCopied, timeOutAlert) => {
+  if (copiedAddress) {
     navigator.clipboard.writeText(copiedAddress);
     setAlertCopied(true);
-    setTimeout(()=> {
+    if (timeOutAlert.current) {
+      clearTimeout(timeOutAlert.current);
+    }
+    timeOutAlert.current = setTimeout(() => {
       setAlertCopied(false);
-    }, 3000)
+    }, 3000);
   }
-}
+};
 
 const StatusCardDetails = ({ position, device }) => {
+  const timeOutAlert = useRef();
   const t = useTranslation();
   const positionAttributes = usePositionAttributes(t);
   const positionItems = useAttributePreference(
@@ -298,13 +302,23 @@ const StatusCardDetails = ({ position, device }) => {
 
   return (
     <div className={classes.cardDetails}>
-      <Snackbar open={alertCopied} autoHideDuration={3000} anchorOrigin={{ vertical: "top", horizontal: "right" }} sx={{ mr: 4 }}>
-        <Alert color="success" onClose={()=> setAlertCopied(false)}>Endereço copiado para área de transferência</Alert>
+      <Snackbar
+        open={alertCopied}
+        autoHideDuration={3000}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        sx={{ mr: 4 }}
+      >
+        <Alert color="success" style={{backgroundColor: "#4bbf50", color: "white"}} size="md" onClose={() => setAlertCopied(false)}>
+          Endereço copiado para área de transferência
+        </Alert>
       </Snackbar>
       <InfoCar device={device} classes={classes} />
       <div>
         <h4>Endereço atual:</h4>
-        <div className={classes.flexRow} style={{justifyContent: "space-between"}}>
+        <div
+          className={classes.flexRow}
+          style={{ justifyContent: "space-between" }}
+        >
           <Typography>
             <AddressValue
               latitude={position.latitude}
@@ -314,13 +328,16 @@ const StatusCardDetails = ({ position, device }) => {
             />
           </Typography>
           <div>
-            <Tooltip title={"Copiar endereço"} onClick={()=> handleCopyAddress(copiedAddress, setAlertCopied)}>
+            <Tooltip
+              title={"Copiar endereço"}
+              onClick={() => handleCopyAddress(copiedAddress, setAlertCopied, timeOutAlert)}
+            >
               <IconButton
                 component="a"
                 className={classes.gray}
-                style={{border: "1px solid transparent"}}
+                style={{ border: "1px solid transparent" }}
               >
-                <ContentCopyIcon/>
+                <ContentCopyIcon />
               </IconButton>
             </Tooltip>
             <Tooltip title={t("linkStreetView")}>
@@ -329,7 +346,7 @@ const StatusCardDetails = ({ position, device }) => {
                 target="_blank"
                 href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${position.latitude}%2C${position.longitude}&heading=${position.course}`}
                 className={classes.orange}
-                style={{border: "1px solid transparent"}}
+                style={{ border: "1px solid transparent" }}
               >
                 <StreetviewIcon />
               </IconButton>
@@ -337,7 +354,6 @@ const StatusCardDetails = ({ position, device }) => {
           </div>
         </div>
       </div>
-
       <div className={classes.details}>
         {positionItems
           .split(",")

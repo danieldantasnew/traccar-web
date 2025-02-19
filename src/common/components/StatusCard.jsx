@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     pointerEvents: "auto",
     position: "fixed",
     height: "100vh",
-    width: "35vw",
+    width: "38vw",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
