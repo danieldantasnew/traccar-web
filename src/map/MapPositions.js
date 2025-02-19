@@ -8,6 +8,8 @@ import { mapIconKey } from './core/preloadImages';
 import { useAttributePreference } from '../common/util/preferences';
 import { useCatchCallback } from '../reactHelper';
 import { findFonts } from './core/mapUtil';
+import mapboxgl from 'mapbox-gl'
+import { createRoot } from 'react-dom/client';
 
 const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleField }) => {
   const id = useId();
@@ -50,7 +52,6 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
       color: showStatus ? position.attributes.color || getStatusColor(device.status) : 'neutral',
       rotation: position.course,
       direction: showDirection,
-      
     };
   };
 
@@ -103,48 +104,81 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
       },
     });
     [id, selected].forEach((source) => {
-      map.addLayer({
-        id: source,
-        type: 'symbol',
-        source,
-        filter: ['!has', 'point_count'],
-        layout: {
-          'icon-image': '{category}-{color}',
-          'icon-size': iconScale,
-          'icon-allow-overlap': true,
-          'text-field': `{${titleField || 'name'}}`,
-          'text-allow-overlap': true,
-          'text-anchor': 'bottom',
-          'text-offset': [0, -2 * iconScale],
-          'text-font': findFonts(map),
-          'text-size': 14,
-        },
-        paint: {
-          'text-halo-color': 'white',
-          'text-halo-width': 1,
-        },
+      // map.addLayer({
+      //   id: source,
+      //   type: 'symbol',
+      //   source,
+      //   filter: ['!has', 'point_count'],
+      //   layout: {
+      //     'icon-image': '{category}-{color}',
+      //     'icon-size': iconScale,
+      //     'icon-allow-overlap': true,
+      //     'text-field': `{${titleField || 'name'}}`,
+      //     'text-allow-overlap': true,
+      //     'text-anchor': 'bottom',
+      //     'text-offset': [0, -2 * iconScale],
+      //     'text-font': findFonts(map),
+      //     'text-size': 14,
+      //   },
+      //   paint: {
+      //     'text-halo-color': 'white',
+      //     'text-halo-width': 1,
+      //   },
+      // });
+      // map.addLayer({
+      //   id: `direction-${source}`,
+      //   type: 'symbol',
+      //   source,
+      //   filter: [
+      //     'all',
+      //     ['!has', 'point_count'],
+      //     ['==', 'direction', true],
+      //   ],
+      //   layout: {
+      //     'icon-image': 'direction',
+      //     'icon-size': iconScale * 1.06,
+      //     'icon-allow-overlap': true,
+      //     'icon-rotate': ['get', 'rotation'],
+      //     'icon-rotation-alignment': 'map',
+      //   },
+      // });
+  
+        // map.on('mouseenter', source, onMouseEnter);
+        // map.on('mouseleave', source, onMouseLeave);
+        // map.on('click', source, onMarkerClick);
+    
+      positions
+      .filter((it) => devices.hasOwnProperty(it.deviceId))
+      .forEach((position) => {
+        const el = document.createElement('div');
+        el.style.display = 'flex';
+        el.style.alignItems = 'center';
+        el.style.gap = "1rem"
+        el.style.backgroundColor = 'black';
+        el.style.color = 'white';
+        el.style.padding = '6px';
+        el.style.borderRadius = '4px';
+        el.style.fontSize = '12px';
+        el.style.fontFamily = 'Arial, sans-serif';
+    
+        el.innerHTML = `
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="#ffffff" d="M135.2 117.4L109.1 192l293.8 0-26.1-74.6C372.3 104.6 360.2 96 346.6 96L165.4 96c-13.6 0-25.7 8.6-30.2 21.4zM39.6 196.8L74.8 96.3C88.3 57.8 124.6 32 165.4 32l181.2 0c40.8 0 77.1 25.8 90.6 64.3l35.2 100.5c23.2 9.6 39.6 32.5 39.6 59.2l0 144 0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L96 400l0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L0 256c0-26.7 16.4-49.6 39.6-59.2zM128 288a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm288 32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/></svg>
+          </div>
+          <div>
+            <div style="font-weight: bold;">${devices[position.deviceId].name}</div>
+            <div>${devices[position.deviceId].model}</div>
+          </div>
+        `;
+    
+      el.addEventListener('click', (event) => {
+        event.stopPropagation();
+        onClick(position.id, position.deviceId);
       });
-      map.addLayer({
-        id: `direction-${source}`,
-        type: 'symbol',
-        source,
-        filter: [
-          'all',
-          ['!has', 'point_count'],
-          ['==', 'direction', true],
-        ],
-        layout: {
-          'icon-image': 'direction',
-          'icon-size': iconScale * 1.06,
-          'icon-allow-overlap': true,
-          'icon-rotate': ['get', 'rotation'],
-          'icon-rotation-alignment': 'map',
-        },
+      new mapboxgl.Marker(el)
+        .setLngLat([position.longitude, position.latitude])
+        .addTo(map);
       });
-
-      map.on('mouseenter', source, onMouseEnter);
-      map.on('mouseleave', source, onMouseLeave);
-      map.on('click', source, onMarkerClick);
     });
     map.addLayer({
       id: clusters,
