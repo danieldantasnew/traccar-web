@@ -319,7 +319,7 @@ const StatusCardDetails = ({ position, device }) => {
           className={classes.flexRow}
           style={{ justifyContent: "space-between" }}
         >
-          <Typography>
+          <Typography style={{maxWidth: "360px"}}>
             <AddressValue
               latitude={position.latitude}
               longitude={position.longitude}
