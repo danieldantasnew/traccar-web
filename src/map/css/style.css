@@ -1,20 +1,56 @@
 .marker {
-    background-color: rgb(0, 119, 50);
+    position: relative;
+    background-color: black;
     color: white;
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 6px;
+    justify-content: space-between;
+    gap: .5rem;
+    padding: 4px;
     border-radius: 4px;
-    font-size: 12px;
+    font-size: 10px;
+    z-index: 10;
 }
 
-.marker:hover {
-    background-color: black;
-    transition: .3s;
-    cursor: pointer;
+.marker svg {
+    width: 20px;
+    background-color: rgba(255, 255, 255, 0.356);
+    padding: 4px;
+    border-radius: .2rem;
+    display: flex;
+    align-items: center;
 }
 
 .marker path {
     fill: rgb(255, 255, 255);
+}
+
+.marker p {
+    margin: 0;
+    line-height: 16px;
+}
+
+.marker p:first-child {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.marker::after {
+    display: block;
+    height: 16px;
+    width: 16px;
+    content: '';
+    position: absolute;
+    background-color: black;
+    bottom: -7px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    z-index: -1;
+    
+}
+
+.marker:hover, .marker:hover::after{
+    background-color: rgb(0, 119, 50);
+    transition: .3s;
+    cursor: pointer;
 }

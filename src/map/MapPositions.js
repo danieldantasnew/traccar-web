@@ -197,20 +197,19 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
   //   };
   // }, [mapCluster, clusters, onMarkerClick, onClusterClick]);
   
-  const markersRef = useRef([]); // Guarda os marcadores ativos
+  const markersRef = useRef([]);
   useEffect(() => {
-    // Remove os marcadores antigos do mapa antes de adicionar novos
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current = [];
-    // Verifica se o mapa está carregado
+
     if (!map || !positions.length) return;
 
-    // Adiciona os novos marcadores ao mapa
+    
     positions
-      .filter((it) => devices.hasOwnProperty(it.deviceId)) // Filtra apenas os devices válidos
+      .filter((it) => devices.hasOwnProperty(it.deviceId))
       .forEach((position) => {
         const el = document.createElement("div");
-            el.className = 'marker'
+        el.className = 'marker'
         el.innerHTML = `
           <div>
             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 512 512">
@@ -218,8 +217,8 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
             </svg>
           </div>
           <div>
-            <div style="font-weight: bold;">${devices[position.deviceId].name}</div>
-            <div>${devices[position.deviceId].model}</div>
+            <p>${devices[position.deviceId].model}</p>
+            <p>${devices[position.deviceId].name}</p>
           </div>
         `;
 
@@ -232,11 +231,10 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
           .setLngLat([position.longitude, position.latitude])
           .addTo(map);
 
-        markersRef.current.push(marker); // Guarda os marcadores ativos
+        markersRef.current.push(marker);
       });
 
     return () => {
-      // Limpa os marcadores quando o componente for desmontado ou os dados forem atualizados
       markersRef.current.forEach(marker => marker.remove());
       markersRef.current = [];
     };
