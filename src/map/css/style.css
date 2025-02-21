@@ -1,7 +1,7 @@
 .marker {
     position: relative;
     background-color: black;
-    color: white;
+    color: black;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -9,7 +9,6 @@
     padding: 4px;
     border-radius: 4px;
     font-size: 10px;
-    z-index: 10;
 }
 
 .marker svg {
@@ -26,6 +25,7 @@
 }
 
 .marker p {
+    color: white;
     margin: 0;
     line-height: 16px;
 }
@@ -37,16 +37,15 @@
 
 .marker::after {
     display: block;
-    height: 16px;
-    width: 16px;
+    height: 14px;
+    width: 14px;
     content: '';
     position: absolute;
-    background-color: black;
-    bottom: -7px;
+    background-color: currentColor;
+    bottom: -5px;
     left: 50%;
     transform: translateX(-50%) rotate(45deg);
-    z-index: -1;
-    
+    z-index: -10;
 }
 
 .marker:hover, .marker:hover::after{
