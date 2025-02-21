@@ -1,0 +1,20 @@
+.marker {
+    background-color: rgb(0, 119, 50);
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 6px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.marker:hover {
+    background-color: black;
+    transition: .3s;
+    cursor: pointer;
+}
+
+.marker path {
+    fill: rgb(255, 255, 255);
+}
