@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     gap: "1rem",
+    overflow:"auto",
     "& h4": {
       fontSize: ".85rem",
       fontWeight: "500",

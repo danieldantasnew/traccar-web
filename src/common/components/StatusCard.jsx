@@ -11,6 +11,8 @@ import {
   MenuItem,
   CardMedia,
   Tooltip,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import CloseIcon from "@mui/icons-material/Close";
@@ -28,21 +30,33 @@ import { useAttributePreference } from "../util/preferences";
 import StatusCardDetails from "./StatusCardDetails";
 import PowerSettingsNewRoundedIcon from "@mui/icons-material/PowerSettingsNewRounded";
 
+function handleWheel(e) {
+  if (e.deltaY > 0) {
+    return (e.currentTarget.style.top = "0");
+  }
+  return (e.currentTarget.style.top = "40vh");
+}
+
+function handleTouch(e, state, setState) {
+  const deltaY = e.touches[0].clientY;
+  setState(deltaY);
+  if (deltaY > state) {
+    return (e.currentTarget.style.top = "40vh");
+  }
+  return (e.currentTarget.style.top = "0");
+}
+
 const useStyles = makeStyles((theme) => ({
   card: {
     pointerEvents: "auto",
-    position: "fixed",
-    height: "100vh",
-    width: "38vw",
+    height: "100%",
+    width: "100%",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
     gap: ".5rem",
     [theme.breakpoints.down("md")]: {
-      width: "100vw",
-    },
-    [theme.breakpoints.down("md")]: {
-      width: "100vw",
+      width: "100%",
     },
   },
   ignitionState: {
@@ -103,13 +117,21 @@ const useStyles = makeStyles((theme) => ({
   actions: {
     justifyContent: "space-between",
   },
-  root: ({ desktopPadding }) => ({
+  root: () => ({
     pointerEvents: "none",
     position: "fixed",
     zIndex: 100,
     left: "0",
     top: "0",
-    [theme.breakpoints.down("md")]: {},
+    height: "100vh",
+    width: "38vw",
+    maxWidth: "550px",
+    transition: ".3s",
+    [theme.breakpoints.down("md")]: {
+      top: "40vh",
+      width: "100vw",
+      maxWidth: "initial",
+    },
   }),
 }));
 
@@ -131,17 +153,14 @@ const IgnitionState = ({ position, classes }) => {
   );
 };
 
-const StatusCard = ({
-  deviceId,
-  position,
-  onClose,
-  disableActions,
-  desktopPadding = 0,
-}) => {
-  const classes = useStyles({ desktopPadding });
+const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
+  const classes = useStyles();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const t = useTranslation();
+  const theme = useTheme();
+  const desktop = useMediaQuery(theme.breakpoints.down("md"));
+  const [axisY, setAxisY] = useState(0);
 
   const deviceReadonly = useDeviceReadonly();
 
@@ -201,13 +220,17 @@ const StatusCard = ({
     }
   }, [navigate, position]);
 
-
   return (
     <>
-      <div className={classes.root}>
+      <div
+        className={classes.root}
+        style={desktop ? {} : { top: "0" }}
+        onWheel={desktop ? handleWheel : null}
+        onTouchMove={(e)=> handleTouch(e, axisY, setAxisY)}
+      >
         {device && (
           <Card elevation={3} className={classes.card}>
-            <div>
+            <div style={{ maxHeight: "100%" }}>
               {deviceImage ? (
                 <CardMedia
                   className={classes.media}
@@ -246,7 +269,7 @@ const StatusCard = ({
               )}
               {position && (
                 <CardContent className={classes.content}>
-                  <StatusCardDetails position={position} device={device}/>
+                  <StatusCardDetails position={position} device={device} />
                 </CardContent>
               )}
             </div>
