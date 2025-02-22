@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import {
   Card,
-  CardContent,
   Typography,
   CardActions,
   IconButton,
@@ -116,7 +115,7 @@ const useStyles = makeStyles((theme) => ({
   },
   actions: {
     justifyContent: "space-between",
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   root: () => ({
     pointerEvents: "none",
@@ -227,49 +226,49 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
         className={classes.root}
         style={desktop ? {} : { top: "0" }}
         onWheel={desktop ? handleWheel : null}
-        onTouchMove={(e)=> handleTouch(e, axisY, setAxisY)}
+        onTouchMove={(e) => handleTouch(e, axisY, setAxisY)}
       >
         {device && (
           <Card elevation={3} className={classes.card}>
-                          {deviceImage ? (
-                <CardMedia
-                  className={classes.media}
-                  image={`/api/media/${device.uniqueId}/${deviceImage}`}
+            {deviceImage ? (
+              <CardMedia
+                className={classes.media}
+                image={`/api/media/${device.uniqueId}/${deviceImage}`}
+              >
+                {position && (
+                  <IgnitionState position={position} classes={classes} />
+                )}
+                <IconButton
+                  size="medium"
+                  onClick={onClose}
+                  onTouchStart={onClose}
                 >
-                  {position && (
-                    <IgnitionState position={position} classes={classes} />
-                  )}
-                  <IconButton
-                    size="medium"
-                    onClick={onClose}
-                    onTouchStart={onClose}
-                  >
-                    <CloseIcon
-                      fontSize="medium"
-                      className={classes.mediaButton}
-                    />
-                  </IconButton>
-                </CardMedia>
-              ) : (
-                <div className={classes.header}>
-                  {position && (
-                    <IgnitionState position={position} classes={classes} />
-                  )}
-                  <IconButton
-                    size="medium"
-                    onClick={onClose}
-                    onTouchStart={onClose}
-                  >
-                    <CloseIcon
-                      fontSize="medium"
-                      className={classes.mediaButton}
-                    />
-                  </IconButton>
-                </div>
-              )}
-              {position && (
-                <StatusCardDetails position={position} device={device} />
-              )}
+                  <CloseIcon
+                    fontSize="medium"
+                    className={classes.mediaButton}
+                  />
+                </IconButton>
+              </CardMedia>
+            ) : (
+              <div className={classes.header}>
+                {position && (
+                  <IgnitionState position={position} classes={classes} />
+                )}
+                <IconButton
+                  size="medium"
+                  onClick={onClose}
+                  onTouchStart={onClose}
+                >
+                  <CloseIcon
+                    fontSize="medium"
+                    className={classes.mediaButton}
+                  />
+                </IconButton>
+              </div>
+            )}
+            {position && (
+              <StatusCardDetails position={position} device={device} />
+            )}
             <CardActions classes={{ root: classes.actions }} disableSpacing>
               <Tooltip title={t("sharedExtra")}>
                 <IconButton
