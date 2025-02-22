@@ -24,8 +24,6 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
   const mapCluster = useAttributePreference('mapCluster', true);
   const directionType = useAttributePreference('mapDirection', 'selected');
 
-
-
   const createFeature = (devices, position, selectedPositionId) => {
 
     const device = devices[position.deviceId];

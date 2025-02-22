@@ -33,12 +33,13 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     gap: "1rem",
-    overflow:"auto",
+    padding: "0 .5rem",
+    overflow: "auto",
     "& h4": {
       fontSize: ".85rem",
       fontWeight: "500",
       color: "rgb(19, 9, 4)",
-      margin: ".5rem 0 .2rem 0",
+      margin: "0",
     },
     "& p": {
       fontSize: "1rem",
@@ -97,6 +98,7 @@ const useStyles = makeStyles((theme) => ({
 
   infoCar: {
     justifyContent: "space-between",
+    padding: 0,
     "& div:last-child": {
       textAlign: "right",
       "& h2": {

@@ -116,6 +116,7 @@ const useStyles = makeStyles((theme) => ({
   },
   actions: {
     justifyContent: "space-between",
+    backgroundColor: "white"
   },
   root: () => ({
     pointerEvents: "none",
@@ -230,8 +231,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
       >
         {device && (
           <Card elevation={3} className={classes.card}>
-            <div style={{ maxHeight: "100%" }}>
-              {deviceImage ? (
+                          {deviceImage ? (
                 <CardMedia
                   className={classes.media}
                   image={`/api/media/${device.uniqueId}/${deviceImage}`}
@@ -268,11 +268,8 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                 </div>
               )}
               {position && (
-                <CardContent className={classes.content}>
-                  <StatusCardDetails position={position} device={device} />
-                </CardContent>
+                <StatusCardDetails position={position} device={device} />
               )}
-            </div>
             <CardActions classes={{ root: classes.actions }} disableSpacing>
               <Tooltip title={t("sharedExtra")}>
                 <IconButton
