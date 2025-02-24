@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useTheme } from '@mui/styles';
 import { map } from '../core/MapView';
 import { useAttributePreference } from '../../common/util/preferences';
+import { findFonts } from '../core/mapUtil';
 
 const MapLiveRoutes = () => {
   const id = useId();
@@ -52,14 +53,19 @@ const MapLiveRoutes = () => {
         map.addLayer({
           source: `${id}-points`,
           id: `${id}-points-layer`,
-          type: 'circle',
+          type: 'symbol',
+          layout: {
+            'text-field': '▲',
+            'text-font': findFonts(map),
+            'text-size': 24,
+            'text-allow-overlap': true,
+            'text-rotate': ['get', 'rotation'],
+          },
           paint: {
-            'circle-radius': 4,
-            'circle-color': 'red',
-            'circle-stroke-width': 1,
-            'circle-stroke-color': 'black',
+            'text-color': 'red',
           },
         });
+        
 
       return () => {
         if (map.getLayer(`${id}-title`)) {
@@ -108,6 +114,7 @@ const MapLiveRoutes = () => {
             },
             properties: {
               id: `${deviceId}-${index}`,
+              rotation: 1010,
             },
           }))
         ),

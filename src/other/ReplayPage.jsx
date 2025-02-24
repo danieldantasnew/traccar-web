@@ -161,7 +161,6 @@ const ReplayPage = () => {
     window.location.assign(`/api/positions/kml?${query.toString()}`);
   };
 
-  console.log(positions)
   return (
     <div className={classes.root}>
       <MapView>
