@@ -30,22 +30,43 @@ const MapLiveRoutes = () => {
       });
       map.addLayer({
         source: id,
-        id,
+        id: `${id}-line`,
         type: 'line',
         layout: {
           'line-join': 'round',
-          'line-cap': 'square',
+          'line-cap': 'round',
         },
         paint: {
           'line-color': ['get', 'color'],
-          'line-width': 3.6,
-          'line-dasharray': [1, 1],
+          'line-width': 2.5,
         },
       });
 
+        map.addSource(`${id}-points`, {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: [],
+          },
+        });
+        map.addLayer({
+          source: `${id}-points`,
+          id: `${id}-points-layer`,
+          type: 'circle',
+          paint: {
+            'circle-radius': 4,
+            'circle-color': 'red',
+            'circle-stroke-width': 1,
+            'circle-stroke-color': 'black',
+          },
+        });
+
       return () => {
-        if (map.getLayer(id)) {
-          map.removeLayer(id);
+        if (map.getLayer(`${id}-title`)) {
+          map.removeLayer(`${id}-title`);
+        }
+        if (map.getLayer(`${id}-line`)) {
+          map.removeLayer(`${id}-line`);
         }
         if (map.getSource(id)) {
           map.removeSource(id);
@@ -71,9 +92,25 @@ const MapLiveRoutes = () => {
             coordinates: history[deviceId],
           },
           properties: {
-            color: '#FF2000',
+            color: 'purple',
           },
         })),
+      });
+
+      map.getSource(`${id}-points`)?.setData({
+        type: 'FeatureCollection',
+        features: deviceIds.flatMap((deviceId) =>
+          history[deviceId].map((coord, index) => ({
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: coord,
+            },
+            properties: {
+              id: `${deviceId}-${index}`,
+            },
+          }))
+        ),
       });
     }
   }, [theme, type, devices, selectedDeviceId, history]);

@@ -22,6 +22,7 @@ const MapRoutePoints = ({ positions, onClick }) => {
     }
   }, [onClick]);
 
+
   useEffect(() => {
     map.addSource(id, {
       type: 'geojson',
@@ -30,6 +31,7 @@ const MapRoutePoints = ({ positions, onClick }) => {
         features: [],
       },
     });
+
     map.addLayer({
       id,
       type: 'symbol',
@@ -40,6 +42,7 @@ const MapRoutePoints = ({ positions, onClick }) => {
       layout: {
         'text-font': findFonts(map),
         'text-field': '▲',
+        'text-size': 24,
         'text-allow-overlap': true,
         'text-rotate': ['get', 'rotation'],
       },
@@ -69,6 +72,8 @@ const MapRoutePoints = ({ positions, onClick }) => {
 
     const control = new SpeedLegendControl(positions, speedUnit, t, maxSpeed, minSpeed);
     map.addControl(control, 'bottom-left');
+
+    console.log(positions)
 
     map.getSource(id)?.setData({
       type: 'FeatureCollection',
