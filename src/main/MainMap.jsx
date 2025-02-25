@@ -39,7 +39,7 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
         <MapOverlay />
         <MapGeofence />
         <MapAccuracy positions={filteredPositions} />
-        <MapLiveRoutes />
+        <MapLiveRoutes position={selectedPosition}/>
         <MapPositions
           positions={filteredPositions}
           onClick={onMarkerClick}

@@ -73,8 +73,6 @@ const MapRoutePoints = ({ positions, onClick }) => {
     const control = new SpeedLegendControl(positions, speedUnit, t, maxSpeed, minSpeed);
     map.addControl(control, 'bottom-left');
 
-    console.log(positions)
-
     map.getSource(id)?.setData({
       type: 'FeatureCollection',
       features: positions.map((position, index) => ({
