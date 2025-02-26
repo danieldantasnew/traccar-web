@@ -5,6 +5,19 @@ import { map } from '../core/MapView';
 import { useAttributePreference } from '../../common/util/preferences';
 import { findFonts } from '../core/mapUtil';
 
+const diffDistance = (currentDistance, prevDistance, setPrevDistance)=> {
+  const diff = Math.abs(currentDistance - prevDistance) >= 200;
+  if(prevDistance === 0) {
+    setPrevDistance(currentDistance);
+    return false;
+  }
+  if(diff) {
+    setPrevDistance(currentDistance);
+    return true
+  };
+  return false;
+}
+
 const MapLiveRoutes = ({positions}) => {
   const id = useId();
   
@@ -14,6 +27,7 @@ const MapLiveRoutes = ({positions}) => {
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
   const history = useSelector((state) => state.session.history);
   const [rotations, setRotations] = useState({});
+  const [distance, setDistance] = useState(0);
   
   useEffect(() => {
     if (type !== 'none') {
@@ -57,7 +71,7 @@ const MapLiveRoutes = ({positions}) => {
         layout: {
           'text-field': '▲',
           'text-font': findFonts(map),
-          'text-size': 20,
+          'text-size': 24,
           'text-allow-overlap': true,
           'text-rotate': ['get', 'rotation'],
         },
@@ -100,37 +114,40 @@ const MapLiveRoutes = ({positions}) => {
         })),
       });
 
-      setRotations((prevRotations) => {
-        const newRotations = { ...prevRotations };
-
-        deviceIds.forEach((deviceId) => {
-          history[deviceId].forEach((coord, index) => {
-            const key = `${deviceId}-${index}`;
-            if (!newRotations[key]) {
-              newRotations[key] = positions?.course ?? 0;
-            }
+      const distanceChecked = (positions && positions.attributes) ? diffDistance(positions.attributes.totalDistance, distance, setDistance) : false;
+      
+      if(distanceChecked) {
+        setRotations((prevRotations) => {
+          const newRotations = { ...prevRotations };
+  
+          deviceIds.forEach((deviceId) => {
+            history[deviceId].forEach((coord, index) => {
+              const key = `${deviceId}-${index}`;
+              if (!newRotations[key]) {
+                newRotations[key] = positions?.course ?? 0;
+              }
+            });
           });
+          return newRotations;
         });
-
-        return newRotations;
-      });
-
-      map.getSource(`${id}-points`)?.setData({
-        type: 'FeatureCollection',
-        features: deviceIds.flatMap((deviceId) =>
-          history[deviceId].map((coord, index) => ({
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: coord,
-            },
-            properties: {
-              id: `${deviceId}-${index}`,
-              rotation: rotations[`${deviceId}-${index}`] ?? 0,
-            },
-          }))
-        ),
-      });
+  
+        map.getSource(`${id}-points`)?.setData({
+          type: 'FeatureCollection',
+          features: deviceIds.flatMap((deviceId) =>
+            history[deviceId].map((coord, index) => ({
+              type: 'Feature',
+              geometry: {
+                type: 'Point',
+                coordinates: coord,
+              },
+              properties: {
+                id: `${deviceId}-${index}`,
+                rotation: rotations[`${deviceId}-${index}`],
+              },
+            }))
+          ),
+        });
+      }
     }
   }, [theme, type, devices, selectedDeviceId, history]);
 
