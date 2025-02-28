@@ -81,7 +81,7 @@ const MapRouteCoordinates = ({ name, coordinates, deviceId }) => {
       },
       properties: {
         name,
-        color: reportColor,
+        color: 'rgba(128, 0, 128, 0.59)',
       },
     });
   }, [theme, coordinates, reportColor]);
