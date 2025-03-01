@@ -44,20 +44,6 @@ const MapRouteCoordinates = ({ name, coordinates, deviceId }) => {
         'line-width': 2,
       },
     });
-    map.addLayer({
-      source: id,
-      id: `${id}-title`,
-      type: 'symbol',
-      layout: {
-        'text-field': '{name}',
-        'text-font': findFonts(map),
-        'text-size': 12,
-      },
-      paint: {
-        'text-halo-color': 'white',
-        'text-halo-width': 1,
-      },
-    });
 
     return () => {
       if (map.getLayer(`${id}-title`)) {
