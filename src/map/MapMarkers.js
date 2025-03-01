@@ -5,7 +5,7 @@ import { map } from './core/MapView';
 import { useAttributePreference } from '../common/util/preferences';
 import { findFonts } from './core/mapUtil';
 
-const MapMarkers = ({ markers, showTitles }) => {
+const MapMarkers = ({ markers }) => {
   const id = useId();
 
   const theme = useTheme();
@@ -13,6 +13,8 @@ const MapMarkers = ({ markers, showTitles }) => {
   const iconScale = useAttributePreference('iconScale', desktop ? 0.75 : 1);
 
   useEffect(() => {
+    if (!map) return;
+
     map.addSource(id, {
       type: 'geojson',
       data: {
@@ -21,67 +23,66 @@ const MapMarkers = ({ markers, showTitles }) => {
       },
     });
 
-    if (showTitles) {
-      map.addLayer({
-        id,
-        type: 'symbol',
-        source: id,
-        filter: ['!has', 'point_count'],
-        layout: {
-          'icon-image': '{image}',
-          'icon-size': iconScale,
-          'icon-allow-overlap': true,
-          'text-field': '{title}',
-          'text-allow-overlap': true,
-          'text-anchor': 'bottom',
-          'text-offset': [0, -2 * iconScale],
-          'text-font': findFonts(map),
-          'text-size': 12,
-        },
-        paint: {
-          'text-halo-color': 'white',
-          'text-halo-width': 1,
-        },
-      });
-    } else {
-      map.addLayer({
-        id,
-        type: 'symbol',
-        source: id,
-        layout: {
-          'icon-image': '{image}',
-          'icon-size': iconScale,
-          'icon-allow-overlap': true,
-        },
-      });
-    }
+    map.addLayer({
+      id: `${id}-circle`,
+      type: 'circle',
+      source: id,
+      paint: {
+        'circle-color': 'white',
+        'circle-radius': 22,
+        'circle-opacity': 1,
+      },
+    });
+
+    map.addLayer({
+      id,
+      type: 'symbol',
+      source: id,
+      layout: {
+        'text-field': '{stopped}',
+        'text-size': 18,
+        'text-font': findFonts(map),
+        'text-allow-overlap': true,
+        'text-anchor': 'center',
+      },
+      paint: {
+        'text-halo-color': 'white',
+        'text-halo-width': 2,
+        'text-color': 'red',
+      },
+    });
+
+    map.once('idle', () => {
+      if (map.getLayer(id)) map.moveLayer(id);
+      if (map.getLayer(`${id}-circle`)) map.moveLayer(`${id}-circle`, id);
+    });
 
     return () => {
-      if (map.getLayer(id)) {
-        map.removeLayer(id);
-      }
-      if (map.getSource(id)) {
-        map.removeSource(id);
-      }
+      if (map.getLayer(id)) map.removeLayer(id);
+      if (map.getLayer(`${id}-circle`)) map.removeLayer(`${id}-circle`);
+      if (map.getSource(id)) map.removeSource(id);
     };
-  }, [showTitles]);
+  }, [map]);
 
   useEffect(() => {
+    if (!map || !map.getSource(id)) return;
+
+    const features = markers.map(({ latitude, longitude, stopped }) => ({
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [longitude, latitude],
+      },
+      properties: {
+        stopped: `${stopped == 1 ? 'INI' : stopped}`,
+      },
+    }));
+
     map.getSource(id)?.setData({
       type: 'FeatureCollection',
-      features: markers.map(({ latitude, longitude, image, title }) => ({
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: [longitude, latitude],
-        },
-        properties: {
-          image: image || 'default-neutral',
-          title: title || '',
-        },
-      })),
+      features,
     });
-  }, [showTitles, markers]);
+  }, [markers, map]);
 
   return null;
 };

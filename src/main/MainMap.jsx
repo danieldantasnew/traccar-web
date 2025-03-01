@@ -19,7 +19,7 @@ import MapNotification from "../map/notification/MapNotification";
 import useFeatures from "../common/util/useFeatures";
 import MapRouteCoordinates from "../map/MapRouteCoordinates";
 import MapMarkers from "../map/MapMarkers";
-import DevicePath from "../common/components/DevicePath.jsx";
+import dayjs from "dayjs";
 import { useCatch } from "../reactHelper.js";
 
 const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
@@ -33,6 +33,10 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
   const [loading, setLoading] = useState(false);
   const selectedId = useSelector((state) => state.devices.selectedId);
 
+  const deviceIds = useSelector((state) => state.devices.selectedIds);
+  const groupIds = useSelector((state) => state.reports.groupIds);
+  const from = dayjs().startOf("day");
+  const to = dayjs().endOf("day");
 
   const onMarkerClick = useCallback(
     (_, deviceId) => {
@@ -46,40 +50,49 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
       item.events
         .map((event) => item.positions.find((p) => event.positionId === p.id))
         .filter((position) => position != null)
-        .map((position) => ({
+        .map((position, index) => ({
           latitude: position.latitude,
           longitude: position.longitude,
+          stopped: `${index+1}`,
         }))
     );
 
-    const handleSubmit = useCatch(async ({ deviceIds, groupIds, from, to }) => {
-      const query = new URLSearchParams({ from, to });
-      deviceIds.forEach((deviceId) => query.append("deviceId", deviceId));
-      groupIds.forEach((groupId) => query.append("groupId", groupId));
-      setLoading(true);
-      try {
-        const response = await fetch(`/api/reports/combined?${query.toString()}`);
-        if (response.ok) {
-          setItems(await response.json());
-        } else {
-          throw Error(await response.text());
-        }
-      } finally {
-        setLoading(false);
+  const handleSubmit = useCatch(async ({ deviceIds, groupIds, from, to }) => {
+    const query = new URLSearchParams({ from, to });
+    deviceIds.forEach((deviceId) => query.append("deviceId", deviceId));
+    groupIds.forEach((groupId) => query.append("groupId", groupId));
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/reports/combined?${query.toString()}`);
+      if (response.ok) {
+        setItems(await response.json());
+      } else {
+        throw Error(await response.text());
       }
-    });
+    } finally {
+      setLoading(false);
+    }
+  });
 
-    useEffect(()=> {
-      console.log(selectedId)
-    }, [selectedId]);
+  useEffect(() => {
+    if (devices[selectedId] && selectedId) {
+      handleSubmit({
+        deviceIds,
+        groupIds,
+        from: from.toISOString(),
+        to: to.toISOString(),
+      });
+    } else {
+      setItems([]);
+    }
+  }, [selectedId, selectedPosition]);
+
   return (
     <>
-      {selectedId && <DevicePath setItems={setItems} handleSubmit={handleSubmit}/>}
       <MapView>
         <MapOverlay />
         <MapGeofence />
         <MapAccuracy positions={filteredPositions} />
-        {/* <MapLiveRoutes positions={selectedPosition}/> */}
         <MapPositions
           positions={filteredPositions}
           onClick={onMarkerClick}
