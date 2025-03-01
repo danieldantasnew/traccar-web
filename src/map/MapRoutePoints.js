@@ -7,6 +7,7 @@ import { useTranslation } from '../common/components/LocalizationProvider';
 import { useAttributePreference } from '../common/util/preferences';
 
 const MapRoutePoints = ({ positions, onClick }) => {
+
   const id = useId();
   const t = useTranslation();
   const speedUnit = useAttributePreference('speedUnit');

@@ -21,6 +21,7 @@ import MapRouteCoordinates from "../map/MapRouteCoordinates";
 import MapMarkers from "../map/MapMarkers";
 import dayjs from "dayjs";
 import { useCatch } from "../reactHelper.js";
+import MapRoutePoints from "../map/MapRoutePoints.js";
 
 const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
   const theme = useTheme();
@@ -32,7 +33,8 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const selectedId = useSelector((state) => state.devices.selectedId);
-
+  const [directions, setDirections] = useState(null);
+ 
   const deviceIds = useSelector((state) => state.devices.selectedIds);
   const groupIds = useSelector((state) => state.reports.groupIds);
   const from = dayjs().startOf("day");
@@ -74,6 +76,18 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
     }
   });
 
+  useEffect(()=> {
+    if(items) {
+      items.forEach((item, index)=> {
+        if(index === 0) {
+          setDirections(items[index].route)
+        }
+
+        return null;
+      })
+    }
+  }, [items])
+
   useEffect(() => {
     if (devices[selectedId] && selectedId) {
       handleSubmit({
@@ -84,6 +98,7 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
       });
     } else {
       setItems([]);
+      setDirections(null);
     }
   }, [selectedId, selectedPosition]);
 
@@ -107,6 +122,7 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
             deviceId={item.deviceId}
           />
         ))}
+        {/* {directions ? <MapRoutePoints positions={directions} /> : ''} */}
         <MapMarkers markers={createMarkers()} />
         <MapDefaultCamera />
         <MapSelectedDevice />
