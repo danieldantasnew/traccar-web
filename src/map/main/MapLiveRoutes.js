@@ -19,7 +19,6 @@ const diffDistance = (currentDistance, prevDistance, setPrevDistance)=> {
 }
 
 const MapLiveRoutes = ({positions}) => {
-  console.log(positions)
   const id = useId();
   
   const theme = useTheme();
