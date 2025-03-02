@@ -146,18 +146,31 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
     });
     map.addLayer({
       id: clusters,
-      type: 'symbol',
+      type: "circle",
       source: id,
-      filter: ['has', 'point_count'],
-      layout: {
-        'icon-image': 'background',
-        'icon-size': iconScale,
-        'text-field': '{point_count_abbreviated}',
-        'text-font': findFonts(map),
-        'text-size': 16,
-      },
+      filter: ["has", "point_count"],
+      paint: {
+        "circle-color": "rgb(0, 45, 143)",
+        "circle-radius": 16,
+        "circle-stroke-width": 3,
+        "circle-stroke-color": "rgb(25, 90, 231)"
+      }
     });
 
+    map.addLayer({
+      id: `${clusters}-label`,
+      type: "symbol",
+      source: id,
+      filter: ["has", "point_count"],
+      layout: {
+        "text-field": "{point_count_abbreviated}",
+        "text-font": findFonts(map),
+        "text-size": 16,
+      },
+      paint: {
+        "text-color": "rgb(255, 255, 255)",
+      }
+    });
     map.on('mouseenter', clusters, onMouseEnter);
     map.on('mouseleave', clusters, onMouseLeave);
     map.on('click', clusters, onClusterClick);
