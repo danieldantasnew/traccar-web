@@ -70,7 +70,7 @@ const MapMarkers = ({ markers }) => {
         coordinates: [longitude, latitude],
       },
       properties: {
-        stopped: `${stopped == 1 ? "INI" : stopped}`,
+        stopped: `${stopped}`,
       },
     }));
 

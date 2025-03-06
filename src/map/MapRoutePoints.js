@@ -6,7 +6,7 @@ import { SpeedLegendControl } from './legend/MapSpeedLegend';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import { useAttributePreference } from '../common/util/preferences';
 
-const MapRoutePoints = ({ positions, onClick }) => {
+const MapRoutePoints = ({ positions, onClick, colorFixed }) => {
   const id = useId();
   const t = useTranslation();
   const speedUnit = useAttributePreference('speedUnit');
@@ -85,7 +85,7 @@ const MapRoutePoints = ({ positions, onClick }) => {
           index,
           id: position.id,
           rotation: position.course,
-          color: getSpeedColor(position.speed, minSpeed, maxSpeed),
+          color: colorFixed || getSpeedColor(position.speed, minSpeed, maxSpeed),
         },
       })),
     });

@@ -34,7 +34,6 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
   const [loading, setLoading] = useState(false);
   const selectedId = useSelector((state) => state.devices.selectedId);
   const [directions, setDirections] = useState(null);
-  const [routes, setRoutes] = useState([]);
  
   const deviceIds = useSelector((state) => state.devices.selectedIds);
   const groupIds = useSelector((state) => state.reports.groupIds);
@@ -66,7 +65,7 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
     groupIds.forEach((groupId) => query.append("groupId", groupId));
     setLoading(true);
     try {
-      const response = await fetch(`/api/positions?${query.toString()}`);
+      const response = await fetch(`/api/reports/combined?${query.toString()}`);
       if (response.ok) {
         setItems(await response.json());
       } else {
@@ -79,16 +78,13 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
 
   useEffect(()=> {
     if(items) {
-      items.forEach((item)=> {
-        console.log(item.latitude, item.longitude, item.course)
-      })
-      // items.forEach((item, index)=> {
-      //   if(index === 0) {
-      //     setDirections(items[index].route)
-      //   }
+      items.forEach((item, index)=> {
+        if(index === 0) {
+          setDirections(items[index].positions)
+        }
 
-      //   return null;
-      // })
+        return null;
+      })
     }
   }, [items])
 
@@ -118,7 +114,7 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
           selectedPosition={selectedPosition}
           showStatus
         />
-        {/* {items.map((item) => (
+        {items.map((item) => (
           <MapRouteCoordinates
             key={item.deviceId}
             name={devices[item.deviceId].name}
@@ -126,8 +122,8 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
             deviceId={item.deviceId}
           />
         ))}
-        {directions ? <MapRoutePoints positions={directions} /> : ''} */}
-        {/* <MapMarkers markers={createMarkers()} /> */}
+        {directions ? <MapRoutePoints positions={directions} colorFixed="rgb(25, 90, 231)" /> : ''}
+        <MapMarkers markers={createMarkers()} />
         <MapDefaultCamera />
         <MapSelectedDevice />
         <PoiMap />
