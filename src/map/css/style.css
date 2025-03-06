@@ -1,7 +1,5 @@
 .marker {
     position: relative;
-    background-color: black;
-    color: black;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -9,6 +7,7 @@
     padding: 4px;
     border-radius: 4px;
     font-size: 10px;
+    cursor: pointer;
 }
 
 .marker svg {
@@ -46,10 +45,4 @@
     left: 50%;
     transform: translateX(-50%) rotate(45deg);
     z-index: -10;
-}
-
-.marker:hover, .marker:hover::after{
-    background-color: rgb(0, 119, 50);
-    transition: .3s;
-    cursor: pointer;
 }

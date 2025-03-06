@@ -5,11 +5,14 @@ import { findFonts } from './core/mapUtil';
 import { SpeedLegendControl } from './legend/MapSpeedLegend';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import { useAttributePreference } from '../common/util/preferences';
+import { useSelector } from 'react-redux';
 
-const MapRoutePoints = ({ positions, onClick, colorFixed }) => {
+const MapRoutePoints = ({ positions, onClick, colorDynamic }) => {
   const id = useId();
   const t = useTranslation();
   const speedUnit = useAttributePreference('speedUnit');
+  const devices = useSelector((state) => state.devices.items);
+  const selectedId = useSelector((state) => state.devices.selectedId);
 
   const onMouseEnter = () => map.getCanvas().style.cursor = 'pointer';
   const onMouseLeave = () => map.getCanvas().style.cursor = '';
@@ -85,7 +88,7 @@ const MapRoutePoints = ({ positions, onClick, colorFixed }) => {
           index,
           id: position.id,
           rotation: position.course,
-          color: colorFixed || getSpeedColor(position.speed, minSpeed, maxSpeed),
+          color: colorDynamic && devices[selectedId] ? devices[selectedId].subColor : getSpeedColor(position.speed, minSpeed, maxSpeed),
         },
       })),
     });

@@ -235,7 +235,7 @@ const InfoCar = ({ device, classes }) => {
     <div className={`${classes.box} ${classes.infoCar}`}>
       <div className={`${classes.box}`} style={{ padding: "0" }}>
         <ListItemAvatar style={{ minWidth: "initial" }}>
-          <Avatar style={{ backgroundColor: "#312F92" }}>
+          <Avatar style={{ backgroundColor: `${device.subColor}` }}>
             <img
               className={classes.icon}
               src={mapIcons[mapIconKey(device.category)]}

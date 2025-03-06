@@ -2,10 +2,10 @@ import { useTheme } from '@mui/styles';
 import { useId, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { map } from './core/MapView';
-import { findFonts } from './core/mapUtil';
 
 const MapRouteCoordinates = ({ name, coordinates, deviceId }) => {
   const id = useId();
+  const devices = useSelector((state) => state.devices.items);
 
   const theme = useTheme();
 
@@ -67,7 +67,7 @@ const MapRouteCoordinates = ({ name, coordinates, deviceId }) => {
       },
       properties: {
         name,
-        color: 'rgb(0, 45, 143)',
+        color: `${devices[deviceId].bgColor}`,
       },
     });
   }, [theme, coordinates, reportColor]);

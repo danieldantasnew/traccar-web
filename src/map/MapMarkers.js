@@ -1,12 +1,15 @@
 import { useId, useEffect } from "react";
 import { map } from "./core/MapView";
 import { findFonts } from "./core/mapUtil";
+import { useSelector } from "react-redux";
 
 const MapMarkers = ({ markers }) => {
   const id = useId();
+  const devices = useSelector((state) => state.devices.items);
+  const selectedId = useSelector((state) => state.devices.selectedId);
 
   useEffect(() => {
-    if (!map) return;
+    if (!map || !devices[selectedId]) return;
     if (map.getSource(id)) {
       map.removeSource(id);
     }
@@ -27,7 +30,7 @@ const MapMarkers = ({ markers }) => {
         type: "circle",
         source: id,
         paint: {
-          "circle-color": "#FFC200", 
+          "circle-color": `${devices[selectedId].bgColor}`, 
           "circle-radius": 22,
           "circle-opacity": 1,
         },
@@ -48,7 +51,7 @@ const MapMarkers = ({ markers }) => {
         },
         paint: { 
           "text-halo-width": 2,
-          "text-color": "rgb(0, 45, 143)",
+          "text-color": `${devices[selectedId].color}`,
         },
       });
     }
@@ -58,7 +61,7 @@ const MapMarkers = ({ markers }) => {
       if (map.getLayer(`${id}-circle`)) map.removeLayer(`${id}-circle`);
       if (map.getSource(id)) map.removeSource(id);
     };
-  }, [map]);
+  }, [map, selectedId]);
 
   useEffect(() => {
     if (!map || !map.getSource(id)) return;

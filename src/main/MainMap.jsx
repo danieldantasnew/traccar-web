@@ -122,7 +122,7 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
             deviceId={item.deviceId}
           />
         ))}
-        {directions ? <MapRoutePoints positions={directions} colorFixed="rgb(25, 90, 231)" /> : ''}
+        {directions ? <MapRoutePoints positions={directions} colorDynamic={true}/> : ''}
         <MapMarkers markers={createMarkers()} />
         <MapDefaultCamera />
         <MapSelectedDevice />
