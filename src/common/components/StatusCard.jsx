@@ -58,6 +58,12 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
     },
   },
+  contentCardTop: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1rem',
+    height: '100%'
+  },
   ignitionState: {
     position: "absolute",
     left: "6px",
@@ -230,45 +236,47 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
       >
         {device && (
           <Card elevation={3} className={classes.card}>
-            {deviceImage ? (
-              <CardMedia
-                className={classes.media}
-                image={`/api/media/${device.uniqueId}/${deviceImage}`}
-              >
-                {position && (
-                  <IgnitionState position={position} classes={classes} />
-                )}
-                <IconButton
-                  size="medium"
-                  onClick={onClose}
-                  onTouchStart={onClose}
+            <div className={classes.contentCardTop}>
+              {deviceImage ? (
+                <CardMedia
+                  className={classes.media}
+                  image={`/api/media/${device.uniqueId}/${deviceImage}`}
                 >
-                  <CloseIcon
-                    fontSize="medium"
-                    className={classes.mediaButton}
-                  />
-                </IconButton>
-              </CardMedia>
-            ) : (
-              <div className={classes.header}>
-                {position && (
-                  <IgnitionState position={position} classes={classes} />
-                )}
-                <IconButton
-                  size="medium"
-                  onClick={onClose}
-                  onTouchStart={onClose}
-                >
-                  <CloseIcon
-                    fontSize="medium"
-                    className={classes.mediaButton}
-                  />
-                </IconButton>
-              </div>
-            )}
-            {position && (
-              <StatusCardDetails position={position} device={device} />
-            )}
+                  {position && (
+                    <IgnitionState position={position} classes={classes} />
+                  )}
+                  <IconButton
+                    size="medium"
+                    onClick={onClose}
+                    onTouchStart={onClose}
+                  >
+                    <CloseIcon
+                      fontSize="medium"
+                      className={classes.mediaButton}
+                    />
+                  </IconButton>
+                </CardMedia>
+              ) : (
+                <div className={classes.header}>
+                  {position && (
+                    <IgnitionState position={position} classes={classes} />
+                  )}
+                  <IconButton
+                    size="medium"
+                    onClick={onClose}
+                    onTouchStart={onClose}
+                  >
+                    <CloseIcon
+                      fontSize="medium"
+                      className={classes.mediaButton}
+                    />
+                  </IconButton>
+                </div>
+              )}
+              {position && (
+                <StatusCardDetails position={position} device={device} />
+              )}
+            </div>
             <CardActions classes={{ root: classes.actions }} disableSpacing>
               <Tooltip title={t("sharedExtra")}>
                 <IconButton
