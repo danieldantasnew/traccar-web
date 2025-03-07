@@ -47,17 +47,20 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
     [dispatch]
   );
 
-  const createMarkers = () =>
-    items.flatMap((item) =>
-      item.events
-        .map((event) => item.positions.find((p) => event.positionId === p.id))
-        .filter((position) => position != null)
-        .map((position, index) => ({
-          latitude: position.latitude,
-          longitude: position.longitude,
-          stopped: `${index+1}`,
-        }))
-    );
+  const createMarkers = () => {
+    return items.flatMap((item) =>
+       item.events
+         .map((event) => item.positions.find((p) => event.positionId === p.id))
+         .filter((position) => position != null)
+         .map((position, index) => ({
+           latitude: position.latitude,
+           longitude: position.longitude,
+           stopped: `${index+1}`,
+           bgColor: `${devices[item.deviceId].bgColor}`,
+           color: `${devices[item.deviceId].color}`,
+         }))
+     );
+   }
 
   const handleSubmit = useCatch(async ({ deviceIds, groupIds, from, to }) => {
     const query = new URLSearchParams({ from, to });

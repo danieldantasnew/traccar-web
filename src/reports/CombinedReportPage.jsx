@@ -39,7 +39,8 @@ const CombinedReportPage = () => {
           latitude: position.latitude,
           longitude: position.longitude,
           stopped: `${index+1}`,
-          deviceId: `${item.deviceId}`
+          bgColor: `${devices[item.deviceId].bgColor}`,
+          color: `${devices[item.deviceId].color}`,
         }))
     );
   }

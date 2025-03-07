@@ -30,7 +30,7 @@ const MapMarkers = ({ markers }) => {
         type: "circle",
         source: id,
         paint: {
-          "circle-color": `${devices[selectedId].bgColor}`, 
+          "circle-color": ["get", "bgColor"],
           "circle-radius": 22,
           "circle-opacity": 1,
         },
@@ -51,7 +51,7 @@ const MapMarkers = ({ markers }) => {
         },
         paint: { 
           "text-halo-width": 2,
-          "text-color": `${devices[selectedId].color}`,
+          "text-color": ["get", "color"],
         },
       });
     }
@@ -66,7 +66,7 @@ const MapMarkers = ({ markers }) => {
   useEffect(() => {
     if (!map || !map.getSource(id)) return;
 
-    const features = markers.map(({ latitude, longitude, stopped }) => ({
+    const features = markers.map(({ latitude, longitude, stopped, bgColor, color }) => ({
       type: "Feature",
       geometry: {
         type: "Point",
@@ -74,6 +74,8 @@ const MapMarkers = ({ markers }) => {
       },
       properties: {
         stopped: `${stopped}`,
+        bgColor: `${bgColor}`,
+        color: `${color}`,
       },
     }));
 
