@@ -30,14 +30,21 @@ const CombinedReportPage = () => {
 
   const itemsCoordinates = useMemo(() => items.flatMap((item) => item.route), [items]);
 
-  const createMarkers = () => items.flatMap((item) => item.events
-    .map((event) => item.positions.find((p) => event.positionId === p.id))
-    .filter((position) => position != null)
-    .map((position) => ({
-      latitude: position.latitude,
-      longitude: position.longitude,
-    })));
+  const createMarkers = () => {
+   return items.flatMap((item) =>
+      item.events
+        .map((event) => item.positions.find((p) => event.positionId === p.id))
+        .filter((position) => position != null)
+        .map((position, index) => ({
+          latitude: position.latitude,
+          longitude: position.longitude,
+          stopped: `${index+1}`,
+          deviceId: `${item.deviceId}`
+        }))
+    );
+  }
 
+  
   const handleSubmit = useCatch(async ({ deviceIds, groupIds, from, to }) => {
     const query = new URLSearchParams({ from, to });
     deviceIds.forEach((deviceId) => query.append('deviceId', deviceId));
@@ -54,6 +61,8 @@ const CombinedReportPage = () => {
       setLoading(false);
     }
   });
+
+  
 
   return (
     <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportCombined']}>
