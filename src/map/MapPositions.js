@@ -327,7 +327,7 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition }) => {
 
         el.className = "marker";
         el.style.backgroundColor = device.subColor;
-        el.style.color = device.subColor;
+        el.style.color = device.color;
         el.innerHTML = `
           <div>
             ${DynamicIcons(device.category)}

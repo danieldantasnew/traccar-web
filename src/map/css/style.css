@@ -8,6 +8,7 @@
     border-radius: 4px;
     font-size: 10px;
     cursor: pointer;
+    border: 2px solid transparent;
 }
 
 .marker svg {
@@ -24,7 +25,6 @@
 }
 
 .marker p {
-    color: white;
     margin: 0;
     line-height: 16px;
 }
@@ -35,14 +35,23 @@
 }
 
 .marker::after {
-    display: block;
-    height: 14px;
-    width: 14px;
     content: '';
     position: absolute;
-    background-color: currentColor;
-    bottom: -5px;
+    bottom: -7px;
     left: 50%;
     transform: translateX(-50%) rotate(45deg);
-    z-index: -10;
+    width: 10px;
+    height: 10px;
+    background-color: inherit;
+    border-left: 2px solid transparent;
+    border-top: 2px solid transparent;
+}
+
+.marker:hover {
+    border: 2px solid rgb(0, 0, 0);
+}
+
+.marker:hover::after {
+    border-bottom: 2px solid rgb(0, 0, 0);
+    border-right: 2px solid rgb(0, 0, 0);
 }
