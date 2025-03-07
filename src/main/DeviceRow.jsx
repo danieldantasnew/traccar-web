@@ -74,6 +74,7 @@ const DeviceRow = ({ data, index, style }) => {
 
   const item = data[index];
   const position = useSelector((state) => state.session.positions[item.id]);
+  const device = useSelector((state) => state.devices.items);
 
   const devicePrimary = useAttributePreference("devicePrimary", "name");
   const deviceSecondary = useAttributePreference("deviceSecondary", "");
@@ -103,7 +104,7 @@ const DeviceRow = ({ data, index, style }) => {
         disabled={!admin && item.disabled}
       >
         <ListItemAvatar>
-          <Avatar>
+          <Avatar style={device && position ? {backgroundColor: `${device[position.deviceId].subColor}`}: {}}>
             <img
               className={classes.icon}
               src={mapIcons[mapIconKey(item.category)]}

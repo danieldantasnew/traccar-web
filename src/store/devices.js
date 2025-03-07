@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const colors = [
   ["rgb(189, 12, 18)", "white", "rgb(255, 0, 8)"],
-  ["rgb(253, 173, 0)", "white", "rgb(151, 103, 0)"],
+  ["rgb(214, 164, 0)", "white", "rgb(151, 103, 0)"],
   ["rgb(28, 160, 133)", "white", "rgb(0, 105, 84)"],
   ["rgba(238, 0, 159, 0.81)", "white", "rgb(173, 0, 116)"],
   ["rgb(3, 221, 39)", "white", "rgb(0, 150, 25)"],

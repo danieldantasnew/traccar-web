@@ -326,6 +326,7 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition }) => {
         const device = devices[position.deviceId];
 
         el.className = "marker";
+        el.title = `${device ? 'Última atualização: ' + formatTime(device.lastUpdate): ''}`
         el.style.backgroundColor = device.subColor;
         el.style.color = device.color;
         el.innerHTML = `

@@ -35,7 +35,7 @@ const MapSelectedDevice = () => {
 
       lastUserZoomTime.current = Date.now();
     }
-  }, [currentId, position]);
+  }, [currentId]);
 
   useEffect(() => {
     const interval = setInterval(() => {

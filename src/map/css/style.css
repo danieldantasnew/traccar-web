@@ -49,9 +49,11 @@
 
 .marker:hover {
     border: 2px solid rgb(0, 0, 0);
+    z-index: 1000;
 }
 
 .marker:hover::after {
     border-bottom: 2px solid rgb(0, 0, 0);
     border-right: 2px solid rgb(0, 0, 0);
 }
+
