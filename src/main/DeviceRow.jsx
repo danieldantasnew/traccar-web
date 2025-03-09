@@ -65,158 +65,112 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DeviceRow = ({ data, index, style }) => {
+const DeviceRow = ({ device }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const t = useTranslation();
 
   const admin = useAdministrator();
 
-  const item = data[index];
-  const position = useSelector((state) => state.session.positions[item.id]);
-  const device = useSelector((state) => state.devices.items);
+  const position = useSelector((state) => state.session.positions[device.id]);
+  const devices = useSelector((state) => state.devices.items);
 
   const devicePrimary = useAttributePreference("devicePrimary", "name");
   const deviceSecondary = useAttributePreference("deviceSecondary", "");
 
   const secondaryText = () => {
     let status;
-    if (item.status === "online" || !item.lastUpdate) {
-      status = formatStatus(item.status, t);
+    if (device.status === "online" || !device.lastUpdate) {
+      status = formatStatus(device.status, t);
     } else {
-      status = dayjs(item.lastUpdate).fromNow();
+      status = dayjs(device.lastUpdate).fromNow();
     }
     return (
       <>
         {deviceSecondary &&
-          item[deviceSecondary] &&
-          `${item[deviceSecondary]} • `}
-        <span className={classes[getStatusColor(item.status)]}>{status}</span>
+          device[deviceSecondary] &&
+          `${device[deviceSecondary]} • `}
+        <span className={classes[getStatusColor(device.status)]}>{status}</span>
       </>
     );
   };
 
   return (
-    <div style={style}>
-      <ListItemButton
-        key={item.id}
-        onClick={() => dispatch(devicesActions.selectId(item.id))}
-        disabled={!admin && item.disabled}
-      >
-        <ListItemAvatar>
-          <Avatar style={device && position ? {backgroundColor: `${device[position.deviceId].subColor}`}: {}}>
-            <img
-              className={classes.icon}
-              src={mapIcons[mapIconKey(item.category)]}
-              alt=""
-            />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText
-          primary={item[devicePrimary]}
-          primaryTypographyProps={{ noWrap: true }}
-          secondary={secondaryText()}
-          secondaryTypographyProps={{ noWrap: true }}
-        />
-        {position && (
-          <>
-            {position.attributes.motion ? (
-              <Tooltip
-                title={`Em movimento`}
-              >
-                <IconButton size="small">
-                  <SpeedRoundedIcon width={22} height={22} className={classes.success}/>
-                </IconButton>
-              </Tooltip>
-            ) : (
-              ""
-            )}
-            {position.attributes.hasOwnProperty("alarm") && (
-              <Tooltip
-                title={`${t("eventAlarm")}: ${formatAlarm(
-                  position.attributes.alarm,
-                  t
-                )}`}
-              >
-                <IconButton size="small">
-                  <ErrorIcon fontSize="small" className={classes.error} />
-                </IconButton>
-              </Tooltip>
-            )}
-            {position.attributes.hasOwnProperty("ignition") && (
-              <Tooltip
-                title={`${t("positionIgnition")}: ${formatBoolean(
-                  position.attributes.ignition,
-                  t
-                )}`}
-              >
-                <IconButton size="small">
-                  {position.attributes.ignition ? (
-                    <PowerSettingsNewRoundedIcon
-                      width={22}
-                      height={22}
-                      className={classes.success}
-                    />
+    <ListItemButton
+      key={device.id}
+      onClick={() => dispatch(devicesActions.selectId(device.id))}
+      disabled={!admin && device.disabled}
+    >
+      <ListItemAvatar>
+        <Avatar style={devices && position ? { backgroundColor: `${devices[position.deviceId].subColor}` } : {}}>
+          <img
+            className={classes.icon}
+            src={mapIcons[mapIconKey(device.category)]}
+            alt=""
+          />
+        </Avatar>
+      </ListItemAvatar>
+      <ListItemText
+        primary={device[devicePrimary]}
+        primaryTypographyProps={{ noWrap: true }}
+        secondary={secondaryText()}
+        secondaryTypographyProps={{ noWrap: true }}
+      />
+      {position && (
+        <>
+          {position.attributes.motion && (
+            <Tooltip title="Em movimento">
+              <IconButton size="small">
+                <SpeedRoundedIcon width={22} height={22} className={classes.success}/>
+              </IconButton>
+            </Tooltip>
+          )}
+          {position.attributes.hasOwnProperty("alarm") && (
+            <Tooltip title={`${t("eventAlarm")}: ${formatAlarm(position.attributes.alarm, t)}`}>
+              <IconButton size="small">
+                <ErrorIcon fontSize="small" className={classes.error} />
+              </IconButton>
+            </Tooltip>
+          )}
+          {position.attributes.hasOwnProperty("ignition") && (
+            <Tooltip title={`${t("positionIgnition")}: ${formatBoolean(position.attributes.ignition, t)}`}>
+              <IconButton size="small">
+                {position.attributes.ignition ? (
+                  <PowerSettingsNewRoundedIcon width={22} height={22} className={classes.success} />
+                ) : (
+                  <PowerSettingsNewRoundedIcon width={22} height={22} className={classes.error} />
+                )}
+              </IconButton>
+            </Tooltip>
+          )}
+          {position.attributes.hasOwnProperty("batteryLevel") && (
+            <Tooltip title={`${t("positionBatteryLevel")}: ${formatPercentage(position.attributes.batteryLevel)}`}>
+              <IconButton size="small">
+                {position.attributes.batteryLevel > 70 ? (
+                  position.attributes.charge ? (
+                    <BatteryChargingFullIcon fontSize="small" className={classes.success} />
                   ) : (
-                    <PowerSettingsNewRoundedIcon
-                      width={22}
-                      height={22}
-                      className={classes.error}
-                    />
-                  )}
-                </IconButton>
-              </Tooltip>
-            )}
-            {position.attributes.hasOwnProperty("batteryLevel") && (
-              <Tooltip
-                title={`${t("positionBatteryLevel")}: ${formatPercentage(
-                  position.attributes.batteryLevel
-                )}`}
-              >
-                <IconButton size="small">
-                  {(position.attributes.batteryLevel > 70 &&
-                    (position.attributes.charge ? (
-                      <BatteryChargingFullIcon
-                        fontSize="small"
-                        className={classes.success}
-                      />
-                    ) : (
-                      <BatteryFullIcon
-                        fontSize="small"
-                        className={classes.success}
-                      />
-                    ))) ||
-                    (position.attributes.batteryLevel > 30 &&
-                      (position.attributes.charge ? (
-                        <BatteryCharging60Icon
-                          fontSize="small"
-                          className={classes.warning}
-                        />
-                      ) : (
-                        <Battery60Icon
-                          fontSize="small"
-                          className={classes.warning}
-                        />
-                      ))) ||
-                    (position.attributes.charge ? (
-                      <BatteryCharging20Icon
-                        fontSize="small"
-                        className={classes.error}
-                      />
-                    ) : (
-                      <Battery20Icon
-                        fontSize="small"
-                        className={classes.error}
-                      />
-                    ))}
-                </IconButton>
-              </Tooltip>
-            )}
-          </>
-        )}
-      </ListItemButton>
-    </div>
+                    <BatteryFullIcon fontSize="small" className={classes.success} />
+                  )
+                ) : position.attributes.batteryLevel > 30 ? (
+                  position.attributes.charge ? (
+                    <BatteryCharging60Icon fontSize="small" className={classes.warning} />
+                  ) : (
+                    <Battery60Icon fontSize="small" className={classes.warning} />
+                  )
+                ) : position.attributes.charge ? (
+                  <BatteryCharging20Icon fontSize="small" className={classes.error} />
+                ) : (
+                  <Battery20Icon fontSize="small" className={classes.error} />
+                )}
+              </IconButton>
+            </Tooltip>
+          )}
+        </>
+      )}
+    </ListItemButton>
   );
 };
 
 export default DeviceRow;
+

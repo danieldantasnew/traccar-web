@@ -1,13 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import makeStyles from '@mui/styles/makeStyles';
-import { FixedSizeList } from 'react-window';
-import AutoSizer from 'react-virtualized-auto-sizer';
 import { devicesActions } from '../store';
 import { useEffectAsync } from '../reactHelper';
 import DeviceRow from './DeviceRow';
+import { Box } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
+  groupTitle: {
+    fontSize: '.8rem',
+    padding: "8px 16px",
+    backgroundColor: "#f3f3f3",
+    fontWeight: "600",
+  },
   list: {
     maxHeight: '100%',
   },
@@ -18,9 +23,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DeviceList = ({ devices, filteredPositions }) => {
+  
   const classes = useStyles();
   const dispatch = useDispatch();
   const listInnerEl = useRef(null);
+  const groups = useSelector((state)=> state.groups.items);
+  const [deviceGroup, setDeviceGroup] = useState(null);
 
   if (listInnerEl.current) {
     listInnerEl.current.className = classes.listInner;
@@ -44,22 +52,45 @@ const DeviceList = ({ devices, filteredPositions }) => {
     }
   }, []);
 
+  useEffect(()=> {
+    if(devices) {
+      const groupedDevices = devices.reduce((acc, device) => {
+        const nameGroup = groups[device.groupId] ? groups[device.groupId].name : 'Sem Categoria';
+      
+        if (!acc[nameGroup]) {
+          acc[nameGroup] = [];
+        }
+      
+        acc[nameGroup].push({ ...device, nameGroup });
+      
+        return acc;
+      }, {});
+      
+      const groupedDevicesArray = Object.entries(groupedDevices).map(([name, devices]) => ({
+        name,
+        devices
+      }));
+      
+      setDeviceGroup(groupedDevicesArray);
+      
+    }
+  }, [devices]);
+
+  if(!deviceGroup) return null;
+
   return (
-    <AutoSizer className={classes.list}>
-      {({ height, width }) => (
-        <FixedSizeList
-          width={width}
-          height={height}
-          itemCount={devices.length}
-          itemData={devices}
-          itemSize={72}
-          overscanCount={10}
-          innerRef={listInnerEl}
-        >
-          {DeviceRow}
-        </FixedSizeList>
-      )}
-    </AutoSizer>
+    <div className={classes.list}>
+      {deviceGroup.map((group) => (
+        <div key={group.name}>
+          <Box component={"h4"} className={classes.groupTitle}>{group.name}</Box>
+          <div className={classes.deviceList}>
+            {group.devices.map((device) => (
+              <DeviceRow key={device.id} device={device} />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
   );
 };
 
