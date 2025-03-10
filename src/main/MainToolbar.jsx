@@ -5,10 +5,10 @@ import {
   Toolbar, IconButton, OutlinedInput, InputAdornment, Popover, FormControl, InputLabel, Select, MenuItem, FormGroup, FormControlLabel, Checkbox, Badge, ListItemButton, ListItemText, Tooltip,
 } from '@mui/material';
 import { makeStyles, useTheme } from '@mui/styles';
-import MapIcon from '@mui/icons-material/Map';
-import ViewListIcon from '@mui/icons-material/ViewList';
-import AddIcon from '@mui/icons-material/Add';
-import TuneIcon from '@mui/icons-material/Tune';
+import MapRoundedIcon from '@mui/icons-material/MapRounded';
+import ViewListRoundedIcon from '@mui/icons-material/ViewListRounded';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import { useDeviceReadonly } from '../common/util/permissions';
 import DeviceRow from './DeviceRow';
@@ -60,7 +60,7 @@ const MainToolbar = ({
   return (
     <Toolbar ref={toolbarRef} className={classes.toolbar}>
       <IconButton edge="start" onClick={() => setDevicesOpen(!devicesOpen)}>
-        {devicesOpen ? <MapIcon /> : <ViewListIcon />}
+        {devicesOpen ? <MapRoundedIcon /> : <ViewListRoundedIcon />}
       </IconButton>
       <OutlinedInput
         ref={inputRef}
@@ -73,7 +73,7 @@ const MainToolbar = ({
           <InputAdornment position="end">
             <IconButton size="small" edge="end" onClick={() => setFilterAnchorEl(inputRef.current)}>
               <Badge color="info" variant="dot" invisible={!filter.statuses.length && !filter.groups.length}>
-                <TuneIcon fontSize="small" />
+                <TuneRoundedIcon fontSize="small" />
               </Badge>
             </IconButton>
           </InputAdornment>
@@ -170,7 +170,7 @@ const MainToolbar = ({
       </Popover>
       <IconButton edge="end" onClick={() => navigate('/settings/device')} disabled={deviceReadonly}>
         <Tooltip open={!deviceReadonly && Object.keys(devices).length === 0} title={t('deviceRegisterFirst')} arrow>
-          <AddIcon />
+          <AddRoundedIcon />
         </Tooltip>
       </IconButton>
     </Toolbar>

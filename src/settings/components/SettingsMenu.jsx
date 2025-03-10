@@ -2,19 +2,20 @@ import React from 'react';
 import {
   Divider, List,
 } from '@mui/material';
-import SettingsIcon from '@mui/icons-material/Settings';
-import CreateIcon from '@mui/icons-material/Create';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import FolderIcon from '@mui/icons-material/Folder';
-import PersonIcon from '@mui/icons-material/Person';
-import StorageIcon from '@mui/icons-material/Storage';
-import BuildIcon from '@mui/icons-material/Build';
-import PeopleIcon from '@mui/icons-material/People';
-import TodayIcon from '@mui/icons-material/Today';
-import PublishIcon from '@mui/icons-material/Publish';
-import SmartphoneIcon from '@mui/icons-material/Smartphone';
-import HelpIcon from '@mui/icons-material/Help';
-import CampaignIcon from '@mui/icons-material/Campaign';
+import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
+import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
+import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
+import LayersRoundedIcon from '@mui/icons-material/LayersRounded';
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
+import StorageRoundedIcon from '@mui/icons-material/StorageRounded';
+import BuildRoundedIcon from '@mui/icons-material/BuildRounded';
+import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
+import TodayRoundedIcon from '@mui/icons-material/TodayRounded';
+import PublishRoundedIcon from '@mui/icons-material/PublishRounded';
+import SmartphoneRoundedIcon from '@mui/icons-material/SmartphoneRounded';
+import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
+import CampaignRoundedIcon from '@mui/icons-material/CampaignRounded';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useTranslation } from '../../common/components/LocalizationProvider';
@@ -42,7 +43,7 @@ const SettingsMenu = () => {
         <MenuItem
           title={t('sharedPreferences')}
           link="/settings/preferences"
-          icon={<SettingsIcon />}
+          icon={<SettingsRoundedIcon />}
           selected={location.pathname === '/settings/preferences'}
         />
         {!readonly && (
@@ -50,32 +51,32 @@ const SettingsMenu = () => {
             <MenuItem
               title={t('sharedNotifications')}
               link="/settings/notifications"
-              icon={<NotificationsIcon />}
+              icon={<NotificationsRoundedIcon />}
               selected={location.pathname.startsWith('/settings/notification')}
             />
             <MenuItem
               title={t('settingsUser')}
               link={`/settings/user/${userId}`}
-              icon={<PersonIcon />}
+              icon={<PersonRoundedIcon />}
               selected={location.pathname === `/settings/user/${userId}`}
             />
             <MenuItem
               title={t('deviceTitle')}
               link="/settings/devices"
-              icon={<SmartphoneIcon />}
+              icon={<SmartphoneRoundedIcon />}
               selected={location.pathname.startsWith('/settings/device')}
             />
             <MenuItem
               title={t('sharedGeofences')}
               link="/geofences"
-              icon={<CreateIcon />}
+              icon={<CreateRoundedIcon />}
               selected={location.pathname.startsWith('/settings/geofence')}
             />
             {!features.disableGroups && (
               <MenuItem
                 title={t('settingsGroups')}
                 link="/settings/groups"
-                icon={<FolderIcon />}
+                icon={<LayersRoundedIcon />}
                 selected={location.pathname.startsWith('/settings/group')}
               />
             )}
@@ -83,7 +84,7 @@ const SettingsMenu = () => {
               <MenuItem
                 title={t('sharedDrivers')}
                 link="/settings/drivers"
-                icon={<PersonIcon />}
+                icon={<GroupRoundedIcon />}
                 selected={location.pathname.startsWith('/settings/driver')}
               />
             )}
@@ -91,7 +92,7 @@ const SettingsMenu = () => {
               <MenuItem
                 title={t('sharedCalendars')}
                 link="/settings/calendars"
-                icon={<TodayIcon />}
+                icon={<TodayRoundedIcon />}
                 selected={location.pathname.startsWith('/settings/calendar')}
               />
             )}
@@ -99,7 +100,7 @@ const SettingsMenu = () => {
               <MenuItem
                 title={t('sharedComputedAttributes')}
                 link="/settings/attributes"
-                icon={<StorageIcon />}
+                icon={<StorageRoundedIcon />}
                 selected={location.pathname.startsWith('/settings/attribute')}
               />
             )}
@@ -107,7 +108,7 @@ const SettingsMenu = () => {
               <MenuItem
                 title={t('sharedMaintenance')}
                 link="/settings/maintenances"
-                icon={<BuildIcon />}
+                icon={<BuildRoundedIcon />}
                 selected={location.pathname.startsWith('/settings/maintenance')}
               />
             )}
@@ -115,7 +116,7 @@ const SettingsMenu = () => {
               <MenuItem
                 title={t('sharedSavedCommands')}
                 link="/settings/commands"
-                icon={<PublishIcon />}
+                icon={<PublishRoundedIcon />}
                 selected={location.pathname.startsWith('/settings/command')}
               />
             )}
@@ -123,7 +124,7 @@ const SettingsMenu = () => {
               <MenuItem
                 title={t('settingsSupport')}
                 link={supportLink}
-                icon={<HelpIcon />}
+                icon={<HelpRoundedIcon />}
               />
             )}
           </>
@@ -136,21 +137,21 @@ const SettingsMenu = () => {
             <MenuItem
               title={t('serverAnnouncement')}
               link="/settings/announcement"
-              icon={<CampaignIcon />}
+              icon={<CampaignRoundedIcon />}
               selected={location.pathname === '/settings/announcement'}
             />
             {admin && (
               <MenuItem
                 title={t('settingsServer')}
                 link="/settings/server"
-                icon={<StorageIcon />}
+                icon={<StorageRoundedIcon />}
                 selected={location.pathname === '/settings/server'}
               />
             )}
             <MenuItem
               title={t('settingsUsers')}
               link="/settings/users"
-              icon={<PeopleIcon />}
+              icon={<PeopleRoundedIcon />}
               selected={location.pathname.startsWith('/settings/user') && location.pathname !== `/settings/user/${userId}`}
             />
           </List>

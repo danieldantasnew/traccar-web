@@ -5,10 +5,10 @@ import {
   Paper, BottomNavigation, BottomNavigationAction, Menu, MenuItem, Typography, Badge,
 } from '@mui/material';
 
-import DescriptionIcon from '@mui/icons-material/Description';
-import SettingsIcon from '@mui/icons-material/Settings';
-import MapIcon from '@mui/icons-material/Map';
-import PersonIcon from '@mui/icons-material/Person';
+import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
+import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
+import MapRoundedIcon from '@mui/icons-material/MapRounded';
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 import { sessionActions } from '../../store';
@@ -105,19 +105,19 @@ const BottomMenu = () => {
           label={t('mapTitle')}
           icon={(
             <Badge color="error" variant="dot" overlap="circular" invisible={socket !== false}>
-              <MapIcon />
+              <MapRoundedIcon />
             </Badge>
           )}
           value="map"
         />
         {!disableReports && (
-          <BottomNavigationAction label={t('reportTitle')} icon={<DescriptionIcon />} value="reports" />
+          <BottomNavigationAction label={t('reportTitle')} icon={<DescriptionRoundedIcon />} value="reports" />
         )}
-        <BottomNavigationAction label={t('settingsTitle')} icon={<SettingsIcon />} value="settings" />
+        <BottomNavigationAction label={t('settingsTitle')} icon={<SettingsRoundedIcon />} value="settings" />
         {readonly ? (
           <BottomNavigationAction label={t('loginLogout')} icon={<ExitToAppIcon />} value="logout" />
         ) : (
-          <BottomNavigationAction label={t('settingsUser')} icon={<PersonIcon />} value="account" />
+          <BottomNavigationAction label={t('settingsUser')} icon={<PersonRoundedIcon />} value="account" />
         )}
       </BottomNavigation>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>

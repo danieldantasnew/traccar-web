@@ -8,7 +8,7 @@ import {
   Checkbox,
   TextField,
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import { DropzoneArea } from 'react-mui-dropzone';
 import EditItemView from './components/EditItemView';
 import EditAttributesAccordion from './components/EditAttributesAccordion';
@@ -65,7 +65,7 @@ const DevicePage = () => {
       {item && (
         <>
           <Accordion defaultExpanded>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <AccordionSummary expandIcon={<ExpandMoreRoundedIcon />}>
               <Typography variant="subtitle1">
                 {t('sharedRequired')}
               </Typography>
@@ -86,7 +86,7 @@ const DevicePage = () => {
             </AccordionDetails>
           </Accordion>
           <Accordion>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <AccordionSummary expandIcon={<ExpandMoreRoundedIcon />}>
               <Typography variant="subtitle1">
                 {t('sharedExtra')}
               </Typography>
@@ -152,7 +152,7 @@ const DevicePage = () => {
           </Accordion>
           {item.id && (
             <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <AccordionSummary expandIcon={<ExpandMoreRoundedIcon />}>
                 <Typography variant="subtitle1">
                   {t('attributeDeviceImage')}
                 </Typography>

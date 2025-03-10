@@ -23,24 +23,23 @@ const { reducer, actions } = createSlice({
     refresh(state, action) {
       state.items = {};
       const randomIndex = Math.floor(Math.random() * colors.length);
-      console.log(randomIndex)
       action.payload.forEach((item, index) => {
         state.items[item.id] = {
           ...item,
-          bgColor: colors[index][0] || colors[randomIndex][0],
-          color: colors[index][1] || colors[randomIndex][1],
-          subColor: colors[index][2] || colors[randomIndex][2],
+          bgColor: colors[index] ? colors[index][0] : colors[randomIndex][0],
+          color: colors[index] ? colors[index][1] : colors[randomIndex][1],
+          subColor: colors[index] ? colors[index][2] : colors[randomIndex][2],
         }
       });
     },
     update(state, action) {
-      action.payload.forEach((item, index) => {
+      action.payload.forEach((item) => {
         const existingItem = state.items[item.id];
         state.items[item.id] = {
           ...item,
-          bgColor: existingItem.bgColor || colors[index][0],
-          color: existingItem.color || colors[index][1],
-          subColor: existingItem.subColor  || colors[index][2],
+          bgColor: existingItem.bgColor,
+          color: existingItem.color,
+          subColor: existingItem.subColor,
         }
       });
     },

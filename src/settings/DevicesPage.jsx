@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Table, TableRow, TableCell, TableHead, TableBody, Button, TableFooter, FormControlLabel, Switch,
 } from '@mui/material';
-import LinkIcon from '@mui/icons-material/Link';
+import LinkRoundedIcon from '@mui/icons-material/LinkRounded';
 import { useEffectAsync } from '../reactHelper';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import PageLayout from '../common/components/PageLayout';
@@ -57,7 +57,7 @@ const DevicesPage = () => {
   const actionConnections = {
     key: 'connections',
     title: t('sharedConnections'),
-    icon: <LinkIcon fontSize="small" />,
+    icon: <LinkRoundedIcon fontSize="small" />,
     handler: (deviceId) => navigate(`/settings/device/${deviceId}/connections`),
   };
 

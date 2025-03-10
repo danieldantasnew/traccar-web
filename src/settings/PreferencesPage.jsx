@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import {
   Accordion, AccordionSummary, AccordionDetails, Typography, Container, FormControl, InputLabel, Select, MenuItem, Checkbox, FormControlLabel, FormGroup, InputAdornment, IconButton, OutlinedInput, Autocomplete, TextField, createFilterOptions, Button,
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import CachedIcon from '@mui/icons-material/Cached';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
+import CachedRoundedIcon from '@mui/icons-material/CachedRounded';
+import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import { useTranslation, useTranslationKeys } from '../common/components/LocalizationProvider';
 import PageLayout from '../common/components/PageLayout';
 import SettingsMenu from './components/SettingsMenu';
@@ -98,7 +98,7 @@ const PreferencesPage = () => {
         {!readonly && (
           <>
             <Accordion defaultExpanded>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <AccordionSummary expandIcon={<ExpandMoreRoundedIcon />}>
                 <Typography variant="subtitle1">
                   {t('mapTitle')}
                 </Typography>
@@ -238,7 +238,7 @@ const PreferencesPage = () => {
               </AccordionDetails>
             </Accordion>
             <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <AccordionSummary expandIcon={<ExpandMoreRoundedIcon />}>
                 <Typography variant="subtitle1">
                   {t('deviceTitle')}
                 </Typography>
@@ -261,7 +261,7 @@ const PreferencesPage = () => {
               </AccordionDetails>
             </Accordion>
             <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <AccordionSummary expandIcon={<ExpandMoreRoundedIcon />}>
                 <Typography variant="subtitle1">
                   {t('sharedSound')}
                 </Typography>
@@ -289,7 +289,7 @@ const PreferencesPage = () => {
           </>
         )}
         <Accordion>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <AccordionSummary expandIcon={<ExpandMoreRoundedIcon />}>
             <Typography variant="subtitle1">
               {t('userToken')}
             </Typography>
@@ -315,10 +315,10 @@ const PreferencesPage = () => {
                   <InputAdornment position="end">
                     <div className={classes.verticalActions}>
                       <IconButton size="small" edge="end" onClick={generateToken} disabled={!!token}>
-                        <CachedIcon fontSize="small" />
+                        <CachedRoundedIcon fontSize="small" />
                       </IconButton>
                       <IconButton size="small" edge="end" onClick={() => navigator.clipboard.writeText(token)} disabled={!token}>
-                        <ContentCopyIcon fontSize="small" />
+                        <ContentCopyRoundedIcon fontSize="small" />
                       </IconButton>
                     </div>
                   </InputAdornment>
@@ -330,7 +330,7 @@ const PreferencesPage = () => {
         {!readonly && (
           <>
             <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <AccordionSummary expandIcon={<ExpandMoreRoundedIcon />}>
                 <Typography variant="subtitle1">
                   {t('sharedInfoTitle')}
                 </Typography>

@@ -5,14 +5,18 @@ import { devicesActions } from "../store";
 import { useEffectAsync } from "../reactHelper";
 import DeviceRow from "./DeviceRow";
 import { Box } from "@mui/material";
+import LayersRoundedIcon from '@mui/icons-material/LayersRounded';
 
 const useStyles = makeStyles((theme) => ({
   groupTitle: {
     fontSize: ".8rem",
     padding: "8px 16px",
-    backgroundColor: "#f3f3f3",
+    backgroundColor: "#e3e3e3",
     fontWeight: "600",
     margin: ".3rem 0",
+    display: "flex",
+    alignItems: "center",
+    gap: ".2rem",
   },
   list: {
     maxHeight: "100%",
@@ -94,6 +98,7 @@ const DeviceList = ({ devices, filteredPositions }) => {
       {deviceGroup.map((group) => (
         <div key={group.name}>
           <Box component={"h4"} className={classes.groupTitle}>
+            <LayersRoundedIcon sx={{ color: "#a9a9a9" }}/>
             {group.name}
           </Box>
           <div className={classes.deviceList}>
