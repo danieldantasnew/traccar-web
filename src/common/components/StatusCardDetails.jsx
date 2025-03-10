@@ -113,8 +113,9 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   icon: {
-    padding: ".5rem",
     filter: "brightness(0) invert(1)",
+    width: '20px',
+    height: '20px',
   },
 
   description: {

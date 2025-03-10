@@ -1,33 +1,33 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import makeStyles from '@mui/styles/makeStyles';
-import { devicesActions } from '../store';
-import { useEffectAsync } from '../reactHelper';
-import DeviceRow from './DeviceRow';
-import { Box } from '@mui/material';
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import makeStyles from "@mui/styles/makeStyles";
+import { devicesActions } from "../store";
+import { useEffectAsync } from "../reactHelper";
+import DeviceRow from "./DeviceRow";
+import { Box } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   groupTitle: {
-    fontSize: '.8rem',
+    fontSize: ".8rem",
     padding: "8px 16px",
     backgroundColor: "#f3f3f3",
     fontWeight: "600",
+    margin: ".3rem 0",
   },
   list: {
-    maxHeight: '100%',
+    maxHeight: "100%",
   },
   listInner: {
-    position: 'relative',
+    position: "relative",
     margin: theme.spacing(1.5, 0),
   },
 }));
 
 const DeviceList = ({ devices, filteredPositions }) => {
-  
   const classes = useStyles();
   const dispatch = useDispatch();
   const listInnerEl = useRef(null);
-  const groups = useSelector((state)=> state.groups.items);
+  const groups = useSelector((state) => state.groups.items);
   const [deviceGroup, setDeviceGroup] = useState(null);
 
   if (listInnerEl.current) {
@@ -44,7 +44,7 @@ const DeviceList = ({ devices, filteredPositions }) => {
   }, []);
 
   useEffectAsync(async () => {
-    const response = await fetch('/api/devices');
+    const response = await fetch("/api/devices");
     if (response.ok) {
       dispatch(devicesActions.refresh(await response.json()));
     } else {
@@ -52,37 +52,50 @@ const DeviceList = ({ devices, filteredPositions }) => {
     }
   }, []);
 
-  useEffect(()=> {
-    if(devices) {
+  useEffect(() => {
+    if (devices) {
+      const phrase = "Sem Grupo".toUpperCase();
       const groupedDevices = devices.reduce((acc, device) => {
-        const nameGroup = groups[device.groupId] ? groups[device.groupId].name : 'Sem Categoria';
-      
+        const nameGroup = groups[device.groupId]
+          ? groups[device.groupId].name.toUpperCase()
+          : phrase;
+
         if (!acc[nameGroup]) {
           acc[nameGroup] = [];
         }
-      
+
         acc[nameGroup].push({ ...device, nameGroup });
-      
+
         return acc;
       }, {});
-      
-      const groupedDevicesArray = Object.entries(groupedDevices).map(([name, devices]) => ({
-        name,
-        devices
-      }));
-      
-      setDeviceGroup(groupedDevicesArray);
-      
+
+      const groupedDevicesArray = Object.entries(groupedDevices).map(
+        ([name, devices]) => ({
+          name,
+          devices,
+        })
+      );
+
+      const newArray = groupedDevicesArray.sort((prev, current) => {
+        if (current.name !== phrase) {
+          return 1;
+        }
+        return -1;
+      });
+
+      setDeviceGroup(newArray);
     }
   }, [devices]);
 
-  if(!deviceGroup) return null;
+  if (!deviceGroup) return null;
 
   return (
     <div className={classes.list}>
       {deviceGroup.map((group) => (
         <div key={group.name}>
-          <Box component={"h4"} className={classes.groupTitle}>{group.name}</Box>
+          <Box component={"h4"} className={classes.groupTitle}>
+            {group.name}
+          </Box>
           <div className={classes.deviceList}>
             {group.devices.map((device) => (
               <DeviceRow key={device.id} device={device} />

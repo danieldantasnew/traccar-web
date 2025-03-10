@@ -22,12 +22,14 @@ const { reducer, actions } = createSlice({
   reducers: {
     refresh(state, action) {
       state.items = {};
+      const randomIndex = Math.floor(Math.random() * colors.length);
+      console.log(randomIndex)
       action.payload.forEach((item, index) => {
         state.items[item.id] = {
           ...item,
-          bgColor: colors[index][0] || 'rgb(218, 97, 101)',
-          color: colors[index][1] || 'black',
-          subColor: colors[index][2] || 'rgb(232, 54, 59)',
+          bgColor: colors[index][0] || colors[randomIndex][0],
+          color: colors[index][1] || colors[randomIndex][1],
+          subColor: colors[index][2] || colors[randomIndex][2],
         }
       });
     },

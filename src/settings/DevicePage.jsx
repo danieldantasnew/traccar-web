@@ -119,7 +119,11 @@ const DevicePage = () => {
                 data={deviceCategories.map((category) => ({
                   id: category,
                   name: t(`category${category.replace(/^\w/, (c) => c.toUpperCase())}`),
-                }))}
+                })).sort((a, b) => {
+                  if (a.id === "default") return -1;
+                  if (b.id === "default") return 1;
+                  return a.name.localeCompare(b.name);
+                })}
                 label={t('deviceCategory')}
               />
               <SelectField

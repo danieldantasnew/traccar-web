@@ -48,8 +48,9 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 5,
   },
   middle: {
-    flex: 1,
     display: 'grid',
+    maxHeight: '79vh',
+    height: '100%',
   },
   contentMap: {
     pointerEvents: 'auto',
