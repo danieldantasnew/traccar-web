@@ -4,19 +4,39 @@ import makeStyles from "@mui/styles/makeStyles";
 import { devicesActions } from "../store";
 import { useEffectAsync } from "../reactHelper";
 import DeviceRow from "./DeviceRow";
-import { Box } from "@mui/material";
-import LayersRoundedIcon from '@mui/icons-material/LayersRounded';
+import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+} from "@mui/material";
+import LayersRoundedIcon from "@mui/icons-material/LayersRounded";
 
 const useStyles = makeStyles((theme) => ({
+  accordion: {
+    boxShadow: "none",
+    margin: "0 !important",
+  },
+  summary: {
+    backgroundColor: "#f1f1f1",
+    padding: "0 8px",
+    minHeight: "1rem !important",
+    maxHeight: "3.4rem",
+  },
+  accordionDetails: {
+    width: "100%",
+    padding: "8px 0",
+  },
   groupTitle: {
     fontSize: ".8rem",
     padding: "8px 16px",
-    backgroundColor: "#e3e3e3",
     fontWeight: "600",
     margin: ".3rem 0",
     display: "flex",
     alignItems: "center",
     gap: ".2rem",
+    width: "100%",
   },
   list: {
     maxHeight: "100%",
@@ -96,17 +116,26 @@ const DeviceList = ({ devices, filteredPositions }) => {
   return (
     <div className={classes.list}>
       {deviceGroup.map((group) => (
-        <div key={group.name}>
-          <Box component={"h4"} className={classes.groupTitle}>
-            <LayersRoundedIcon sx={{ color: "#a9a9a9" }}/>
-            {group.name}
-          </Box>
-          <div className={classes.deviceList}>
+        <Accordion
+          key={group.name}
+          className={classes.accordion}
+          defaultExpanded
+        >
+          <AccordionSummary
+            className={classes.summary}
+            expandIcon={<ExpandMoreRoundedIcon />}
+          >
+            <Box component={"h4"} className={classes.groupTitle}>
+              <LayersRoundedIcon sx={{ color: "#a9a9a9" }} />
+              {group.name}
+            </Box>
+          </AccordionSummary>
+          <AccordionDetails className={classes.accordionDetails}>
             {group.devices.map((device) => (
               <DeviceRow key={device.id} device={device} />
             ))}
-          </div>
-        </div>
+          </AccordionDetails>
+        </Accordion>
       ))}
     </div>
   );

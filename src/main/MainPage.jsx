@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
   middle: {
     display: 'grid',
-    maxHeight: '79vh',
+    maxHeight: '100dvh',
     height: '100%',
   },
   contentMap: {
