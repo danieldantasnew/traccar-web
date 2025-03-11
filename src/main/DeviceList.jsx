@@ -40,6 +40,8 @@ const useStyles = makeStyles((theme) => ({
   },
   list: {
     maxHeight: "100%",
+    height: "100%",
+    overflow: "auto"
   },
   listInner: {
     position: "relative",
@@ -47,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DeviceList = ({ devices, filteredPositions }) => {
+const DeviceList = ({ devices, filteredPositions, style }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const listInnerEl = useRef(null);
@@ -114,7 +116,7 @@ const DeviceList = ({ devices, filteredPositions }) => {
   if (!deviceGroup) return null;
 
   return (
-    <div className={classes.list}>
+    <div className={classes.list} style={style}>
       {deviceGroup.map((group) => (
         <Accordion
           key={group.name}

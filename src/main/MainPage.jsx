@@ -49,8 +49,9 @@ const useStyles = makeStyles((theme) => ({
   },
   middle: {
     display: 'grid',
-    maxHeight: '100dvh',
-    height: '100%',
+    maxHeight: '100% !important',
+    height: '100% !important',
+    overflow: "auto",
   },
   contentMap: {
     pointerEvents: 'auto',
@@ -61,7 +62,6 @@ const useStyles = makeStyles((theme) => ({
     gridArea: '1 / 1',
     maxHeight: "100%",
     zIndex: 4,
-    overflow: "auto"
   },
 }));
 
@@ -112,7 +112,7 @@ const MainPage = () => {
         />
       )}
       <div className={classes.sidebar}>
-        <Paper square elevation={3} className={classes.header}>
+        <Paper square elevation={0} className={classes.header}>
           <MainToolbar
             filteredDevices={filteredDevices}
             devicesOpen={devicesOpen}
