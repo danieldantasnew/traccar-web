@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "0 !important",
   },
   summary: {
-    backgroundColor: "#f1f1f1",
+    backgroundColor: "#f3f3f3f3",
     padding: "0 8px",
     minHeight: "1rem !important",
     maxHeight: "3.4rem",

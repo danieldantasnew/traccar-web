@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
   footer: {
     pointerEvents: 'auto',
     zIndex: 5,
+    boxShadow: '0 0 .9px 0px rgb(0,0,0,9)',
   },
   middle: {
     display: 'grid',
@@ -112,7 +113,7 @@ const MainPage = () => {
         />
       )}
       <div className={classes.sidebar}>
-        <Paper square elevation={0} className={classes.header}>
+        <Paper square elevation={1} className={classes.header}>
           <MainToolbar
             filteredDevices={filteredDevices}
             devicesOpen={devicesOpen}
@@ -127,7 +128,7 @@ const MainPage = () => {
             setFilterMap={setFilterMap}
           />
         </Paper>
-        <div className={classes.middle}>
+        <div className={classes.middle} style={devicesOpen ? {} : { visibility: 'hidden' }}>
           {!desktop && (
             <div className={classes.contentMap}>
               <MainMap
@@ -137,7 +138,7 @@ const MainPage = () => {
               />
             </div>
           )}
-          <Paper square className={classes.contentList} style={devicesOpen ? {} : { visibility: 'hidden' }}>
+          <Paper square className={classes.contentList}>
             <DeviceList devices={filteredDevices} />
           </Paper>
         </div>
