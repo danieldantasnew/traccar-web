@@ -5,8 +5,6 @@ import {
   Toolbar, IconButton, OutlinedInput, InputAdornment, Popover, FormControl, InputLabel, Select, MenuItem, FormGroup, FormControlLabel, Checkbox, Badge, ListItemButton, ListItemText, Tooltip,
 } from '@mui/material';
 import { makeStyles, useTheme } from '@mui/styles';
-import MapRoundedIcon from '@mui/icons-material/MapRounded';
-import ViewListRoundedIcon from '@mui/icons-material/ViewListRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
 import { useTranslation } from '../common/components/LocalizationProvider';
@@ -29,8 +27,6 @@ const useStyles = makeStyles((theme) => ({
 
 const MainToolbar = ({
   filteredDevices,
-  devicesOpen,
-  setDevicesOpen,
   keyword,
   setKeyword,
   filter,
@@ -60,9 +56,6 @@ const MainToolbar = ({
 
   return (
     <Toolbar ref={toolbarRef} className={classes.toolbar}>
-      <IconButton edge="start" onClick={() => setDevicesOpen(!devicesOpen)}>
-        {devicesOpen ? <MapRoundedIcon /> : <ViewListRoundedIcon />}
-      </IconButton>
       <OutlinedInput
         ref={inputRef}
         placeholder={t('sharedSearchDevices')}
