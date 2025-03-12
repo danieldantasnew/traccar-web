@@ -10,16 +10,16 @@ export default (keyword, filter, filterSort, filterMap, positions, setFilteredDe
     const deviceGroups = (device) => {
       const groupIds = [];
       let { groupId } = device;
-      while (groupId) {
-        groupIds.push(groupId);
-        groupId = groups[groupId]?.groupId || 0;
-      }
+      groupIds.push(groupId); 
       return groupIds;
     };
 
     const filtered = Object.values(devices)
-      .filter((device) => !filter.statuses.length || filter.statuses.includes(device.status))
-      .filter((device) => !filter.groups.length || deviceGroups(device).some((id) => filter.groups.includes(id)))
+      .filter((device) =>!filter.statuses.length || filter.statuses.includes(device.status))
+      .filter((device) => !filter.groups.length || deviceGroups(device).some((id) => {
+        if((id == 0 || id == 1) && filter.groups.includes("no-group")) return true;
+        return filter.groups.includes(id)
+      }))
       .filter((device) => {
         const lowerCaseKeyword = keyword.toLowerCase();
         return [device.name, device.uniqueId, device.phone, device.model, device.contact].some((s) => s && s.toLowerCase().includes(lowerCaseKeyword));

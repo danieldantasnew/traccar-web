@@ -70,15 +70,13 @@ const MainPage = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const theme = useTheme();
-
   const desktop = useMediaQuery(theme.breakpoints.up('md'));
-
   const mapOnSelect = useAttributePreference('mapOnSelect', true);
-
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
   const positions = useSelector((state) => state.session.positions);
   const [filteredPositions, setFilteredPositions] = useState([]);
   const selectedPosition = filteredPositions.find((position) => selectedDeviceId && position.deviceId === selectedDeviceId);
+  const phraseGroup = "OUTROS";
 
   const [filteredDevices, setFilteredDevices] = useState([]);
 
@@ -126,6 +124,7 @@ const MainPage = () => {
             setFilterSort={setFilterSort}
             filterMap={filterMap}
             setFilterMap={setFilterMap}
+            phraseGroup={phraseGroup}
           />
         </Paper>
         <div className={classes.middle} style={devicesOpen ? {} : { visibility: 'hidden' }}>
@@ -139,7 +138,7 @@ const MainPage = () => {
             </div>
           )}
           <Paper square className={classes.contentList}>
-            <DeviceList devices={filteredDevices} />
+            <DeviceList devices={filteredDevices} phraseGroup={phraseGroup}/>
           </Paper>
         </div>
         {desktop && (

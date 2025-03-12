@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DeviceList = ({ devices, filteredPositions, style }) => {
+const DeviceList = ({ devices, filteredPositions, style, phraseGroup }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const listInnerEl = useRef(null);
@@ -80,7 +80,7 @@ const DeviceList = ({ devices, filteredPositions, style }) => {
 
   useEffect(() => {
     if (devices) {
-      const phrase = "Sem Grupo".toUpperCase();
+      const phrase = phraseGroup.toUpperCase();
       const groupedDevices = devices.reduce((acc, device) => {
         const nameGroup = groups[device.groupId]
           ? groups[device.groupId].name.toUpperCase()
