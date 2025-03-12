@@ -12,3 +12,24 @@ body {
   flex-direction: column;
   height: 100%;
 }
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #a0a0a0 #f1f1f1;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: #a0a0a0; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #747474; 
+}
