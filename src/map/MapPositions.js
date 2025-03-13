@@ -243,7 +243,7 @@ import { useAttributePreference } from "../common/util/preferences";
 import { useCatchCallback } from "../reactHelper";
 import mapboxgl from "mapbox-gl";
 import "./css/style.css";
-import { DynamicIcons } from "./DynamicIcons";
+import { DynamicIcons } from "../common/components/DynamicIcons.jsx";
 
 const MapPositions = ({ positions, onClick, showStatus, selectedPosition }) => {
   const id = useId();

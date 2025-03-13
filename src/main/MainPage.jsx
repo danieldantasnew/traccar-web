@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { IconButton, Paper } from "@mui/material";
+import { Box, IconButton, Paper, Slide } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -13,9 +13,10 @@ import EventsDrawer from "./EventsDrawer";
 import useFilter from "./useFilter";
 import MainToolbar from "./MainToolbar";
 import MainMap from "./MainMap";
-import MapRoundedIcon from '@mui/icons-material/MapRounded';
-import ViewListRoundedIcon from '@mui/icons-material/ViewListRounded';
+import MapRoundedIcon from "@mui/icons-material/MapRounded";
 import { useAttributePreference } from "../common/util/preferences";
+import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
+import CloseIcon from "@mui/icons-material/Close";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     margin: 0,
     zIndex: 60,
+    padding: "16px",
   },
   sidebarLayoutLeft: {
     pointerEvents: "auto",
@@ -44,18 +46,38 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 6,
   },
   allDevices: {
-    display: 'flex',
-    flexDirection: 'column',
-    
+    display: "flex",
+    flexDirection: "column",
+    position: "fixed",
+    top: "5.53rem",
+    left: 0,
+    width: "28vw",
+    maxWidth: "480px",
+    height: "100%",
+    ["& h3"]: {
+      margin: 0,
+      padding: "0 1rem",
+      fontSize: "1.6rem",
+      display: "flex",
+      justifyContent: "flex-start",
+      alignItems: "center",
+      gap: ".5rem",
+      ["& svg"]: {
+        width: "32px",
+        height: "32px",
+        marginTop: "4px",
+        ["& path"]: {
+          fill: "white",
+        },
+      },
+    },
   },
   devices: {
     display: "grid",
     maxHeight: "100% !important",
     height: "100% !important",
     overflow: "auto",
-    position: 'fixed',
-    top: '4rem',
-    width: '28vw',
+    width: "100%",
   },
   contentMap: {
     pointerEvents: "auto",
@@ -66,6 +88,9 @@ const useStyles = makeStyles((theme) => ({
     gridArea: "1 / 1",
     maxHeight: "100%",
     zIndex: 4,
+  },
+  mediaButton: {
+    color: "white"
   },
 }));
 
@@ -93,7 +118,7 @@ const MainPage = () => {
   const [filterSort, setFilterSort] = usePersistedState("filterSort", "");
   const [filterMap, setFilterMap] = usePersistedState("filterMap", false);
 
-  const [devicesOpen, setDevicesOpen] = useState(desktop);
+  const [devicesOpen, setDevicesOpen] = useState(false);
   const [eventsOpen, setEventsOpen] = useState(false);
 
   const onEventsClick = useCallback(() => setEventsOpen(true), [setEventsOpen]);
@@ -123,50 +148,87 @@ const MainPage = () => {
           onEventsClick={onEventsClick}
         />
       )}
-      <div className={classes.sidebar}>
-        <Paper elevation={0} className={classes.sidebarLayoutLeft}>
+      <Paper square elevation={1} className={classes.sidebar}>
+        <Box component="div" className={classes.sidebarLayoutLeft}>
           <IconButton edge="start" onClick={() => setDevicesOpen(!devicesOpen)}>
-            {devicesOpen ? <MapRoundedIcon /> : <ViewListRoundedIcon />}
+            {devicesOpen ? (
+              <MapRoundedIcon />
+            ) : (
+              <DynamicIconsComponent category={"carGroup"} />
+            )}
           </IconButton>
-          <Paper elevation={0} className={classes.allDevices} style={devicesOpen ? {} : { visibility: "hidden" }}>
-            <MainToolbar
-              filteredDevices={filteredDevices}
-              devicesOpen={devicesOpen}
-              setDevicesOpen={setDevicesOpen}
-              keyword={keyword}
-              setKeyword={setKeyword}
-              filter={filter}
-              setFilter={setFilter}
-              filterSort={filterSort}
-              setFilterSort={setFilterSort}
-              filterMap={filterMap}
-              setFilterMap={setFilterMap}
-              phraseGroup={phraseGroup}
-            />
-            <div
-              className={classes.devices}
-            >
-              {!desktop && (
-                <div className={classes.contentMap}>
-                  <MainMap
-                    filteredPositions={filteredPositions}
-                    selectedPosition={selectedPosition}
-                    onEventsClick={onEventsClick}
+          <Slide direction="right" in={devicesOpen} timeout={200}>
+            <Paper square className={classes.allDevices}>
+              <Box
+                component={"div"}
+                sx={{
+                  backgroundColor: theme.palette.primary.main,
+                  padding: ".5rem 0 3rem 0",
+                  color: "white",
+                }}
+              >
+                <Box
+                  component={"div"}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box component={"h3"}>
+                    <DynamicIconsComponent category={"carGroup"} />
+                    Meus Veículos
+                  </Box>
+                  <IconButton
+                    size="medium"
+                    onClick={() => setDevicesOpen(!devicesOpen)}
+                    onTouchStart={() => setDevicesOpen(!devicesOpen)}
+                  >
+                    <CloseIcon
+                      fontSize="medium"
+                      className={classes.mediaButton}
+                    />
+                  </IconButton>
+                </Box>
+                <MainToolbar
+                  filteredDevices={filteredDevices}
+                  keyword={keyword}
+                  setKeyword={setKeyword}
+                  filter={filter}
+                  setFilter={setFilter}
+                  filterSort={filterSort}
+                  setFilterSort={setFilterSort}
+                  filterMap={filterMap}
+                  setFilterMap={setFilterMap}
+                  phraseGroup={phraseGroup}
+                />
+              </Box>
+              <div className={classes.devices}>
+                {!desktop && (
+                  <div className={classes.contentMap}>
+                    <MainMap
+                      filteredPositions={filteredPositions}
+                      selectedPosition={selectedPosition}
+                      onEventsClick={onEventsClick}
+                    />
+                  </div>
+                )}
+                <Paper square className={classes.contentList}>
+                  <DeviceList
+                    devices={filteredDevices}
+                    phraseGroup={phraseGroup}
                   />
-                </div>
-              )}
-              <Paper square className={classes.contentList}>
-                <DeviceList devices={filteredDevices} phraseGroup={phraseGroup} />
-              </Paper>
-            </div>
-          </Paper>
-        </Paper>
+                </Paper>
+              </div>
+            </Paper>
+          </Slide>
+        </Box>
         {desktop && (
-          <Paper elevation={0} className={classes.sidebarLayoutRight}>
+          <Box component="div" className={classes.sidebarLayoutRight}>
             <BottomMenu />
-          </Paper>
+          </Box>
         )}
-      </div>
+      </Paper>
       <EventsDrawer open={eventsOpen} onClose={() => setEventsOpen(false)} />
       {selectedDeviceId && (
         <StatusCard

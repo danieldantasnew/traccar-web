@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
   toolbar: {
     display: 'flex',
     gap: theme.spacing(1),
+    padding: '0 16px',
   },
   filterPanel: {
     display: 'flex',
@@ -76,7 +77,7 @@ const MainToolbar = ({
         fullWidth
       />
       <Popover
-        open={!!devicesAnchorEl && !devicesOpen}
+        open={!!devicesAnchorEl}
         anchorEl={devicesAnchorEl}
         onClose={() => setDevicesAnchorEl(null)}
         anchorOrigin={{
@@ -97,7 +98,7 @@ const MainToolbar = ({
           <DeviceRow key={filteredDevices[index].id} data={filteredDevices} index={index} />
         ))}
         {filteredDevices.length > 3 && (
-          <ListItemButton alignItems="center" onClick={() => setDevicesOpen(true)}>
+          <ListItemButton alignItems="center">
             <ListItemText
               primary={t('notificationAlways')}
               style={{ textAlign: 'center' }}
@@ -163,7 +164,7 @@ const MainToolbar = ({
           </FormGroup>
         </div>
       </Popover>
-      <IconButton edge="end" onClick={() => navigate('/settings/device')} disabled={deviceReadonly}>
+      <IconButton style={{color: 'white'}} edge="end" onClick={() => navigate('/settings/device')} disabled={deviceReadonly}>
         <Tooltip open={!deviceReadonly && Object.keys(devices).length === 0} title={t('deviceRegisterFirst')} arrow>
           <AddRoundedIcon />
         </Tooltip>

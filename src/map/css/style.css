@@ -59,6 +59,5 @@
 }
 
 .maplibregl-ctrl-top-right {
-    top: 50%;
-    transform: translateY(-50%);
+    top: 10vh;
 }
