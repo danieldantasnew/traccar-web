@@ -2,11 +2,13 @@ import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme)=> ({
   svg: {
+    height: '24px',
+    width: '24px',
     ["& svg"]: {
-      height: '30px',
-      width: '30px',
+      height: '100%',
+      width: '100%',
       ["& path"]: {
-        fill: theme.palette.primary.main
+        fill: '#666666'
       }
     }
   }

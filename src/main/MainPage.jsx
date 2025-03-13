@@ -5,7 +5,6 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useDispatch, useSelector } from "react-redux";
 import DeviceList from "./DeviceList";
-import BottomMenu from "../common/components/BottomMenu";
 import StatusCard from "../common/components/StatusCard";
 import { devicesActions } from "../store";
 import usePersistedState from "../common/util/usePersistedState";
@@ -13,18 +12,18 @@ import EventsDrawer from "./EventsDrawer";
 import useFilter from "./useFilter";
 import MainToolbar from "./MainToolbar";
 import MainMap from "./MainMap";
-import MapRoundedIcon from "@mui/icons-material/MapRounded";
 import { useAttributePreference } from "../common/util/preferences";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
 import CloseIcon from "@mui/icons-material/Close";
+import NavSideBar from "./NavSideBar.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100%",
   },
   sidebar: {
-    backgroundColor: "#ffffff",
-    pointerEvents: "none",
+    backgroundColor: "#ffff",
+    pointerEvents: "auto",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
@@ -35,9 +34,9 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     margin: 0,
     zIndex: 60,
-    padding: "16px",
+    padding: "8px 16px",
   },
-  sidebarLayoutLeft: {
+  sidebarLayout: {
     pointerEvents: "auto",
     zIndex: 6,
   },
@@ -45,11 +44,24 @@ const useStyles = makeStyles((theme) => ({
     pointerEvents: "auto",
     zIndex: 6,
   },
+  optsLeft: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    gap: "2rem",
+    ["& img"]: {
+      width: "68px",
+    },
+  },
+  iconsSideBar: {
+    display: "flex",
+    gap: ".5rem",
+  },
   allDevices: {
     display: "flex",
     flexDirection: "column",
     position: "fixed",
-    top: "5.53rem",
+    top: 0,
     left: 0,
     width: "28vw",
     maxWidth: "480px",
@@ -61,15 +73,19 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       justifyContent: "flex-start",
       alignItems: "center",
-      gap: ".5rem",
+      gap: "1rem",
       ["& svg"]: {
         width: "32px",
         height: "32px",
-        marginTop: "4px",
         ["& path"]: {
           fill: "white",
         },
       },
+    },
+    [theme.breakpoints.down("md")]: {
+      width: "100%",
+      maxWidth: "initial",
+      zIndex: 60,
     },
   },
   devices: {
@@ -90,7 +106,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 4,
   },
   mediaButton: {
-    color: "white"
+    color: "white",
   },
 }));
 
@@ -141,22 +157,19 @@ const MainPage = () => {
 
   return (
     <div className={classes.root}>
-      {desktop && (
         <MainMap
           filteredPositions={filteredPositions}
           selectedPosition={selectedPosition}
           onEventsClick={onEventsClick}
         />
-      )}
       <Paper square elevation={1} className={classes.sidebar}>
-        <Box component="div" className={classes.sidebarLayoutLeft}>
-          <IconButton edge="start" onClick={() => setDevicesOpen(!devicesOpen)}>
-            {devicesOpen ? (
-              <MapRoundedIcon />
-            ) : (
-              <DynamicIconsComponent category={"carGroup"} />
-            )}
-          </IconButton>
+        <Box component="div" className={classes.sidebarLayout}>
+          <Box component="div" className={classes.optsLeft}>
+            <img src="../../public/logo-main.svg" alt="Logo LGNET" />
+          </Box>
+        </Box>
+        <Box component="div" className={classes.sidebarLayout}>
+          <NavSideBar setDevicesOpen={setDevicesOpen}/>
           <Slide direction="right" in={devicesOpen} timeout={200}>
             <Paper square className={classes.allDevices}>
               <Box
@@ -176,7 +189,10 @@ const MainPage = () => {
                   }}
                 >
                   <Box component={"h3"}>
-                    <DynamicIconsComponent category={"carGroup"} />
+                    <DynamicIconsComponent
+                      style={{ marginBottom: "3px" }}
+                      category={"carGroup"}
+                    />
                     Meus Veículos
                   </Box>
                   <IconButton
@@ -204,15 +220,6 @@ const MainPage = () => {
                 />
               </Box>
               <div className={classes.devices}>
-                {!desktop && (
-                  <div className={classes.contentMap}>
-                    <MainMap
-                      filteredPositions={filteredPositions}
-                      selectedPosition={selectedPosition}
-                      onEventsClick={onEventsClick}
-                    />
-                  </div>
-                )}
                 <Paper square className={classes.contentList}>
                   <DeviceList
                     devices={filteredDevices}
@@ -223,11 +230,6 @@ const MainPage = () => {
             </Paper>
           </Slide>
         </Box>
-        {desktop && (
-          <Box component="div" className={classes.sidebarLayoutRight}>
-            <BottomMenu />
-          </Box>
-        )}
       </Paper>
       <EventsDrawer open={eventsOpen} onClose={() => setEventsOpen(false)} />
       {selectedDeviceId && (
