@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme)=> ({
       height: '100%',
       width: '100%',
       ["& path"]: {
-        fill: '#666666'
+        fill: 'currentColor'
       }
     }
   }

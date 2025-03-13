@@ -134,7 +134,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "550px",
     transition: ".3s",
     [theme.breakpoints.down("md")]: {
-      top: "40vh",
+      top: "50vh",
       width: "100vw",
       maxWidth: "initial",
     },

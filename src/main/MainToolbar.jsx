@@ -164,11 +164,13 @@ const MainToolbar = ({
           </FormGroup>
         </div>
       </Popover>
+      <Tooltip title="Adicionar veículo">
       <IconButton style={{color: 'white'}} edge="end" onClick={() => navigate('/settings/device')} disabled={deviceReadonly}>
         <Tooltip open={!deviceReadonly && Object.keys(devices).length === 0} title={t('deviceRegisterFirst')} arrow>
           <AddRoundedIcon />
         </Tooltip>
       </IconButton>
+      </Tooltip>
     </Toolbar>
   );
 };

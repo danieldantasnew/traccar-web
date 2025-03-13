@@ -60,8 +60,9 @@
 
 .maplibregl-ctrl-bottom-left {
     left: 0 !important;
+    z-index: 1;
 }
 
 .maplibregl-ctrl-top-right {
-    top: 4rem;
+    top: 1rem;
 }

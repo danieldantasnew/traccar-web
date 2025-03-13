@@ -15,7 +15,7 @@ import MainMap from "./MainMap";
 import { useAttributePreference } from "../common/util/preferences";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
 import CloseIcon from "@mui/icons-material/Close";
-import NavSideBar from "./NavSideBar.jsx";
+import NavSideBar from "../common/components/NavMenu.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,12 +29,14 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     height: "auto",
     position: "fixed",
-    left: 0,
-    top: 0,
-    width: "100%",
+    width: "auto",
+    left: 12,
+    top: "50%",
+    borderRadius: "44px",
+    transform: "translateY(-50%)",
     margin: 0,
-    zIndex: 60,
-    padding: "8px 16px",
+    zIndex: 5,
+    padding: "8px",
   },
   sidebarLayout: {
     pointerEvents: "auto",
@@ -66,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
     width: "28vw",
     maxWidth: "480px",
     height: "100%",
+    zIndex: "6",
     ["& h3"]: {
       margin: 0,
       padding: "0 1rem",
@@ -157,80 +160,71 @@ const MainPage = () => {
 
   return (
     <div className={classes.root}>
-        <MainMap
-          filteredPositions={filteredPositions}
-          selectedPosition={selectedPosition}
-          onEventsClick={onEventsClick}
-        />
-      <Paper square elevation={1} className={classes.sidebar}>
-        <Box component="div" className={classes.sidebarLayout}>
-          <Box component="div" className={classes.optsLeft}>
-            <img src="../../public/logo-main.svg" alt="Logo LGNET" />
-          </Box>
-        </Box>
-        <Box component="div" className={classes.sidebarLayout}>
-          <NavSideBar setDevicesOpen={setDevicesOpen}/>
-          <Slide direction="right" in={devicesOpen} timeout={200}>
-            <Paper square className={classes.allDevices}>
-              <Box
-                component={"div"}
-                sx={{
-                  backgroundColor: theme.palette.primary.main,
-                  padding: ".5rem 0 3rem 0",
-                  color: "white",
-                }}
-              >
-                <Box
-                  component={"div"}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Box component={"h3"}>
-                    <DynamicIconsComponent
-                      style={{ marginBottom: "3px" }}
-                      category={"carGroup"}
-                    />
-                    Meus Veículos
-                  </Box>
-                  <IconButton
-                    size="medium"
-                    onClick={() => setDevicesOpen(!devicesOpen)}
-                    onTouchStart={() => setDevicesOpen(!devicesOpen)}
-                  >
-                    <CloseIcon
-                      fontSize="medium"
-                      className={classes.mediaButton}
-                    />
-                  </IconButton>
-                </Box>
-                <MainToolbar
-                  filteredDevices={filteredDevices}
-                  keyword={keyword}
-                  setKeyword={setKeyword}
-                  filter={filter}
-                  setFilter={setFilter}
-                  filterSort={filterSort}
-                  setFilterSort={setFilterSort}
-                  filterMap={filterMap}
-                  setFilterMap={setFilterMap}
-                  phraseGroup={phraseGroup}
+      <MainMap
+        filteredPositions={filteredPositions}
+        selectedPosition={selectedPosition}
+        onEventsClick={onEventsClick}
+      />
+      <Slide direction="right" in={devicesOpen} timeout={200}>
+        <Paper square className={classes.allDevices}>
+          <Box
+            component={"div"}
+            sx={{
+              backgroundColor: theme.palette.primary.main,
+              padding: ".5rem 0 3rem 0",
+              color: "white",
+            }}
+          >
+            <Box
+              component={"div"}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Box component={"h3"}>
+                <DynamicIconsComponent
+                  style={{ marginBottom: "3px" }}
+                  category={"carGroup"}
                 />
+                Meus Veículos
               </Box>
-              <div className={classes.devices}>
-                <Paper square className={classes.contentList}>
-                  <DeviceList
-                    devices={filteredDevices}
-                    phraseGroup={phraseGroup}
-                  />
-                </Paper>
-              </div>
+              <IconButton
+                size="medium"
+                onClick={() => setDevicesOpen(!devicesOpen)}
+                onTouchStart={() => setDevicesOpen(!devicesOpen)}
+              >
+                <CloseIcon fontSize="medium" className={classes.mediaButton} />
+              </IconButton>
+            </Box>
+            <MainToolbar
+              filteredDevices={filteredDevices}
+              keyword={keyword}
+              setKeyword={setKeyword}
+              filter={filter}
+              setFilter={setFilter}
+              filterSort={filterSort}
+              setFilterSort={setFilterSort}
+              filterMap={filterMap}
+              setFilterMap={setFilterMap}
+              phraseGroup={phraseGroup}
+            />
+          </Box>
+          <div className={classes.devices}>
+            <Paper square className={classes.contentList}>
+              <DeviceList devices={filteredDevices} phraseGroup={phraseGroup} />
             </Paper>
-          </Slide>
-        </Box>
-      </Paper>
+          </div>
+        </Paper>
+      </Slide>
+      {desktop && (
+        <Paper square elevation={4} className={classes.sidebar}>
+          <Box component="div" className={classes.sidebarLayout}>
+            <NavSideBar setDevicesOpen={setDevicesOpen} />
+          </Box>
+        </Paper>
+      )}
       <EventsDrawer open={eventsOpen} onClose={() => setEventsOpen(false)} />
       {selectedDeviceId && (
         <StatusCard

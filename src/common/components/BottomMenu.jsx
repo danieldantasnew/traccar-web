@@ -8,7 +8,7 @@ import {
 import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import MapRoundedIcon from '@mui/icons-material/MapRounded';
-import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 import { sessionActions } from '../../store';
@@ -117,7 +117,7 @@ const BottomMenu = () => {
         {readonly ? (
           <BottomNavigationAction label={t('loginLogout')} icon={<ExitToAppIcon />} value="logout" />
         ) : (
-          <BottomNavigationAction label={t('settingsUser')} icon={<PersonRoundedIcon />} value="account" />
+          <BottomNavigationAction label={t('settingsUser')} icon={<AccountCircleRoundedIcon />} value="account" />
         )}
       </BottomNavigation>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
