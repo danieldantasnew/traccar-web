@@ -14,12 +14,12 @@ import {
   useTheme,
 } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
-import CloseIcon from "@mui/icons-material/Close";
-import ReplayIcon from "@mui/icons-material/Replay";
-import PublishIcon from "@mui/icons-material/Publish";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import PendingIcon from "@mui/icons-material/Pending";
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import ReplayRoundedIcon from '@mui/icons-material/ReplayRounded';
+import PublishRoundedIcon from '@mui/icons-material/PublishRounded';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import PendingRoundedIcon from '@mui/icons-material/PendingRounded';
 import { useTranslation } from "./LocalizationProvider";
 import RemoveDialog from "./RemoveDialog";
 import { useDeviceReadonly } from "../util/permissions";
@@ -98,8 +98,10 @@ const useStyles = makeStyles((theme) => ({
     color: "green",
   },
   mediaButton: {
-    color: theme.palette.primary.contrastText,
-    mixBlendMode: "difference",
+    color: theme.palette.primary.main,
+    padding: '2px',
+    backgroundColor: '#f9f9f9',
+    borderRadius: '50%',
   },
   header: {
     display: "flex",
@@ -250,8 +252,8 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                     onClick={onClose}
                     onTouchStart={onClose}
                   >
-                    <CloseIcon
-                      fontSize="medium"
+                    <CloseRoundedIcon
+                      sx={{ fontSize: 30 }}
                       className={classes.mediaButton}
                     />
                   </IconButton>
@@ -266,8 +268,8 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                     onClick={onClose}
                     onTouchStart={onClose}
                   >
-                    <CloseIcon
-                      fontSize="medium"
+                    <CloseRoundedIcon
+                      sx={{ fontSize: 30 }}
                       className={classes.mediaButton}
                     />
                   </IconButton>
@@ -284,7 +286,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                   onClick={(e) => setAnchorEl(e.currentTarget)}
                   disabled={!position}
                 >
-                  <PendingIcon />
+                  <PendingRoundedIcon />
                 </IconButton>
               </Tooltip>
               <Tooltip title={t("reportReplay")}>
@@ -292,7 +294,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                   onClick={() => navigate("/replay")}
                   disabled={disableActions || !position}
                 >
-                  <ReplayIcon />
+                  <ReplayRoundedIcon />
                 </IconButton>
               </Tooltip>
               <Tooltip title={t("commandTitle")}>
@@ -302,7 +304,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                   }
                   disabled={disableActions}
                 >
-                  <PublishIcon />
+                  <PublishRoundedIcon />
                 </IconButton>
               </Tooltip>
               <Tooltip title={t("sharedEdit")}>
@@ -310,7 +312,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                   onClick={() => navigate(`/settings/device/${deviceId}`)}
                   disabled={disableActions || deviceReadonly}
                 >
-                  <EditIcon />
+                  <EditRoundedIcon />
                 </IconButton>
               </Tooltip>
               <Tooltip title={t("sharedRemove")}>
@@ -319,7 +321,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                   onClick={() => setRemoving(true)}
                   disabled={disableActions || deviceReadonly}
                 >
-                  <DeleteIcon />
+                  <DeleteRoundedIcon />
                 </IconButton>
               </Tooltip>
             </CardActions>

@@ -24,6 +24,11 @@ const useStyles = makeStyles((theme) => ({
     gap: theme.spacing(2),
     width: theme.dimensions.drawerWidthTablet,
   },
+  addIcon: {
+    backgroundColor: '#f9f9f9',
+    color: theme.palette.primary.main,
+    borderRadius: '50%',
+  }
 }));
 
 const MainToolbar = ({
@@ -167,7 +172,7 @@ const MainToolbar = ({
       <Tooltip title="Adicionar veículo">
       <IconButton style={{color: 'white'}} edge="end" onClick={() => navigate('/settings/device')} disabled={deviceReadonly}>
         <Tooltip open={!deviceReadonly && Object.keys(devices).length === 0} title={t('deviceRegisterFirst')} arrow>
-          <AddRoundedIcon />
+          <AddRoundedIcon className={classes.addIcon} sx={{ fontSize: 30 }} />
         </Tooltip>
       </IconButton>
       </Tooltip>

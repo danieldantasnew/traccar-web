@@ -14,7 +14,7 @@ import MainToolbar from "./MainToolbar";
 import MainMap from "./MainMap";
 import { useAttributePreference } from "../common/util/preferences";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
-import CloseIcon from "@mui/icons-material/Close";
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import NavSideBar from "../common/components/NavMenu.jsx";
 
 const useStyles = makeStyles((theme) => ({
@@ -195,7 +195,7 @@ const MainPage = () => {
                 onClick={() => setDevicesOpen(!devicesOpen)}
                 onTouchStart={() => setDevicesOpen(!devicesOpen)}
               >
-                <CloseIcon fontSize="medium" className={classes.mediaButton} />
+                <CloseRoundedIcon sx={{ fontSize: 28 }} className={classes.mediaButton} />
               </IconButton>
             </Box>
             <MainToolbar
