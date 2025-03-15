@@ -9,12 +9,13 @@ const colors = [
   ["rgb(3, 221, 39)", "white", "rgb(0, 150, 25)"],
   ["rgb(69, 92, 219)","white", "rgb(0, 28, 189)"],
   ["rgb(142, 67, 173)","white", "rgb(82, 0, 117)"],
-  ["rgb(3, 62, 140)", "white", "rgb(3, 140, 133)"],
+  ["rgb(0, 112, 177)", "white", "rgb(0, 162, 255)"],
   ["rgb(242, 68, 5)", "white", "rgb(250, 127, 8)"],
   ["rgb(158, 248, 238)", "white", "rgb(34, 186, 187)"],
   ["rgb(64, 0, 54)", "white", "rgb(255, 129, 208)"],
   ["rgb(0, 0, 0)","white", "rgb(136, 136, 136)"],
-  ["rgb(217, 4, 61)", "white", "rgb(230, 0, 31)"],
+  ["rgb(217, 4, 61)", "white", "rgb(156, 57, 0)"],
+  ["rgb(0, 80, 185)", "white", "rgb(0, 82, 136)"],
 ];
 
 const { reducer, actions } = createSlice({
@@ -27,8 +28,8 @@ const { reducer, actions } = createSlice({
   reducers: {
     refresh(state, action) {
       state.items = {};
-      const randomIndex = Math.floor(Math.random() * colors.length);
       action.payload.forEach((item, index) => {
+        const randomIndex = Math.floor(Math.random() * colors.length);
         state.items[item.id] = {
           ...item,
           bgColor: colors[index] ? colors[index][0] : colors[randomIndex][0],
