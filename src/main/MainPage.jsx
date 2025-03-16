@@ -15,7 +15,7 @@ import MainMap from "./MainMap";
 import { useAttributePreference } from "../common/util/preferences";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import NavSideBar from "../common/components/NavMenu.jsx";
+import NavMenu from "../common/components/NavMenu.jsx";
 import { useDevices } from "../common/components/AllDevices.jsx";
 
 const useStyles = makeStyles((theme) => ({
@@ -42,23 +42,6 @@ const useStyles = makeStyles((theme) => ({
   sidebarLayout: {
     pointerEvents: "auto",
     zIndex: 6,
-  },
-  sidebarLayoutRight: {
-    pointerEvents: "auto",
-    zIndex: 6,
-  },
-  optsLeft: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    gap: "2rem",
-    ["& img"]: {
-      width: "68px",
-    },
-  },
-  iconsSideBar: {
-    display: "flex",
-    gap: ".5rem",
   },
   allDevices: {
     display: "flex",
@@ -221,7 +204,7 @@ const MainPage = () => {
       {desktop && (
         <Paper square elevation={4} className={classes.sidebar}>
           <Box component="div" className={classes.sidebarLayout}>
-            <NavSideBar setDevicesOpen={setDevicesOpen} />
+            <NavMenu setDevicesOpen={setDevicesOpen} />
           </Box>
         </Paper>
       )}

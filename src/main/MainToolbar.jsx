@@ -79,7 +79,6 @@ const MainToolbar = ({
         placeholder={t("sharedSearchDevices")}
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
-        onFocus={() => setDevicesAnchorEl(toolbarRef.current)}
         onBlur={() => setDevicesAnchorEl(null)}
         endAdornment={
           <InputAdornment position="end">
