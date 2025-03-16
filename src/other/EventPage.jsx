@@ -10,7 +10,7 @@ import { useEffectAsync } from '../reactHelper';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import MapView from '../map/core/MapView';
 import MapCamera from '../map/MapCamera';
-import MapPositions from '../map/MapPositions';
+import MapPositions from '../map/MapPositions.jsx';
 import MapGeofence from '../map/MapGeofence';
 import StatusCard from '../common/components/StatusCard';
 import { formatNotificationTitle } from '../common/util/formatter';

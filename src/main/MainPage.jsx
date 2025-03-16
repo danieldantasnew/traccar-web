@@ -50,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     left: 0,
     width: "28vw",
+    minWidth: '336px',
     maxWidth: "480px",
     zIndex: "6",
     ["& h3"]: {
@@ -154,8 +155,12 @@ const MainPage = () => {
             component={"div"}
             sx={{
               backgroundColor: theme.palette.primary.main,
-              padding: ".5rem 0 3rem 0",
+              padding: "1rem 0 1rem 0",
               color: "white",
+              display: "flex",
+              justifyContent: "space-between",
+              flexDirection: 'column',
+              gap: '1rem',
             }}
           >
             <Box

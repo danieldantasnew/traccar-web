@@ -17,7 +17,7 @@ import { useSelector } from 'react-redux';
 import MapView from '../map/core/MapView';
 import MapRoutePath from '../map/MapRoutePath';
 import MapRoutePoints from '../map/MapRoutePoints';
-import MapPositions from '../map/MapPositions';
+import MapPositions from '../map/MapPositions.jsx';
 import { formatTime } from '../common/util/formatter';
 import ReportFilter from '../reports/components/ReportFilter';
 import { useTranslation } from '../common/components/LocalizationProvider';

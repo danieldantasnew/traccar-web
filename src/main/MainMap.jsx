@@ -11,7 +11,7 @@ import PoiMap from "../map/main/PoiMap";
 import MapPadding from "../map/MapPadding";
 import { devicesActions } from "../store";
 import MapDefaultCamera from "../map/main/MapDefaultCamera";
-import MapPositions from "../map/MapPositions";
+import MapPositions from "../map/MapPositions.jsx";
 import MapOverlay from "../map/overlay/MapOverlay";
 import MapGeocoder from "../map/geocoder/MapGeocoder";
 import MapScale from "../map/MapScale";

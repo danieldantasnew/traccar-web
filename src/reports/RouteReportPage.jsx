@@ -17,7 +17,7 @@ import { useCatch } from '../reactHelper';
 import MapView from '../map/core/MapView';
 import MapRoutePath from '../map/MapRoutePath';
 import MapRoutePoints from '../map/MapRoutePoints';
-import MapPositions from '../map/MapPositions';
+import MapPositions from '../map/MapPositions.jsx';
 import useReportStyles from './common/useReportStyles';
 import TableShimmer from '../common/components/TableShimmer';
 import MapCamera from '../map/MapCamera';

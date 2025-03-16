@@ -16,7 +16,7 @@ import { useTranslation } from '../common/components/LocalizationProvider';
 import MapGeocoder from '../map/geocoder/MapGeocoder';
 import SelectField from '../common/components/SelectField';
 import { devicesActions } from '../store';
-import MapPositions from '../map/MapPositions';
+import MapPositions from '../map/MapPositions.jsx';
 import { useCatch } from '../reactHelper';
 import MapScale from '../map/MapScale';
 

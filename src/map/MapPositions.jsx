@@ -1,13 +1,15 @@
 import { useId, useCallback, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { map } from "./core/MapView";
-import { formatTime, getStatusColor } from "../common/util/formatter";
-import { mapIconKey } from "./core/preloadImages";
-import { useAttributePreference } from "../common/util/preferences";
-import { useCatchCallback } from "../reactHelper";
+import { map } from "./core/MapView.jsx";
+import { formatTime, getStatusColor } from "../common/util/formatter.js";
+import { mapIconKey } from "./core/preloadImages.js";
+import { useAttributePreference } from "../common/util/preferences.js";
+import { useCatchCallback } from "../reactHelper.js";
 import mapboxgl from "mapbox-gl";
 import "./css/style.css";
-import { DynamicIcons } from "../common/components/DynamicIcons.jsx";
+import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
+import { Tooltip } from "@mui/material";
+import { createRoot } from 'react-dom/client';
 
 const MapPositions = ({ positions, onClick, showStatus, selectedPosition }) => {
   const id = useId();
@@ -78,49 +80,68 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition }) => {
   );
 
   useEffect(() => {
-    markersRef.current.forEach((marker) => marker.remove());
-    markersRef.current = [];
-
+    // Criar um Set com os IDs das novas posições
+    const newPositionIds = new Set(positions.map((p) => p.id));
+  
+    // Remover apenas os markers que não estão mais presentes
+    markersRef.current = markersRef.current.filter(({ marker, root, positionId }) => {
+      if (!newPositionIds.has(positionId)) {
+        setTimeout(() => {
+          root.unmount();
+          marker.remove();
+        }, 0);
+        return false; // Remove do array de referência
+      }
+      return true;
+    });
+  
     if (!map || !positions.length) return;
-
+  
     positions
       .filter((it) => devices.hasOwnProperty(it.deviceId))
       .forEach((position) => {
+        // Se o marker já existe, não criar um novo
+        if (markersRef.current.some((m) => m.positionId === position.id)) return;
+  
         const el = document.createElement("div");
         const device = devices[position.deviceId];
-
+  
         el.className = "marker";
-        //Adicionar componente ToolTip com followCursor para acompanhar a informação da última atualização
-        el.title = `${device ? 'Última atualização: ' + formatTime(device.lastUpdate): ''}`
+  
+        // Criar e renderizar o Tooltip dentro do marcador
+        const root = createRoot(el);
+        root.render(
+          <Tooltip title={device ? `Última atualização: ${formatTime(device.lastUpdate)}` : ""} followCursor arrow>
+            <div style={{display: 'flex', gap: '.8rem', alignItems: 'center', justifyContent: 'space-between', padding: '2px'}}>
+              <DynamicIconsComponent key={device.name} category={device.category} />
+              <div>
+                <p>{device.model}</p>
+                <p>{device.name}</p>
+              </div>
+            </div>
+          </Tooltip>
+        );
+  
         el.style.backgroundColor = device.subColor;
         el.style.color = device.color;
-        el.innerHTML = `
-          <div>
-            ${DynamicIcons(device.category)}
-          </div>
-          <div>
-            <p>${devices[position.deviceId].model}</p>
-            <p>${devices[position.deviceId].name}</p>
-          </div>
-        `;
-
+  
         el.addEventListener("click", (event) => {
           event.stopPropagation();
           onClick(position.id, position.deviceId);
         });
-
+  
         const marker = new mapboxgl.Marker(el)
           .setLngLat([position.longitude, position.latitude])
           .addTo(map);
-
-        markersRef.current.push(marker);
+  
+        // Adicionar o novo marker à referência
+        markersRef.current.push({ marker, root, positionId: position.id });
       });
-
-    return () => {
-      markersRef.current.forEach((marker) => marker.remove());
-      markersRef.current = [];
-    };
+  
   }, [map, positions, devices]);
+  
+  
+  
 
   useEffect(() => {
     [id, selected].forEach((source) => {

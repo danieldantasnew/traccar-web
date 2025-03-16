@@ -15,22 +15,19 @@ import {
   FormControlLabel,
   Checkbox,
   Badge,
-  ListItemButton,
-  ListItemText,
+  useTheme,
   Button,
 } from "@mui/material";
-import { makeStyles, useTheme } from "@mui/styles";
+import { makeStyles } from "@mui/styles";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import TuneRoundedIcon from "@mui/icons-material/TuneRounded";
 import { useTranslation } from "../common/components/LocalizationProvider";
-import { useDeviceReadonly } from "../common/util/permissions";
-import DeviceRow from "./DeviceRow";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
     display: "flex",
     flexDirection: "column",
-    gap: theme.spacing(1),
+    gap: '1rem',
     padding: "0 16px",
   },
   filterPanel: {
@@ -40,10 +37,15 @@ const useStyles = makeStyles((theme) => ({
     gap: theme.spacing(2),
     width: theme.dimensions.drawerWidthTablet,
   },
+  buttonStyle: {
+    border: "1px solid white",
+    ["&:hover"]: {
+      backgroundColor: 'rgba(255, 255, 255, 0.58)'
+    }
+  },
 }));
 
 const MainToolbar = ({
-  filteredDevices,
   keyword,
   setKeyword,
   filter,
@@ -55,31 +57,27 @@ const MainToolbar = ({
   phraseGroup,
 }) => {
   const classes = useStyles();
-  const theme = useTheme();
   const navigate = useNavigate();
   const t = useTranslation();
-
-  const deviceReadonly = useDeviceReadonly();
-
+  const theme = useTheme();
   const groups = useSelector((state) => state.groups.items);
   const devices = useSelector((state) => state.devices.items);
-
-  const toolbarRef = useRef();
   const inputRef = useRef();
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
-  const [devicesAnchorEl, setDevicesAnchorEl] = useState(null);
 
   const deviceStatusCount = (status) =>
     Object.values(devices).filter((d) => d.status === status).length;
 
   return (
-    <Toolbar ref={toolbarRef} className={classes.toolbar}>
+    <Toolbar className={classes.toolbar}>
       <OutlinedInput
+        sx={{
+          "&:focus-within": { outline: "1px solid white" },
+        }}
         ref={inputRef}
         placeholder={t("sharedSearchDevices")}
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
-        onBlur={() => setDevicesAnchorEl(null)}
         endAdornment={
           <InputAdornment position="end">
             <IconButton
@@ -100,44 +98,6 @@ const MainToolbar = ({
         size="small"
         fullWidth
       />
-      <Popover
-        open={!!devicesAnchorEl}
-        anchorEl={devicesAnchorEl}
-        onClose={() => setDevicesAnchorEl(null)}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: Number(theme.spacing(2).slice(0, -2)),
-        }}
-        marginThreshold={0}
-        slotProps={{
-          paper: {
-            style: {
-              width: `calc(${
-                toolbarRef.current?.clientWidth
-              }px - ${theme.spacing(4)})`,
-            },
-          },
-        }}
-        elevation={1}
-        disableAutoFocus
-        disableEnforceFocus
-      >
-        {filteredDevices.slice(0, 3).map((_, index) => (
-          <DeviceRow
-            key={filteredDevices[index].id}
-            data={filteredDevices}
-            index={index}
-          />
-        ))}
-        {filteredDevices.length > 3 && (
-          <ListItemButton alignItems="center">
-            <ListItemText
-              primary={t("notificationAlways")}
-              style={{ textAlign: "center" }}
-            />
-          </ListItemButton>
-        )}
-      </Popover>
       <Popover
         open={!!filterAnchorEl}
         anchorEl={filterAnchorEl}
@@ -216,9 +176,8 @@ const MainToolbar = ({
         </div>
       </Popover>
       <Button
-        style={{ border: "1px solid white" }}
+        className={classes.buttonStyle}
         onClick={() => navigate("/settings/device")}
-        disabled={deviceReadonly}
         variant="contained"
         endIcon={<AddRoundedIcon />}
       >

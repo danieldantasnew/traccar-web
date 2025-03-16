@@ -18,7 +18,7 @@ import ColumnSelect from './components/ColumnSelect';
 import usePersistedState from '../common/util/usePersistedState';
 import { useCatch } from '../reactHelper';
 import useReportStyles from './common/useReportStyles';
-import MapPositions from '../map/MapPositions';
+import MapPositions from '../map/MapPositions.jsx';
 import MapView from '../map/core/MapView';
 import MapCamera from '../map/MapCamera';
 import AddressValue from '../common/components/AddressValue';
