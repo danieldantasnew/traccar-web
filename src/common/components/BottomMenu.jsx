@@ -1,20 +1,29 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
-  Paper, BottomNavigation, BottomNavigationAction, Menu, MenuItem, Typography, Badge,
-} from '@mui/material';
+  Paper,
+  BottomNavigation,
+  BottomNavigationAction,
+  Menu,
+  MenuItem,
+  Typography,
+  Badge,
+  ListItemIcon,
+} from "@mui/material";
 
-import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
-import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
-import MapRoundedIcon from '@mui/icons-material/MapRounded';
-import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-
-import { sessionActions } from '../../store';
-import { useTranslation } from './LocalizationProvider';
-import { useRestriction } from '../util/permissions';
-import { nativePostMessage } from './NativeInterface';
+import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
+import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import MapRoundedIcon from "@mui/icons-material/MapRounded";
+import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
+import ExitToAppRoundedIcon from "@mui/icons-material/ExitToAppRounded";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import { sessionActions } from "../../store";
+import { useTranslation } from "./LocalizationProvider";
+import { useRestriction } from "../util/permissions";
+import { nativePostMessage } from "./NativeInterface";
+import { DynamicIconsComponent } from "./DynamicIcons";
+import { useDevices } from "./AllDevices";
 
 const BottomMenu = () => {
   const navigate = useNavigate();
@@ -22,22 +31,28 @@ const BottomMenu = () => {
   const dispatch = useDispatch();
   const t = useTranslation();
 
-  const readonly = useRestriction('readonly');
-  const disableReports = useRestriction('disableReports');
+  const { devicesOpen, setDevicesOpen, setHeightMenuNavMobile } = useDevices();
+  const paperRef = useRef(null);
+  const readonly = useRestriction("readonly");
+  const disableReports = useRestriction("disableReports");
   const user = useSelector((state) => state.session.user);
   const socket = useSelector((state) => state.session.socket);
 
   const [anchorEl, setAnchorEl] = useState(null);
 
   const currentSelection = () => {
+    if (devicesOpen) return "deviceGroup";
     if (location.pathname === `/settings/user/${user.id}`) {
-      return 'account';
-    } if (location.pathname.startsWith('/settings')) {
-      return 'settings';
-    } if (location.pathname.startsWith('/reports')) {
-      return 'reports';
-    } if (location.pathname === '/') {
-      return 'map';
+      return "account";
+    }
+    if (location.pathname.startsWith("/settings")) {
+      return "settings";
+    }
+    if (location.pathname.startsWith("/reports")) {
+      return "reports";
+    }
+    if (location.pathname === "/") {
+      return "map";
     }
     return null;
   };
@@ -50,47 +65,53 @@ const BottomMenu = () => {
   const handleLogout = async () => {
     setAnchorEl(null);
 
-    const notificationToken = window.localStorage.getItem('notificationToken');
+    const notificationToken = window.localStorage.getItem("notificationToken");
     if (notificationToken && !user.readonly) {
-      window.localStorage.removeItem('notificationToken');
-      const tokens = user.attributes.notificationTokens?.split(',') || [];
+      window.localStorage.removeItem("notificationToken");
+      const tokens = user.attributes.notificationTokens?.split(",") || [];
       if (tokens.includes(notificationToken)) {
         const updatedUser = {
           ...user,
           attributes: {
             ...user.attributes,
-            notificationTokens: tokens.length > 1 ? tokens.filter((it) => it !== notificationToken).join(',') : undefined,
+            notificationTokens:
+              tokens.length > 1
+                ? tokens.filter((it) => it !== notificationToken).join(",")
+                : undefined,
           },
         };
         await fetch(`/api/users/${user.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(updatedUser),
         });
       }
     }
 
-    await fetch('/api/session', { method: 'DELETE' });
-    nativePostMessage('logout');
-    navigate('/login');
+    await fetch("/api/session", { method: "DELETE" });
+    nativePostMessage("logout");
+    navigate("/login");
     dispatch(sessionActions.updateUser(null));
   };
 
   const handleSelection = (event, value) => {
     switch (value) {
-      case 'map':
-        navigate('/');
+      case "map":
+        navigate("/");
         break;
-      case 'reports':
-        navigate('/reports/combined');
+      case "deviceGroup":
+        navigate("/");
         break;
-      case 'settings':
-        navigate('/settings/preferences');
+      case "reports":
+        navigate("/reports/combined");
         break;
-      case 'account':
+      case "settings":
+        navigate("/settings/preferences");
+        break;
+      case "account":
         setAnchorEl(event.currentTarget);
         break;
-      case 'logout':
+      case "logout":
         handleLogout();
         break;
       default:
@@ -98,34 +119,93 @@ const BottomMenu = () => {
     }
   };
 
+  useEffect(() => {
+    if (paperRef.current) {
+      setHeightMenuNavMobile(paperRef.current.clientHeight);
+    }
+  }, []);
+
   return (
-    <Paper square elevation={0}>
-      <BottomNavigation value={currentSelection()} onChange={handleSelection} showLabels>
+    <Paper square elevation={0} ref={paperRef}>
+      <BottomNavigation
+        value={currentSelection()}
+        onChange={handleSelection}
+        showLabels
+      >
         <BottomNavigationAction
-          label={t('mapTitle')}
-          icon={(
-            <Badge color="error" variant="dot" overlap="circular" invisible={socket !== false}>
+          sx={{ minWidth: "initial", maxWidth: '160px', padding: "0px 4px" }}
+          onClick={() => setDevicesOpen(false)}
+          label={t("mapTitle")}
+          icon={
+            <Badge
+              color="error"
+              variant="dot"
+              overlap="circular"
+              invisible={socket !== false}
+            >
               <MapRoundedIcon />
             </Badge>
-          )}
+          }
           value="map"
         />
+        <BottomNavigationAction
+          sx={{ minWidth: "initial", maxWidth: '160px', padding: "0px 4px" }}
+          onClick={() => setDevicesOpen((state) => !state)}
+          label={"Veículos"}
+          icon={<DynamicIconsComponent category={"carGroup"} />}
+          value="deviceGroup"
+        />
+
         {!disableReports && (
-          <BottomNavigationAction label={t('reportTitle')} icon={<DescriptionRoundedIcon />} value="reports" />
+          <BottomNavigationAction
+            sx={{ minWidth: "initial", maxWidth: '160px', padding: "0px 4px" }}
+            onClick={() => setDevicesOpen(false)}
+            label={t("reportTitle")}
+            icon={<DescriptionRoundedIcon />}
+            value="reports"
+          />
         )}
-        <BottomNavigationAction label={t('settingsTitle')} icon={<SettingsRoundedIcon />} value="settings" />
+        <BottomNavigationAction
+          sx={{ minWidth: "initial", maxWidth: '160px', padding: "0px 4px" }}
+          onClick={() => setDevicesOpen(false)}
+          label={t("settingsTitle")}
+          icon={<SettingsRoundedIcon />}
+          value="settings"
+        />
         {readonly ? (
-          <BottomNavigationAction label={t('loginLogout')} icon={<ExitToAppIcon />} value="logout" />
+          <BottomNavigationAction
+            sx={{ minWidth: "initial", maxWidth: '160px', padding: "0px 4px" }}
+            onClick={() => setDevicesOpen(false)}
+            label={t("loginLogout")}
+            icon={<ExitToAppRoundedIcon />}
+            value="logout"
+          />
         ) : (
-          <BottomNavigationAction label={t('settingsUser')} icon={<AccountCircleRoundedIcon />} value="account" />
+          <BottomNavigationAction
+            sx={{ minWidth: "initial", maxWidth: '160px', padding: "0px 4px" }}
+            onClick={() => setDevicesOpen(false)}
+            label={t("settingsUser")}
+            icon={<AccountCircleRoundedIcon />}
+            value="account"
+          />
         )}
       </BottomNavigation>
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={() => setAnchorEl(null)}
+      >
         <MenuItem onClick={handleAccount}>
-          <Typography color="textPrimary">{t('settingsUser')}</Typography>
+          <ListItemIcon>
+            <EditRoundedIcon />
+          </ListItemIcon>
+          <Typography color="textPrimary">Editar Conta</Typography>
         </MenuItem>
         <MenuItem onClick={handleLogout}>
-          <Typography color="error">{t('loginLogout')}</Typography>
+          <ListItemIcon>
+            <ExitToAppRoundedIcon fontSize="medium" color="error" />
+          </ListItemIcon>
+          <Typography color="error">{t("loginLogout")}</Typography>
         </MenuItem>
       </Menu>
     </Paper>

@@ -16,6 +16,7 @@ import { useAttributePreference } from "../common/util/preferences";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import NavSideBar from "../common/components/NavMenu.jsx";
+import { useDevices } from "../common/components/AllDevices.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,7 +68,6 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     width: "28vw",
     maxWidth: "480px",
-    height: "100%",
     zIndex: "6",
     ["& h3"]: {
       margin: 0,
@@ -137,7 +137,7 @@ const MainPage = () => {
   const [filterSort, setFilterSort] = usePersistedState("filterSort", "");
   const [filterMap, setFilterMap] = usePersistedState("filterMap", false);
 
-  const [devicesOpen, setDevicesOpen] = useState(false);
+  const {devicesOpen, setDevicesOpen, heightMenuNavMobile} = useDevices();
   const [eventsOpen, setEventsOpen] = useState(false);
 
   const onEventsClick = useCallback(() => setEventsOpen(true), [setEventsOpen]);
@@ -166,7 +166,7 @@ const MainPage = () => {
         onEventsClick={onEventsClick}
       />
       <Slide direction="right" in={devicesOpen} timeout={200}>
-        <Paper square className={classes.allDevices}>
+        <Paper square className={classes.allDevices} style={!desktop? {height: `calc(100% - ${heightMenuNavMobile}px)`}: {height: "100%"}}>
           <Box
             component={"div"}
             sx={{

@@ -11,6 +11,7 @@ import { sessionActions } from './store';
 import UpdateController from './UpdateController';
 import TermsDialog from './common/components/TermsDialog';
 import Loader from './common/components/Loader';
+import { DevicesProvider } from './common/components/AllDevices';
 
 const useStyles = makeStyles(() => ({
   page: {
@@ -72,14 +73,16 @@ const App = () => {
       <SocketController />
       <CachingController />
       <UpdateController />
-      <div className={classes.page}>
-        <Outlet />
-      </div>
-      {!desktop && (
-        <div className={classes.menu}>
-          <BottomMenu />
+      <DevicesProvider>
+        <div className={classes.page}>
+          <Outlet />
         </div>
-      )}
+        {!desktop && (
+          <div className={classes.menu}>
+            <BottomMenu />
+          </div>
+        )}
+      </DevicesProvider>
     </>
   );
 };

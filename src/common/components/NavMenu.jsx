@@ -9,6 +9,9 @@ import { useTranslation } from "./LocalizationProvider";
 import { useState } from "react";
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import { useDispatch, useSelector } from "react-redux";
+import { nativePostMessage } from './NativeInterface';
+import { sessionActions } from '../../store';
 
 const useStyles = makeStyles((theme) => ({
   iconsSideBar: {
@@ -27,7 +30,45 @@ const NavMenu = ({ setDevicesOpen }) => {
   const classes = useStyles();
   const t = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.session.user);
   const [accountPopOver, setAccountPopOver] = useState(false);
+
+  const handleAccount = () => {
+    setAccountPopOver(null);
+    navigate(`/settings/user/${user.id}`);
+  };
+
+  const handleLogout = async () => {
+    setAccountPopOver(null);
+
+    const notificationToken = window.localStorage.getItem('notificationToken');
+    if (notificationToken && !user.readonly) {
+      window.localStorage.removeItem('notificationToken');
+      const tokens = user.attributes.notificationTokens?.split(',') || [];
+      if (tokens.includes(notificationToken)) {
+        const updatedUser = {
+          ...user,
+          attributes: {
+            ...user.attributes,
+            notificationTokens: tokens.length > 1 ? tokens.filter((it) => it !== notificationToken).join(',') : undefined,
+          },
+        };
+        await fetch(`/api/users/${user.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updatedUser),
+        });
+      }
+    }
+
+    await fetch('/api/session', { method: 'DELETE' });
+    nativePostMessage('logout');
+    navigate('/login');
+    dispatch(sessionActions.updateUser(null));
+  };
+
+
   return (
     <Box component={"div"} className={classes.iconsSideBar}>
       <Tooltip title="Meus veículos" placement="right" arrow>
@@ -79,13 +120,13 @@ const NavMenu = ({ setDevicesOpen }) => {
         }}
       >
         <MenuList>
-          <MenuItem>
+          <MenuItem onClick={handleAccount}>
             <ListItemIcon>
               <EditRoundedIcon/>
             </ListItemIcon>
            Editar Conta
           </MenuItem>
-          <MenuItem>
+          <MenuItem onClick={handleLogout}>
             <ListItemIcon>
               <ExitToAppRoundedIcon fontSize="medium" color="error"/>
             </ListItemIcon>
