@@ -80,69 +80,67 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition }) => {
   );
 
   useEffect(() => {
-    // Criar um Set com os IDs das novas posições
-    const newPositionIds = new Set(positions.map((p) => p.id));
+    if (!map || !positions.length) return;
   
-    // Remover apenas os markers que não estão mais presentes
+    const newPositionMap = new Map(positions.map(p => [p.id, p]));
+  
     markersRef.current = markersRef.current.filter(({ marker, root, positionId }) => {
-      if (!newPositionIds.has(positionId)) {
+      const newPosition = newPositionMap.get(positionId);
+      
+      if (!newPosition) {
         setTimeout(() => {
           root.unmount();
           marker.remove();
         }, 0);
-        return false; // Remove do array de referência
+        return false;
+      } else {
+        const { longitude, latitude } = newPosition;
+        const currentLngLat = marker.getLngLat();
+        if (currentLngLat.lng !== longitude || currentLngLat.lat !== latitude) {
+          marker.setLngLat([longitude, latitude]);
+        }
+        return true;
       }
-      return true;
     });
   
-    if (!map || !positions.length) return;
+    positions.forEach((position) => {
+      if (markersRef.current.some((m) => m.positionId === position.id)) return;
   
-    positions
-      .filter((it) => devices.hasOwnProperty(it.deviceId))
-      .forEach((position) => {
-        // Se o marker já existe, não criar um novo
-        if (markersRef.current.some((m) => m.positionId === position.id)) return;
+      const el = document.createElement("div");
+      const device = devices[position.deviceId];
   
-        const el = document.createElement("div");
-        const device = devices[position.deviceId];
+      el.className = "marker";
   
-        el.className = "marker";
-  
-        // Criar e renderizar o Tooltip dentro do marcador
-        const root = createRoot(el);
-        root.render(
-          <Tooltip title={device ? `Última atualização: ${formatTime(device.lastUpdate)}` : ""} followCursor arrow>
-            <div style={{display: 'flex', gap: '.8rem', alignItems: 'center', justifyContent: 'space-between', padding: '2px'}}>
-              <DynamicIconsComponent key={device.name} category={device.category} />
-              <div>
-                <p>{device.model}</p>
-                <p>{device.name}</p>
-              </div>
+      const root = createRoot(el);
+      root.render(
+        <Tooltip title={device ? `Última atualização: ${formatTime(device.lastUpdate)}` : ""} followCursor arrow>
+          <div style={{ display: "flex", gap: ".8rem", alignItems: "center", justifyContent: "space-between", padding: "2px" }}>
+            <DynamicIconsComponent key={device.name} category={device.category} />
+            <div>
+              <p>{device.model}</p>
+              <p>{device.name}</p>
             </div>
-          </Tooltip>
-        );
+          </div>
+        </Tooltip>
+      );
   
-        el.style.backgroundColor = device.subColor;
-        el.style.color = device.color;
+      el.style.backgroundColor = device.subColor;
+      el.style.color = device.color;
   
-        el.addEventListener("click", (event) => {
-          event.stopPropagation();
-          onClick(position.id, position.deviceId);
-        });
-  
-        const marker = new mapboxgl.Marker(el)
-          .setLngLat([position.longitude, position.latitude])
-          .addTo(map);
-  
-        // Adicionar o novo marker à referência
-        markersRef.current.push({ marker, root, positionId: position.id });
+      el.addEventListener("click", (event) => {
+        event.stopPropagation();
+        onClick(position.id, position.deviceId);
       });
+  
+      const marker = new mapboxgl.Marker(el)
+        .setLngLat([position.longitude, position.latitude])
+        .addTo(map);
+  
+      markersRef.current.push({ marker, root, positionId: position.id });
+    });
   
   }, [map, positions, devices]);
   
-  
-  
-
   useEffect(() => {
     [id, selected].forEach((source) => {
       map.getSource(source)?.setData({
