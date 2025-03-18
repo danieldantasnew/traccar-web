@@ -22,7 +22,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBatteryFull,
   faClock,
-  faCopy,
   faExpand,
   faGaugeHigh,
   faGlobe,
