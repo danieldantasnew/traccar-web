@@ -12,6 +12,7 @@ import {
   Tooltip,
   useMediaQuery,
   useTheme,
+  Box,
 } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import { useTranslation } from "./LocalizationProvider";
@@ -21,9 +22,16 @@ import { devicesActions } from "../../store";
 import { useCatch, useCatchCallback } from "../../reactHelper";
 import { useAttributePreference } from "../util/preferences";
 import StatusCardDetails from "./StatusCardDetails";
-import PowerSettingsNewRoundedIcon from "@mui/icons-material/PowerSettingsNewRounded";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpFromBracket, faEllipsis, faPen, faRotateLeft, faTrash, faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowUpFromBracket,
+  faEllipsis,
+  faPen,
+  faPowerOff,
+  faRotateLeft,
+  faTrash,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 
 function handleWheel(e) {
   if (e.deltaY > 0) {
@@ -55,22 +63,19 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   contentCardTop: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1rem',
-    height: '100%'
+    display: "flex",
+    flexDirection: "column",
+    gap: "1rem",
+    height: "100%",
   },
   ignitionState: {
-    position: "absolute",
-    left: "6px",
-    top: "6px",
     padding: "6px",
     display: "flex",
     alignItems: "center",
     gap: ".3rem",
-    backgroundColor: "transparent",
+    backgroundColor: "#f3f3f3",
     borderRadius: ".5rem",
-    boxShadow: "none",
+    boxShadow: "0 0 4px 0px rgba(0, 0, 0, 0.34)",
     "& p": {
       fontWeight: "500",
       fontSize: ".9rem",
@@ -82,6 +87,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "flex-start",
     maxHeight: "35vh",
     height: "100%",
+    backgroundColor: '#f3f3f3',
   },
   red: {
     fill: "red",
@@ -93,23 +99,29 @@ const useStyles = makeStyles((theme) => ({
     border: "2px solid green",
     color: "green",
   },
-  mediaButton: {
-    color: theme.palette.primary.main,
-    padding: '4px',
-    backgroundColor: '#f9f9f9',
-    borderRadius: '50%',
-    height: '22px',
-    width: '22px'
+  closeButton: {
+    color: 'white',
+    padding: "4px",
+    backgroundColor: theme.palette.primary.main,
+    borderRadius: "50%",
+    height: "18px",
+    width: "18px",
+    cursor: "pointer",
+    boxShadow: "0 0 4px .5px rgba(255, 255, 255, 0.62)",
+    ['&:hover']: {
+      backgroundColor: 'red',
+    }
   },
-  header: {
+  infoTop: {
     display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "flex-start",
-    maxHeight: "35vh",
-    height: "100%",
-    padding: theme.spacing(1, 1, 0, 2),
-    backgroundColor: "#e9e9e9",
+    justifyContent: "space-between",
+    padding: "0 8px",
+    alignItems: "center",
     fontSize: "1.4rem",
+    position: "absolute",
+    top: 12,
+    left: 0,
+    width: "100%",
   },
   content: {
     paddingTop: theme.spacing(1),
@@ -146,14 +158,14 @@ const IgnitionState = ({ position, classes }) => {
   if (position.attributes.ignition || position.attributes.motion)
     return (
       <Card className={`${classes.ignitionState} ${classes.green}`}>
-        <PowerSettingsNewRoundedIcon width={18} height={18} />
+        <FontAwesomeIcon icon={faPowerOff} size="xs"/>
         <Typography>Ligado</Typography>
       </Card>
     );
 
   return (
     <Card className={`${classes.ignitionState} ${classes.red}`}>
-      <PowerSettingsNewRoundedIcon width={18} height={18} />
+      <FontAwesomeIcon icon={faPowerOff} size="xs" />
       <Typography>Desligado</Typography>
     </Card>
   );
@@ -236,41 +248,31 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
       >
         {device && (
           <Card elevation={3} className={classes.card}>
-            <div className={classes.contentCardTop}>
-              {deviceImage ? (
+            <Box className={classes.contentCardTop}>
                 <CardMedia
                   className={classes.media}
-                  image={`/api/media/${device.uniqueId}/${deviceImage}`}
+                  image={deviceImage ? `/api/media/${device.uniqueId}/${deviceImage}`: ''}
                 >
-                  {position && (
-                    <IgnitionState position={position} classes={classes} />
-                  )}
-                  <IconButton
-                    size="medium"
-                    onClick={onClose}
-                    onTouchStart={onClose}
-                  >
-                    <FontAwesomeIcon icon={faXmark} className={classes.mediaButton}/>
-                  </IconButton>
+                  <Box component={"div"} className={classes.infoTop}>
+                    {position && (
+                      <IgnitionState position={position} classes={classes} />
+                    )}
+                    <Tooltip
+                      title="Fechar"
+                      arrow
+                      placement="right"
+                      onClick={onClose}
+                      onTouchStart={onClose}
+                      className={classes.closeButton}
+                    >
+                      <FontAwesomeIcon icon={faXmark} />
+                    </Tooltip>
+                  </Box>
                 </CardMedia>
-              ) : (
-                <div className={classes.header}>
-                  {position && (
-                    <IgnitionState position={position} classes={classes} />
-                  )}
-                  <IconButton
-                    size="medium"
-                    onClick={onClose}
-                    onTouchStart={onClose}
-                  >
-                    <FontAwesomeIcon icon={faXmark} className={classes.mediaButton}/>
-                  </IconButton>
-                </div>
-              )}
               {position && (
                 <StatusCardDetails position={position} device={device} />
               )}
-            </div>
+            </Box>
             <CardActions classes={{ root: classes.actions }} disableSpacing>
               <Tooltip title={t("sharedExtra")}>
                 <IconButton
@@ -278,7 +280,16 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                   onClick={(e) => setAnchorEl(e.currentTarget)}
                   disabled={!position}
                 >
-                  <FontAwesomeIcon icon={faEllipsis} size="sm" style={{backgroundColor: theme.palette.primary.main, borderRadius: '50%', padding: '4px', color: 'white'}}/>
+                  <FontAwesomeIcon
+                    icon={faEllipsis}
+                    size="sm"
+                    style={{
+                      backgroundColor: theme.palette.primary.main,
+                      borderRadius: "50%",
+                      padding: "4px",
+                      color: "white",
+                    }}
+                  />
                 </IconButton>
               </Tooltip>
               <Tooltip title={t("reportReplay")}>
@@ -286,7 +297,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                   onClick={() => navigate("/replay")}
                   disabled={disableActions || !position}
                 >
-                  <FontAwesomeIcon icon={faRotateLeft} size="sm"/>
+                  <FontAwesomeIcon icon={faRotateLeft} size="sm" />
                 </IconButton>
               </Tooltip>
               <Tooltip title={t("commandTitle")}>
@@ -296,7 +307,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                   }
                   disabled={disableActions}
                 >
-                  <FontAwesomeIcon icon={faArrowUpFromBracket} size="sm"/>
+                  <FontAwesomeIcon icon={faArrowUpFromBracket} size="sm" />
                 </IconButton>
               </Tooltip>
               <Tooltip title={t("sharedEdit")}>

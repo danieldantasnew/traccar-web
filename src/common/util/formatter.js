@@ -71,7 +71,7 @@ export const formatCourse = (value) => {
   return courseValues[Math.floor(normalizedValue / 45)];
 };
 
-export const formatDistance = (value, unit, t) => `${distanceFromMeters(value, unit).toFixed(2)} ${distanceUnitString(unit, t)}`;
+export const formatDistance = (value, unit, t) => `${distanceFromMeters(value, unit).toFixed(1)} ${distanceUnitString(unit, t)}`;
 
 export const formatAltitude = (value, unit, t) => `${altitudeFromMeters(value, unit).toFixed(2)} ${altitudeUnitString(unit, t)}`;
 

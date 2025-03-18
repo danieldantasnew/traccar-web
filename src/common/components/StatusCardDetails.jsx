@@ -32,6 +32,7 @@ import {
   faSignsPost,
   faStreetView,
 } from "@fortawesome/free-solid-svg-icons";
+import { DynamicIconsComponent } from "./DynamicIcons";
 
 const useStyles = makeStyles((theme) => ({
   cardDetails: {
@@ -353,10 +354,7 @@ const StatusCardDetails = ({ position, device }) => {
               }
             >
               <IconButton component="a">
-                <FontAwesomeIcon
-                  icon={faCopy}
-                  style={{ border: "1px solid transparent", color: "#a9a9a9" }}
-                />
+                <DynamicIconsComponent category={"copy"} style={{ border: "1px solid transparent", color: "#a1a1a1" }}/>
               </IconButton>
             </Tooltip>
             <Tooltip title={t("linkStreetView")}>

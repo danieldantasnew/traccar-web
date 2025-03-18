@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Box, IconButton, Paper, Slide } from "@mui/material";
+import { Box, IconButton, Paper, Slide, Tooltip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -179,13 +179,15 @@ const MainPage = () => {
                 />
                 Meus Veículos
               </Box>
-              <IconButton
-                size="medium"
-                onClick={() => setDevicesOpen(!devicesOpen)}
-                onTouchStart={() => setDevicesOpen(!devicesOpen)}
-              >
-                <FontAwesomeIcon icon={faXmark} className={classes.mediaButton}/>
-              </IconButton>
+              <Tooltip title="Fechar" arrow placement="right">
+                <IconButton
+                  size="medium"
+                  onClick={() => setDevicesOpen(!devicesOpen)}
+                  onTouchStart={() => setDevicesOpen(!devicesOpen)}
+                >
+                  <FontAwesomeIcon icon={faXmark} className={classes.mediaButton}/>
+                </IconButton>
+              </Tooltip>
             </Box>
             <MainToolbar
               filteredDevices={filteredDevices}
