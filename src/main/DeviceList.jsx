@@ -4,14 +4,14 @@ import makeStyles from "@mui/styles/makeStyles";
 import { devicesActions } from "../store";
 import { useEffectAsync } from "../reactHelper";
 import DeviceRow from "./DeviceRow";
-import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Box,
 } from "@mui/material";
-import LayersRoundedIcon from "@mui/icons-material/LayersRounded";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown, faLayerGroup } from "@fortawesome/free-solid-svg-icons";
 
 const useStyles = makeStyles((theme) => ({
   accordion: {
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     margin: ".3rem 0",
     display: "flex",
     alignItems: "center",
-    gap: ".2rem",
+    gap: ".4rem",
     width: "100%",
   },
   list: {
@@ -125,10 +125,10 @@ const DeviceList = ({ devices, filteredPositions, style, phraseGroup }) => {
         >
           <AccordionSummary
             className={classes.summary}
-            expandIcon={<ExpandMoreRoundedIcon />}
+            expandIcon={<FontAwesomeIcon icon={faAngleDown} />}
           >
             <Box component={"h4"} className={classes.groupTitle}>
-              <LayersRoundedIcon sx={{ color: "#a9a9a9" }} />
+              <FontAwesomeIcon icon={faLayerGroup} size="lg" style={{ color: "#a9a9a9"}}/>
               {group.name}
             </Box>
           </AccordionSummary>

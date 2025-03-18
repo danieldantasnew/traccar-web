@@ -8,7 +8,6 @@ import {
   Checkbox,
   TextField,
 } from '@mui/material';
-import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import { DropzoneArea } from 'react-mui-dropzone';
 import EditItemView from './components/EditItemView';
 import EditAttributesAccordion from './components/EditAttributesAccordion';
@@ -22,6 +21,8 @@ import useCommonDeviceAttributes from '../common/attributes/useCommonDeviceAttri
 import { useCatch } from '../reactHelper';
 import useQuery from '../common/util/useQuery';
 import useSettingsStyles from './common/useSettingsStyles';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
 const DevicePage = () => {
   const classes = useSettingsStyles();
@@ -65,7 +66,7 @@ const DevicePage = () => {
       {item && (
         <>
           <Accordion defaultExpanded>
-            <AccordionSummary expandIcon={<ExpandMoreRoundedIcon />}>
+            <AccordionSummary expandIcon={<FontAwesomeIcon icon={faAngleDown} />}>
               <Typography variant="subtitle1">
                 {t('sharedRequired')}
               </Typography>
@@ -86,7 +87,7 @@ const DevicePage = () => {
             </AccordionDetails>
           </Accordion>
           <Accordion>
-            <AccordionSummary expandIcon={<ExpandMoreRoundedIcon />}>
+            <AccordionSummary expandIcon={<FontAwesomeIcon icon={faAngleDown} />}>
               <Typography variant="subtitle1">
                 {t('sharedExtra')}
               </Typography>
@@ -152,7 +153,7 @@ const DevicePage = () => {
           </Accordion>
           {item.id && (
             <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreRoundedIcon />}>
+              <AccordionSummary expandIcon={<FontAwesomeIcon icon={faAngleDown} />}>
                 <Typography variant="subtitle1">
                   {t('attributeDeviceImage')}
                 </Typography>

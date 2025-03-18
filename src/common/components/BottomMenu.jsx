@@ -12,18 +12,21 @@ import {
   ListItemIcon,
 } from "@mui/material";
 
-import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
-import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
-import MapRoundedIcon from "@mui/icons-material/MapRounded";
-import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
-import ExitToAppRoundedIcon from "@mui/icons-material/ExitToAppRounded";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { sessionActions } from "../../store";
 import { useTranslation } from "./LocalizationProvider";
 import { useRestriction } from "../util/permissions";
 import { nativePostMessage } from "./NativeInterface";
 import { DynamicIconsComponent } from "./DynamicIcons";
 import { useDevices } from "./AllDevices";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowRightFromBracket,
+  faCircleUser,
+  faFileLines,
+  faGear,
+  faMap,
+  faUserPen,
+} from "@fortawesome/free-solid-svg-icons";
 
 const BottomMenu = () => {
   const navigate = useNavigate();
@@ -133,7 +136,7 @@ const BottomMenu = () => {
         showLabels
       >
         <BottomNavigationAction
-          sx={{ minWidth: "initial", maxWidth: '160px', padding: "0px 4px" }}
+          sx={{ minWidth: "initial", maxWidth: "160px", padding: "0px 4px" }}
           onClick={() => setDevicesOpen(false)}
           label={t("mapTitle")}
           icon={
@@ -143,13 +146,13 @@ const BottomMenu = () => {
               overlap="circular"
               invisible={socket !== false}
             >
-              <MapRoundedIcon />
+              <FontAwesomeIcon icon={faMap} size="lg" />
             </Badge>
           }
           value="map"
         />
         <BottomNavigationAction
-          sx={{ minWidth: "initial", maxWidth: '160px', padding: "0px 4px" }}
+          sx={{ minWidth: "initial", maxWidth: "160px", padding: "0px 4px" }}
           onClick={() => setDevicesOpen((state) => !state)}
           label={"Veículos"}
           icon={<DynamicIconsComponent category={"carGroup"} />}
@@ -158,34 +161,34 @@ const BottomMenu = () => {
 
         {!disableReports && (
           <BottomNavigationAction
-            sx={{ minWidth: "initial", maxWidth: '160px', padding: "0px 4px" }}
+            sx={{ minWidth: "initial", maxWidth: "160px", padding: "0px 4px" }}
             onClick={() => setDevicesOpen(false)}
             label={t("reportTitle")}
-            icon={<DescriptionRoundedIcon />}
+            icon={<FontAwesomeIcon icon={faFileLines} size="xl" />}
             value="reports"
           />
         )}
         <BottomNavigationAction
-          sx={{ minWidth: "initial", maxWidth: '160px', padding: "0px 4px" }}
+          sx={{ minWidth: "initial", maxWidth: "160px", padding: "0px 4px" }}
           onClick={() => setDevicesOpen(false)}
           label={t("settingsTitle")}
-          icon={<SettingsRoundedIcon />}
+          icon={<FontAwesomeIcon icon={faGear} size="xl" />}
           value="settings"
         />
         {readonly ? (
           <BottomNavigationAction
-            sx={{ minWidth: "initial", maxWidth: '160px', padding: "0px 4px" }}
+            sx={{ minWidth: "initial", maxWidth: "160px", padding: "0px 4px" }}
             onClick={() => setDevicesOpen(false)}
             label={t("loginLogout")}
-            icon={<ExitToAppRoundedIcon />}
+            icon={<FontAwesomeIcon icon={faArrowRightFromBracket} size="xl" />}
             value="logout"
           />
         ) : (
           <BottomNavigationAction
-            sx={{ minWidth: "initial", maxWidth: '160px', padding: "0px 4px" }}
+            sx={{ minWidth: "initial", maxWidth: "160px", padding: "0px 4px" }}
             onClick={() => setDevicesOpen(false)}
             label={t("settingsUser")}
-            icon={<AccountCircleRoundedIcon />}
+            icon={<FontAwesomeIcon icon={faCircleUser} size="xl" />}
             value="account"
           />
         )}
@@ -197,13 +200,17 @@ const BottomMenu = () => {
       >
         <MenuItem onClick={handleAccount}>
           <ListItemIcon>
-            <EditRoundedIcon />
+            <FontAwesomeIcon icon={faUserPen} />
           </ListItemIcon>
           <Typography color="textPrimary">Editar Conta</Typography>
         </MenuItem>
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
-            <ExitToAppRoundedIcon fontSize="medium" color="error" />
+            <FontAwesomeIcon
+              icon={faArrowRightFromBracket}
+              style={{ color: "red" }}
+              color="red"
+            />
           </ListItemIcon>
           <Typography color="error">{t("loginLogout")}</Typography>
         </MenuItem>

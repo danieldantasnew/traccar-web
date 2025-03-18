@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import {
   Table, TableRow, TableCell, TableHead, TableBody, Button, TableFooter, FormControlLabel, Switch,
 } from '@mui/material';
-import LinkRoundedIcon from '@mui/icons-material/LinkRounded';
 import { useEffectAsync } from '../reactHelper';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import PageLayout from '../common/components/PageLayout';
@@ -18,6 +17,8 @@ import { useDeviceReadonly, useManager } from '../common/util/permissions';
 import useSettingsStyles from './common/useSettingsStyles';
 import DeviceUsersValue from './components/DeviceUsersValue';
 import usePersistedState from '../common/util/usePersistedState';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLink } from '@fortawesome/free-solid-svg-icons';
 
 const DevicesPage = () => {
   const classes = useSettingsStyles();
@@ -57,7 +58,7 @@ const DevicesPage = () => {
   const actionConnections = {
     key: 'connections',
     title: t('sharedConnections'),
-    icon: <LinkRoundedIcon fontSize="small" />,
+    icon: <FontAwesomeIcon icon={faLink} size='xs' />,
     handler: (deviceId) => navigate(`/settings/device/${deviceId}/connections`),
   };
 

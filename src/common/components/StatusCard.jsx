@@ -14,12 +14,6 @@ import {
   useTheme,
 } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import ReplayRoundedIcon from '@mui/icons-material/ReplayRounded';
-import PublishRoundedIcon from '@mui/icons-material/PublishRounded';
-import EditRoundedIcon from '@mui/icons-material/EditRounded';
-import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
-import PendingRoundedIcon from '@mui/icons-material/PendingRounded';
 import { useTranslation } from "./LocalizationProvider";
 import RemoveDialog from "./RemoveDialog";
 import { useDeviceReadonly } from "../util/permissions";
@@ -28,6 +22,8 @@ import { useCatch, useCatchCallback } from "../../reactHelper";
 import { useAttributePreference } from "../util/preferences";
 import StatusCardDetails from "./StatusCardDetails";
 import PowerSettingsNewRoundedIcon from "@mui/icons-material/PowerSettingsNewRounded";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUpFromBracket, faEllipsis, faPen, faRotateLeft, faTrash, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 function handleWheel(e) {
   if (e.deltaY > 0) {
@@ -99,9 +95,11 @@ const useStyles = makeStyles((theme) => ({
   },
   mediaButton: {
     color: theme.palette.primary.main,
-    padding: '2px',
+    padding: '4px',
     backgroundColor: '#f9f9f9',
     borderRadius: '50%',
+    height: '22px',
+    width: '22px'
   },
   header: {
     display: "flex",
@@ -252,10 +250,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                     onClick={onClose}
                     onTouchStart={onClose}
                   >
-                    <CloseRoundedIcon
-                      sx={{ fontSize: 30 }}
-                      className={classes.mediaButton}
-                    />
+                    <FontAwesomeIcon icon={faXmark} className={classes.mediaButton}/>
                   </IconButton>
                 </CardMedia>
               ) : (
@@ -268,10 +263,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                     onClick={onClose}
                     onTouchStart={onClose}
                   >
-                    <CloseRoundedIcon
-                      sx={{ fontSize: 30 }}
-                      className={classes.mediaButton}
-                    />
+                    <FontAwesomeIcon icon={faXmark} className={classes.mediaButton}/>
                   </IconButton>
                 </div>
               )}
@@ -286,7 +278,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                   onClick={(e) => setAnchorEl(e.currentTarget)}
                   disabled={!position}
                 >
-                  <PendingRoundedIcon />
+                  <FontAwesomeIcon icon={faEllipsis} size="sm" style={{backgroundColor: theme.palette.primary.main, borderRadius: '50%', padding: '4px', color: 'white'}}/>
                 </IconButton>
               </Tooltip>
               <Tooltip title={t("reportReplay")}>
@@ -294,7 +286,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                   onClick={() => navigate("/replay")}
                   disabled={disableActions || !position}
                 >
-                  <ReplayRoundedIcon />
+                  <FontAwesomeIcon icon={faRotateLeft} size="sm"/>
                 </IconButton>
               </Tooltip>
               <Tooltip title={t("commandTitle")}>
@@ -304,7 +296,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                   }
                   disabled={disableActions}
                 >
-                  <PublishRoundedIcon />
+                  <FontAwesomeIcon icon={faArrowUpFromBracket} size="sm"/>
                 </IconButton>
               </Tooltip>
               <Tooltip title={t("sharedEdit")}>
@@ -312,7 +304,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                   onClick={() => navigate(`/settings/device/${deviceId}`)}
                   disabled={disableActions || deviceReadonly}
                 >
-                  <EditRoundedIcon />
+                  <FontAwesomeIcon icon={faPen} size="sm" />
                 </IconButton>
               </Tooltip>
               <Tooltip title={t("sharedRemove")}>
@@ -321,7 +313,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                   onClick={() => setRemoving(true)}
                   disabled={disableActions || deviceReadonly}
                 >
-                  <DeleteRoundedIcon />
+                  <FontAwesomeIcon icon={faTrash} size="sm" />
                 </IconButton>
               </Tooltip>
             </CardActions>

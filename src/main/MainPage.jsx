@@ -14,9 +14,10 @@ import MainToolbar from "./MainToolbar";
 import MainMap from "./MainMap";
 import { useAttributePreference } from "../common/util/preferences";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import NavMenu from "../common/components/NavMenu.jsx";
 import { useDevices } from "../common/components/AllDevices.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -183,7 +184,7 @@ const MainPage = () => {
                 onClick={() => setDevicesOpen(!devicesOpen)}
                 onTouchStart={() => setDevicesOpen(!devicesOpen)}
               >
-                <CloseRoundedIcon sx={{ fontSize: 28 }} className={classes.mediaButton} />
+                <FontAwesomeIcon icon={faXmark} className={classes.mediaButton}/>
               </IconButton>
             </Box>
             <MainToolbar

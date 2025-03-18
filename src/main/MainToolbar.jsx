@@ -22,6 +22,8 @@ import { makeStyles } from "@mui/styles";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import TuneRoundedIcon from "@mui/icons-material/TuneRounded";
 import { useTranslation } from "../common/components/LocalizationProvider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faSliders } from "@fortawesome/free-solid-svg-icons";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -59,7 +61,6 @@ const MainToolbar = ({
   const classes = useStyles();
   const navigate = useNavigate();
   const t = useTranslation();
-  const theme = useTheme();
   const groups = useSelector((state) => state.groups.items);
   const devices = useSelector((state) => state.devices.items);
   const inputRef = useRef();
@@ -90,7 +91,7 @@ const MainToolbar = ({
                 variant="dot"
                 invisible={!filter.statuses.length && !filter.groups.length}
               >
-                <TuneRoundedIcon fontSize="small" />
+                <FontAwesomeIcon icon={faSliders} style={{color: '#b3b3b3'}}/>
               </Badge>
             </IconButton>
           </InputAdornment>
@@ -179,7 +180,7 @@ const MainToolbar = ({
         className={classes.buttonStyle}
         onClick={() => navigate("/settings/device")}
         variant="contained"
-        endIcon={<AddRoundedIcon />}
+        endIcon={<FontAwesomeIcon size="xs" icon={faPlus} />}
       >
         Adicionar Veículo
       </Button>

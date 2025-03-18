@@ -10,7 +10,6 @@ import {
   TextField,
   Button,
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import PageLayout from '../common/components/PageLayout';
 import SettingsMenu from './components/SettingsMenu';
@@ -18,6 +17,8 @@ import { useCatch } from '../reactHelper';
 import { useAttributePreference } from '../common/util/preferences';
 import { distanceFromMeters, distanceToMeters, distanceUnitString } from '../common/util/converter';
 import useSettingsStyles from './common/useSettingsStyles';
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const AccumulatorsPage = () => {
   const navigate = useNavigate();
@@ -60,7 +61,7 @@ const AccumulatorsPage = () => {
       {item && (
         <Container maxWidth="xs" className={classes.container}>
           <Accordion defaultExpanded>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <AccordionSummary expandIcon={<FontAwesomeIcon icon={faAngleDown} />}>
               <Typography variant="subtitle1">
                 {t('sharedRequired')}
               </Typography>

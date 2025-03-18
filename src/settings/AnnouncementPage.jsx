@@ -9,7 +9,6 @@ import {
   TextField,
   Button,
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import PageLayout from '../common/components/PageLayout';
 import SettingsMenu from './components/SettingsMenu';
@@ -17,6 +16,8 @@ import { useCatchCallback } from '../reactHelper';
 import useSettingsStyles from './common/useSettingsStyles';
 import SelectField from '../common/components/SelectField';
 import { prefixString } from '../common/util/stringUtils';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
 const AnnouncementPage = () => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ const AnnouncementPage = () => {
     <PageLayout menu={<SettingsMenu />} breadcrumbs={['serverAnnouncement']}>
       <Container maxWidth="xs" className={classes.container}>
         <Accordion defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <AccordionSummary expandIcon={<FontAwesomeIcon icon={faAngleDown} />}>
             <Typography variant="subtitle1">
               {t('sharedRequired')}
             </Typography>

@@ -1,17 +1,29 @@
 import { makeStyles } from "@mui/styles";
 import { DynamicIconsComponent } from "./DynamicIcons";
-import { Box, IconButton, ListItemIcon, MenuItem, MenuList, Popover, Tooltip, Typography } from "@mui/material";
-import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
-import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
-import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import {
+  Box,
+  IconButton,
+  ListItemIcon,
+  MenuItem,
+  MenuList,
+  Popover,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "./LocalizationProvider";
 import { useState } from "react";
-import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
-import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import { useDispatch, useSelector } from "react-redux";
-import { nativePostMessage } from './NativeInterface';
-import { sessionActions } from '../../store';
+import { nativePostMessage } from "./NativeInterface";
+import { sessionActions } from "../../store";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowRightFromBracket,
+  faCircleUser,
+  faFileLines,
+  faGear,
+  faUserPen,
+} from "@fortawesome/free-solid-svg-icons";
 
 const useStyles = makeStyles((theme) => ({
   iconsSideBar: {
@@ -42,32 +54,34 @@ const NavMenu = ({ setDevicesOpen }) => {
   const handleLogout = async () => {
     setAccountPopOver(null);
 
-    const notificationToken = window.localStorage.getItem('notificationToken');
+    const notificationToken = window.localStorage.getItem("notificationToken");
     if (notificationToken && !user.readonly) {
-      window.localStorage.removeItem('notificationToken');
-      const tokens = user.attributes.notificationTokens?.split(',') || [];
+      window.localStorage.removeItem("notificationToken");
+      const tokens = user.attributes.notificationTokens?.split(",") || [];
       if (tokens.includes(notificationToken)) {
         const updatedUser = {
           ...user,
           attributes: {
             ...user.attributes,
-            notificationTokens: tokens.length > 1 ? tokens.filter((it) => it !== notificationToken).join(',') : undefined,
+            notificationTokens:
+              tokens.length > 1
+                ? tokens.filter((it) => it !== notificationToken).join(",")
+                : undefined,
           },
         };
         await fetch(`/api/users/${user.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(updatedUser),
         });
       }
     }
 
-    await fetch('/api/session', { method: 'DELETE' });
-    nativePostMessage('logout');
-    navigate('/login');
+    await fetch("/api/session", { method: "DELETE" });
+    nativePostMessage("logout");
+    navigate("/login");
     dispatch(sessionActions.updateUser(null));
   };
-
 
   return (
     <Box component={"div"} className={classes.iconsSideBar}>
@@ -86,7 +100,7 @@ const NavMenu = ({ setDevicesOpen }) => {
           onClick={() => navigate("/reports/combined")}
           onTouchStart={() => navigate("/reports/combined")}
         >
-          <DescriptionRoundedIcon />
+          <FontAwesomeIcon size="sm" icon={faFileLines} />
         </IconButton>
       </Tooltip>
 
@@ -96,17 +110,16 @@ const NavMenu = ({ setDevicesOpen }) => {
           onClick={() => navigate("/settings/preferences")}
           onTouchStart={() => navigate("/settings/preferences")}
         >
-          <SettingsRoundedIcon />
+          <FontAwesomeIcon icon={faGear} size="sm" />
         </IconButton>
       </Tooltip>
 
-      <Tooltip
-        title={t("settingsUser")}
-        placement="right"
-        arrow
-      >
-        <IconButton size="medium" onClick={(event) => setAccountPopOver(event.currentTarget)}>
-          <AccountCircleRoundedIcon />
+      <Tooltip title={t("settingsUser")} placement="right" arrow>
+        <IconButton
+          size="medium"
+          onClick={(event) => setAccountPopOver(event.currentTarget)}
+        >
+          <FontAwesomeIcon size="sm" icon={faCircleUser} />
         </IconButton>
       </Tooltip>
       <Popover
@@ -115,24 +128,26 @@ const NavMenu = ({ setDevicesOpen }) => {
         onClose={() => setAccountPopOver(null)}
         anchorEl={accountPopOver}
         anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: "top",
+          horizontal: "right",
         }}
       >
         <MenuList>
           <MenuItem onClick={handleAccount}>
             <ListItemIcon>
-              <EditRoundedIcon/>
+              <FontAwesomeIcon icon={faUserPen} />
             </ListItemIcon>
-           Editar Conta
+            Editar Conta
           </MenuItem>
           <MenuItem onClick={handleLogout}>
             <ListItemIcon>
-              <ExitToAppRoundedIcon fontSize="medium" color="error"/>
+              <FontAwesomeIcon
+                icon={faArrowRightFromBracket}
+                style={{ color: "red" }}
+                color="red"
+              />
             </ListItemIcon>
-            <Typography >
-              Sair
-            </Typography>
+            <Typography>Sair</Typography>
           </MenuItem>
         </MenuList>
       </Popover>

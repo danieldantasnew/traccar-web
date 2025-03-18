@@ -2,20 +2,6 @@ import React from 'react';
 import {
   Divider, List,
 } from '@mui/material';
-import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
-import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
-import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
-import LayersRoundedIcon from '@mui/icons-material/LayersRounded';
-import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
-import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
-import StorageRoundedIcon from '@mui/icons-material/StorageRounded';
-import BuildRoundedIcon from '@mui/icons-material/BuildRounded';
-import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
-import TodayRoundedIcon from '@mui/icons-material/TodayRounded';
-import PublishRoundedIcon from '@mui/icons-material/PublishRounded';
-import SmartphoneRoundedIcon from '@mui/icons-material/SmartphoneRounded';
-import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
-import CampaignRoundedIcon from '@mui/icons-material/CampaignRounded';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useTranslation } from '../../common/components/LocalizationProvider';
@@ -24,6 +10,8 @@ import {
 } from '../../common/util/permissions';
 import useFeatures from '../../common/util/useFeatures';
 import MenuItem from '../../common/components/MenuItem';
+import { faBell, faBullhorn, faCalendarDays, faCircleQuestion, faDatabase, faEarthAmericas, faGear, faLayerGroup, faList, faMobileScreenButton, faTerminal, faUser, faUsers, faWrench } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const SettingsMenu = () => {
   const t = useTranslation();
@@ -43,7 +31,7 @@ const SettingsMenu = () => {
         <MenuItem
           title={t('sharedPreferences')}
           link="/settings/preferences"
-          icon={<SettingsRoundedIcon />}
+          icon={<FontAwesomeIcon icon={faGear} size='lg' />}
           selected={location.pathname === '/settings/preferences'}
         />
         {!readonly && (
@@ -51,32 +39,32 @@ const SettingsMenu = () => {
             <MenuItem
               title={t('sharedNotifications')}
               link="/settings/notifications"
-              icon={<NotificationsRoundedIcon />}
+              icon={<FontAwesomeIcon icon={faBell} size='lg'/>}
               selected={location.pathname.startsWith('/settings/notification')}
             />
             <MenuItem
               title={t('settingsUser')}
               link={`/settings/user/${userId}`}
-              icon={<PersonRoundedIcon />}
+              icon={<FontAwesomeIcon icon={faUser} size='lg'/>}
               selected={location.pathname === `/settings/user/${userId}`}
             />
             <MenuItem
               title={t('deviceTitle')}
               link="/settings/devices"
-              icon={<SmartphoneRoundedIcon />}
+              icon={<FontAwesomeIcon icon={faMobileScreenButton} size='lg' />}
               selected={location.pathname.startsWith('/settings/device')}
             />
             <MenuItem
               title={t('sharedGeofences')}
               link="/geofences"
-              icon={<CreateRoundedIcon />}
+              icon={<FontAwesomeIcon icon={faEarthAmericas} size='lg'/>}
               selected={location.pathname.startsWith('/settings/geofence')}
             />
             {!features.disableGroups && (
               <MenuItem
                 title={t('settingsGroups')}
                 link="/settings/groups"
-                icon={<LayersRoundedIcon />}
+                icon={<FontAwesomeIcon icon={faLayerGroup} size='lg' />}
                 selected={location.pathname.startsWith('/settings/group')}
               />
             )}
@@ -84,7 +72,7 @@ const SettingsMenu = () => {
               <MenuItem
                 title={t('sharedDrivers')}
                 link="/settings/drivers"
-                icon={<GroupRoundedIcon />}
+                icon={<FontAwesomeIcon icon={faUsers} size='lg' />}
                 selected={location.pathname.startsWith('/settings/driver')}
               />
             )}
@@ -92,7 +80,7 @@ const SettingsMenu = () => {
               <MenuItem
                 title={t('sharedCalendars')}
                 link="/settings/calendars"
-                icon={<TodayRoundedIcon />}
+                icon={<FontAwesomeIcon icon={faCalendarDays} size='lg'/>}
                 selected={location.pathname.startsWith('/settings/calendar')}
               />
             )}
@@ -100,7 +88,7 @@ const SettingsMenu = () => {
               <MenuItem
                 title={t('sharedComputedAttributes')}
                 link="/settings/attributes"
-                icon={<StorageRoundedIcon />}
+                icon={<FontAwesomeIcon icon={faList} size='lg'/>}
                 selected={location.pathname.startsWith('/settings/attribute')}
               />
             )}
@@ -108,7 +96,7 @@ const SettingsMenu = () => {
               <MenuItem
                 title={t('sharedMaintenance')}
                 link="/settings/maintenances"
-                icon={<BuildRoundedIcon />}
+                icon={<FontAwesomeIcon icon={faWrench} size='lg' />}
                 selected={location.pathname.startsWith('/settings/maintenance')}
               />
             )}
@@ -116,7 +104,7 @@ const SettingsMenu = () => {
               <MenuItem
                 title={t('sharedSavedCommands')}
                 link="/settings/commands"
-                icon={<PublishRoundedIcon />}
+                icon={<FontAwesomeIcon icon={faTerminal} size='lg' />}
                 selected={location.pathname.startsWith('/settings/command')}
               />
             )}
@@ -124,7 +112,7 @@ const SettingsMenu = () => {
               <MenuItem
                 title={t('settingsSupport')}
                 link={supportLink}
-                icon={<HelpRoundedIcon />}
+                icon={<FontAwesomeIcon icon={faCircleQuestion} />}
               />
             )}
           </>
@@ -137,21 +125,21 @@ const SettingsMenu = () => {
             <MenuItem
               title={t('serverAnnouncement')}
               link="/settings/announcement"
-              icon={<CampaignRoundedIcon />}
+              icon={<FontAwesomeIcon icon={faBullhorn} size='sm' />}
               selected={location.pathname === '/settings/announcement'}
             />
             {admin && (
               <MenuItem
                 title={t('settingsServer')}
                 link="/settings/server"
-                icon={<StorageRoundedIcon />}
+                icon={<FontAwesomeIcon icon={faDatabase} size='sm'/>}
                 selected={location.pathname === '/settings/server'}
               />
             )}
             <MenuItem
               title={t('settingsUsers')}
               link="/settings/users"
-              icon={<PeopleRoundedIcon />}
+              icon={<FontAwesomeIcon icon={faUsers} size='sm' />}
               selected={location.pathname.startsWith('/settings/user') && location.pathname !== `/settings/user/${userId}`}
             />
           </List>

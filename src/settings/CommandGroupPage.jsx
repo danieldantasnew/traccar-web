@@ -22,6 +22,8 @@ import PageLayout from '../common/components/PageLayout';
 import SettingsMenu from './components/SettingsMenu';
 import { useCatch } from '../reactHelper';
 import useSettingsStyles from './common/useSettingsStyles';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
 const CommandDevicePage = () => {
   const navigate = useNavigate();
@@ -53,7 +55,7 @@ const CommandDevicePage = () => {
     <PageLayout menu={<SettingsMenu />} breadcrumbs={['settingsTitle', 'deviceCommand']}>
       <Container maxWidth="xs" className={classes.container}>
         <Accordion defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <AccordionSummary expandIcon={<FontAwesomeIcon icon={faAngleDown} />}>
             <Typography variant="subtitle1">
               {t('sharedRequired')}
             </Typography>

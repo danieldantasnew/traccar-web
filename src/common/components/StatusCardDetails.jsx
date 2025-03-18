@@ -1,16 +1,9 @@
 import React, { useRef, useState } from "react";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { formatTime } from "../util/formatter";
-import AccessTimeFilledRoundedIcon from "@mui/icons-material/AccessTimeFilledRounded";
 import makeStyles from "@mui/styles/makeStyles";
 import usePositionAttributes from "../attributes/usePositionAttributes";
 import { useAttributePreference } from "../util/preferences";
-import PowerSettingsNewRoundedIcon from "@mui/icons-material/PowerSettingsNewRounded";
-import SpeedRoundedIcon from "@mui/icons-material/SpeedRounded";
-import SignpostRoundedIcon from "@mui/icons-material/SignpostRounded";
-import CropFreeRoundedIcon from "@mui/icons-material/CropFreeRounded";
-import MapIcon from "@mui/icons-material/Map";
-import BatteryChargingFullRoundedIcon from "@mui/icons-material/BatteryChargingFullRounded";
 import PositionValue from "./PositionValue";
 import {
   Alert,
@@ -24,9 +17,19 @@ import {
 } from "@mui/material";
 import AddressValue from "./AddressValue";
 import { useTranslation } from "./LocalizationProvider";
-import StreetviewIcon from "@mui/icons-material/Streetview";
 import { mapIconKey, mapIcons } from "../../map/core/preloadImages";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBatteryFull,
+  faClock,
+  faCopy,
+  faExpand,
+  faGaugeHigh,
+  faMap,
+  faPowerOff,
+  faSignsPost,
+  faStreetView,
+} from "@fortawesome/free-solid-svg-icons";
 
 const useStyles = makeStyles((theme) => ({
   cardDetails: {
@@ -114,8 +117,8 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     filter: "brightness(0) invert(1)",
-    width: '20px',
-    height: '20px',
+    width: "20px",
+    height: "20px",
   },
 
   description: {
@@ -211,21 +214,21 @@ const getColor = (attribute) => {
 const getIcon = (name) => {
   switch (name) {
     case "fixTime":
-      return <AccessTimeFilledRoundedIcon />;
+      return <FontAwesomeIcon icon={faClock} />;
     case "speed":
-      return <SpeedRoundedIcon />;
+      return <FontAwesomeIcon icon={faGaugeHigh} />;
     case "totalDistance":
-      return <MapIcon />;
+      return <FontAwesomeIcon icon={faMap} />;
     case "course":
-      return <SignpostRoundedIcon />;
+      return <FontAwesomeIcon icon={faSignsPost} />;
     case "id":
-      return <CropFreeRoundedIcon />;
+      return <FontAwesomeIcon icon={faExpand} />;
     case "motion":
-      return <SpeedRoundedIcon />;
+      return <FontAwesomeIcon icon={faGaugeHigh} />;
     case "batteryLevel":
-      return <BatteryChargingFullRoundedIcon />;
+      return <FontAwesomeIcon icon={faBatteryFull} />;
     case "ignition":
-      return <PowerSettingsNewRoundedIcon />;
+      return <FontAwesomeIcon icon={faPowerOff} />;
     default:
       return "";
   }
@@ -312,7 +315,12 @@ const StatusCardDetails = ({ position, device }) => {
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         sx={{ mr: 4 }}
       >
-        <Alert color="success" style={{backgroundColor: "#4bbf50", color: "white"}} size="md" onClose={() => setAlertCopied(false)}>
+        <Alert
+          color="success"
+          style={{ backgroundColor: "#4bbf50", color: "white" }}
+          size="md"
+          onClose={() => setAlertCopied(false)}
+        >
           Endereço copiado para área de transferência
         </Alert>
       </Snackbar>
@@ -323,7 +331,7 @@ const StatusCardDetails = ({ position, device }) => {
           className={classes.flexRow}
           style={{ justifyContent: "space-between" }}
         >
-          <Typography style={{maxWidth: "360px"}}>
+          <Typography style={{ maxWidth: "360px" }}>
             <AddressValue
               latitude={position.latitude}
               longitude={position.longitude}
@@ -334,14 +342,15 @@ const StatusCardDetails = ({ position, device }) => {
           <div>
             <Tooltip
               title={"Copiar endereço"}
-              onClick={() => handleCopyAddress(copiedAddress, setAlertCopied, timeOutAlert)}
+              onClick={() =>
+                handleCopyAddress(copiedAddress, setAlertCopied, timeOutAlert)
+              }
             >
-              <IconButton
-                component="a"
-                className={classes.gray}
-                style={{ border: "1px solid transparent" }}
-              >
-                <ContentCopyIcon />
+              <IconButton component="a">
+                <FontAwesomeIcon
+                  icon={faCopy}
+                  style={{ border: "1px solid transparent", color: "#a9a9a9" }}
+                />
               </IconButton>
             </Tooltip>
             <Tooltip title={t("linkStreetView")}>
@@ -352,7 +361,7 @@ const StatusCardDetails = ({ position, device }) => {
                 className={classes.orange}
                 style={{ border: "1px solid transparent" }}
               >
-                <StreetviewIcon />
+                <FontAwesomeIcon icon={faStreetView} />
               </IconButton>
             </Tooltip>
           </div>

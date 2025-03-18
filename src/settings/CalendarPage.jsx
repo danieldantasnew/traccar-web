@@ -5,7 +5,6 @@ import TextField from '@mui/material/TextField';
 import {
   Accordion, AccordionSummary, AccordionDetails, Typography, FormControl, InputLabel, Select, MenuItem,
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DropzoneArea } from 'react-mui-dropzone';
 import EditItemView from './components/EditItemView';
 import EditAttributesAccordion from './components/EditAttributesAccordion';
@@ -15,6 +14,8 @@ import { prefixString } from '../common/util/stringUtils';
 import { calendarsActions } from '../store';
 import { useCatch } from '../reactHelper';
 import useSettingsStyles from './common/useSettingsStyles';
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const formatCalendarTime = (time) => {
   const tzid = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -112,7 +113,7 @@ const CalendarPage = () => {
       {item && (
         <>
           <Accordion defaultExpanded>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <AccordionSummary expandIcon={<FontAwesomeIcon icon={faAngleDown} />}>
               <Typography variant="subtitle1">
                 {t('sharedRequired')}
               </Typography>

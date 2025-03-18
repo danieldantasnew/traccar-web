@@ -15,11 +15,8 @@ import Battery60Icon from '@mui/icons-material/Battery60';
 import BatteryCharging60Icon from '@mui/icons-material/BatteryCharging60';
 import Battery20Icon from '@mui/icons-material/Battery20';
 import BatteryCharging20Icon from '@mui/icons-material/BatteryCharging20';
-import ErrorIcon from '@mui/icons-material/Error';
-import PowerSettingsNewRoundedIcon from '@mui/icons-material/PowerSettingsNewRounded';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import SpeedRoundedIcon from '@mui/icons-material/SpeedRounded';
 import { devicesActions } from '../store';
 import {
   formatAlarm,
@@ -32,6 +29,8 @@ import { useTranslation } from '../common/components/LocalizationProvider';
 import { mapIconKey, mapIcons } from '../map/core/preloadImages';
 import { useAdministrator } from '../common/util/permissions';
 import { useAttributePreference } from '../common/util/preferences';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleExclamation, faGaugeHigh, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 
 dayjs.extend(relativeTime);
 
@@ -121,14 +120,14 @@ const DeviceRow = ({ device }) => {
           {position.attributes.motion && (
             <Tooltip title="Em movimento">
               <IconButton size="small">
-                <SpeedRoundedIcon width={22} height={22} className={classes.success}/>
+                <FontAwesomeIcon icon={faGaugeHigh} className={classes.success}/>
               </IconButton>
             </Tooltip>
           )}
           {position.attributes.hasOwnProperty("alarm") && (
             <Tooltip title={`${t("eventAlarm")}: ${formatAlarm(position.attributes.alarm, t)}`}>
               <IconButton size="small">
-                <ErrorIcon fontSize="small" className={classes.error} />
+                <FontAwesomeIcon icon={faCircleExclamation} className={classes.error} />
               </IconButton>
             </Tooltip>
           )}
@@ -136,9 +135,9 @@ const DeviceRow = ({ device }) => {
             <Tooltip title={`${t("positionIgnition")}: ${formatBoolean(position.attributes.ignition, t)}`}>
               <IconButton size="small">
                 {position.attributes.ignition ? (
-                  <PowerSettingsNewRoundedIcon width={22} height={22} className={classes.success} />
+                  <FontAwesomeIcon icon={faPowerOff} className={classes.success} />
                 ) : (
-                  <PowerSettingsNewRoundedIcon width={22} height={22} className={classes.error} />
+                  <FontAwesomeIcon icon={faPowerOff} className={classes.error} />
                 )}
               </IconButton>
             </Tooltip>
