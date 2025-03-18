@@ -25,8 +25,10 @@ import {
   faCopy,
   faExpand,
   faGaugeHigh,
+  faGlobe,
   faMap,
   faPowerOff,
+  faSatelliteDish,
   faSignsPost,
   faStreetView,
 } from "@fortawesome/free-solid-svg-icons";
@@ -229,8 +231,12 @@ const getIcon = (name) => {
       return <FontAwesomeIcon icon={faBatteryFull} />;
     case "ignition":
       return <FontAwesomeIcon icon={faPowerOff} />;
+    case "sat":
+      return <FontAwesomeIcon icon={faSatelliteDish} />;
+    case "hours":
+      return <FontAwesomeIcon icon={faClock} />;
     default:
-      return "";
+      return <FontAwesomeIcon icon={faGlobe} />;
   }
 };
 
