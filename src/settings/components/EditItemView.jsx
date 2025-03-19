@@ -7,6 +7,7 @@ import { useCatch, useEffectAsync } from '../../reactHelper';
 import { useTranslation } from '../../common/components/LocalizationProvider';
 import PageLayout from '../../common/components/PageLayout';
 import useSettingsStyles from '../common/useSettingsStyles';
+import { getRandomColor } from '../../common/util/colors';
 
 const EditItemView = ({
   children, endpoint, item, setItem, defaultItem, validate, onItemSaved, menu, breadcrumbs,
@@ -38,10 +39,17 @@ const EditItemView = ({
       url += `/${id}`;
     }
 
+    const updatedItem = !id ? { 
+      ...item, 
+      attributes: { ...item.attributes, ['web.reportColor']: getRandomColor() }
+    } : item;
+    
+    setItem(updatedItem);
+
     const response = await fetch(url, {
       method: !id ? 'POST' : 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(item),
+      body: JSON.stringify(updatedItem),
     });
 
     if (response.ok) {

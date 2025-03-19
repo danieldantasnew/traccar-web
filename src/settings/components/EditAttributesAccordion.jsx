@@ -112,7 +112,7 @@ const EditAttributesAccordion = ({ attribute, attributes, setAttributes, definit
   const convertToList = (attributes) => {
     const booleanList = [];
     const otherList = [];
-    const excludeAttributes = ['speedUnit', 'distanceUnit', 'volumeUnit', 'timezone'];
+    const excludeAttributes = ['speedUnit', 'distanceUnit', 'volumeUnit', 'timezone', 'web.reportColor'];
     Object.keys(attributes || []).filter((key) => !excludeAttributes.includes(key)).forEach((key) => {
       const value = attributes[key];
       const type = getAttributeType(value);
@@ -146,6 +146,8 @@ const EditAttributesAccordion = ({ attribute, attributes, setAttributes, definit
       }
     }
   };
+
+  console.log()
 
   return features.disableAttributes ? '' : (
     <Accordion defaultExpanded={!!attribute}>

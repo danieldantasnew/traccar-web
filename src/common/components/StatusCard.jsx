@@ -254,9 +254,9 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                   image={deviceImage ? `/api/media/${device.uniqueId}/${deviceImage}`: ''}
                 >
                   <Box component={"div"} className={classes.infoTop}>
-                    {position && (
+                    {position ? (
                       <IgnitionState position={position} classes={classes} />
-                    )}
+                    ): <span></span>}
                     <Tooltip
                       title="Fechar"
                       arrow

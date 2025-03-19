@@ -29,7 +29,7 @@ const AddAttributeDialog = ({ open, onResult, definitions }) => {
     key,
     name: value.name,
     type: value.type,
-  }));
+  })).filter(option => option.key !== 'web.reportColor');
 
   const [key, setKey] = useState();
   const [type, setType] = useState('string');

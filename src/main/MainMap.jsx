@@ -120,14 +120,19 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
           selectedPosition={selectedPosition}
           showStatus
         />
-        {items.map((item) => (
-          <MapRouteCoordinates
-            key={item.deviceId}
-            name={devices[item.deviceId].name}
-            coordinates={item.route}
-            deviceId={item.deviceId}
-          />
-        ))}
+        {items.map((item) => {
+          if(devices[item.deviceId]) {
+            return (
+              <MapRouteCoordinates
+                key={item.deviceId}
+                name={devices[item.deviceId].name}
+                coordinates={item.route}
+                deviceId={item.deviceId}
+              />
+            )
+          }
+          return;
+        })}
         {directions ? <MapRoutePoints positions={directions} colorDynamic={true}/> : ''}
         <MapMarkers markers={createMarkers()} />
         <MapDefaultCamera />
