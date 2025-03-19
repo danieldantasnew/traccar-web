@@ -59,6 +59,7 @@ const MapRouteCoordinates = ({ name, coordinates, deviceId }) => {
   }, []);
 
   useEffect(() => {
+    const colorDevice = devices[deviceId].attributes['web.reportColor'] ? devices[deviceId].attributes['web.reportColor'].split(';') :["rgb(189, 12, 18)", "white", "rgb(255, 0, 8)"];
     map.getSource(id)?.setData({
       type: 'Feature',
       geometry: {
@@ -67,7 +68,7 @@ const MapRouteCoordinates = ({ name, coordinates, deviceId }) => {
       },
       properties: {
         name,
-        color: `${devices[deviceId].bgColor}`,
+        color: colorDevice[2],
       },
     });
   }, [theme, coordinates, reportColor]);

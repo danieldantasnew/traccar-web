@@ -30,4 +30,26 @@ const getSpeedColor = (speed, minSpeed, maxSpeed) => {
   return `rgb(${r}, ${g}, ${b})`;
 };
 
+export const getRandomColor = () => {
+  const baseRed = Math.floor(Math.random() * 256);
+  const baseGreen = Math.floor(Math.random() * 256);
+  const baseBlue = Math.floor(Math.random() * 256);
+
+  const baseColor = `rgb(${baseRed}, ${baseGreen}, ${baseBlue})`;
+
+  const luminance = 0.2126 * baseRed + 0.7152 * baseGreen + 0.0722 * baseBlue;
+  const textColor = luminance > 128 ? "black" : "white";
+
+  const variation = Math.random() > 0.5 ? 30 : -30;
+
+  const variantRed = Math.max(0, Math.min(255, baseRed + variation));
+  const variantGreen = Math.max(0, Math.min(255, baseGreen + variation));
+  const variantBlue = Math.max(0, Math.min(255, baseBlue + variation));
+
+  const variantColor = `rgb(${variantRed}, ${variantGreen}, ${variantBlue})`;
+
+  return `${baseColor};${textColor};${variantColor}`;
+};
+
+
 export default getSpeedColor;

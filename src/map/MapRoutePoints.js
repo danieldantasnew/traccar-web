@@ -88,7 +88,7 @@ const MapRoutePoints = ({ positions, onClick, colorDynamic }) => {
           index,
           id: position.id,
           rotation: position.course,
-          color: colorDynamic && devices[selectedId] ? devices[selectedId].subColor : getSpeedColor(position.speed, minSpeed, maxSpeed),
+          color: colorDynamic && devices[selectedId] ? devices[selectedId].attributes['web.reportColor'].split(';')[2] : getSpeedColor(position.speed, minSpeed, maxSpeed),
         },
       })),
     });

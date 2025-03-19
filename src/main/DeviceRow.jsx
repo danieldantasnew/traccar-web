@@ -30,7 +30,7 @@ import { mapIconKey, mapIcons } from '../map/core/preloadImages';
 import { useAdministrator } from '../common/util/permissions';
 import { useAttributePreference } from '../common/util/preferences';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleExclamation, faGaugeHigh, faPowerOff } from '@fortawesome/free-solid-svg-icons';
+import { faCar, faCircleExclamation, faGaugeHigh, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 
 dayjs.extend(relativeTime);
 
@@ -68,7 +68,7 @@ const DeviceRow = ({ device }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const t = useTranslation();
-
+  const colors = device.attributes['web.reportColor'] ? device.attributes['web.reportColor'].split(';') : ["rgb(189, 12, 18)", "white", "rgb(255, 0, 8)"];
   const admin = useAdministrator();
 
   const position = useSelector((state) => state.session.positions[device.id]);
@@ -101,12 +101,8 @@ const DeviceRow = ({ device }) => {
       disabled={!admin && device.disabled}
     >
       <ListItemAvatar>
-        <Avatar style={devices && position ? { backgroundColor: `${devices[position.deviceId].subColor}` } : {}}>
-          <img
-            className={classes.icon}
-            src={mapIcons[mapIconKey(device.category)]}
-            alt=""
-          />
+        <Avatar style={devices && position ? { backgroundColor: colors[0], color: colors[1]} : {}}>
+          <FontAwesomeIcon icon={faCar} style={{width: '28px'}}/>
         </Avatar>
       </ListItemAvatar>
       <ListItemText

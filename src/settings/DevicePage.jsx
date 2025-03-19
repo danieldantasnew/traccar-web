@@ -23,6 +23,7 @@ import useQuery from '../common/util/useQuery';
 import useSettingsStyles from './common/useSettingsStyles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { getRandomColor } from '../common/util/colors';
 
 const DevicePage = () => {
   const classes = useSettingsStyles();
@@ -38,6 +39,7 @@ const DevicePage = () => {
 
   const [item, setItem] = useState(uniqueId ? { uniqueId } : null);
 
+
   const handleFiles = useCatch(async (files) => {
     if (files.length > 0) {
       const response = await fetch(`/api/devices/${item.id}/image`, {
@@ -45,7 +47,7 @@ const DevicePage = () => {
         body: files[0],
       });
       if (response.ok) {
-        setItem({ ...item, attributes: { ...item.attributes, deviceImage: await response.text() } });
+        setItem({ ...item, attributes: { ...item.attributes, ['web.reportColor']: getRandomColor() , deviceImage: await response.text() } });
       } else {
         throw Error(await response.text());
       }

@@ -31,20 +31,22 @@ const CombinedReportPage = () => {
   const itemsCoordinates = useMemo(() => items.flatMap((item) => item.route), [items]);
 
   const createMarkers = () => {
-   return items.flatMap((item) =>
-      item.events
-        .map((event) => item.positions.find((p) => event.positionId === p.id))
-        .filter((position) => position != null)
-        .map((position, index) => ({
-          latitude: position.latitude,
-          longitude: position.longitude,
-          stopped: `${index+1}`,
-          bgColor: `${devices[item.deviceId].bgColor}`,
-          color: `${devices[item.deviceId].color}`,
-        }))
-    );
-  }
-
+    return items.flatMap((item) => {
+      const bgColor = devices[item.deviceId].attributes['web.reportColor'] ? devices[item.deviceId].attributes['web.reportColor'].split(';')[0] : "rgb(189, 12, 18)";
+      const color = devices[item.deviceId].attributes['web.reportColor'] ? devices[item.deviceId].attributes['web.reportColor'].split(';')[1] : "rgb(189, 12, 18)"
+      return item.events
+      .map((event) => item.positions.find((p) => event.positionId === p.id))
+      .filter((position) => position != null)
+      .map((position, index) => ({
+        latitude: position.latitude,
+        longitude: position.longitude,
+        stopped: `${index+1}`,
+        bgColor,
+        color,
+      }))
+    }
+     );
+   }
   
   const handleSubmit = useCatch(async ({ deviceIds, groupIds, from, to }) => {
     const query = new URLSearchParams({ from, to });

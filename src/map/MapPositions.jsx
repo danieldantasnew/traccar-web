@@ -108,6 +108,7 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition }) => {
   
       const el = document.createElement("div");
       const device = devices[position.deviceId];
+      const colors = device.attributes['web.reportColor']? device.attributes['web.reportColor'].split(';') : ["rgb(189, 12, 18)", "white", "rgb(255, 0, 8)"];
   
       el.className = "marker";
   
@@ -124,8 +125,8 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition }) => {
         </Tooltip>
       );
   
-      el.style.backgroundColor = device.subColor;
-      el.style.color = device.color;
+      el.style.backgroundColor = colors[0];
+      el.style.color = colors[1];
   
       el.addEventListener("click", (event) => {
         event.stopPropagation();

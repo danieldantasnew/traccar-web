@@ -21,13 +21,14 @@ import { mapIconKey, mapIcons } from "../../map/core/preloadImages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBatteryFull,
+  faCar,
   faClock,
   faExpand,
   faGaugeHigh,
   faGlobe,
   faMap,
   faPowerOff,
-  faSatelliteDish,
+  faSatellite,
   faSignsPost,
   faStreetView,
 } from "@fortawesome/free-solid-svg-icons";
@@ -232,7 +233,7 @@ const getIcon = (name) => {
     case "ignition":
       return <FontAwesomeIcon icon={faPowerOff} />;
     case "sat":
-      return <FontAwesomeIcon icon={faSatelliteDish} />;
+      return <FontAwesomeIcon icon={faSatellite} />;
     case "hours":
       return <FontAwesomeIcon icon={faClock} />;
     default:
@@ -241,16 +242,13 @@ const getIcon = (name) => {
 };
 
 const InfoCar = ({ device, classes }) => {
+  const colors = device.attributes['web.reportColor'] ? device.attributes['web.reportColor'].split(';'): ["rgb(189, 12, 18)", "white", "rgb(255, 0, 8)"];
   return (
     <div className={`${classes.box} ${classes.infoCar}`}>
       <div className={`${classes.box}`} style={{ padding: "0" }}>
         <ListItemAvatar style={{ minWidth: "initial" }}>
-          <Avatar style={{ backgroundColor: `${device.subColor}` }}>
-            <img
-              className={classes.icon}
-              src={mapIcons[mapIconKey(device.category)]}
-              alt=""
-            />
+          <Avatar style={{ backgroundColor: colors[0], color: colors[1] }}>
+            <FontAwesomeIcon icon={faCar} style={{width: '28px'}} />
           </Avatar>
         </ListItemAvatar>
         <div className={classes.description}>

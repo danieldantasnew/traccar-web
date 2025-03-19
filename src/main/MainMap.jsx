@@ -48,17 +48,20 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
   );
 
   const createMarkers = () => {
-    return items.flatMap((item) =>
-       item.events
-         .map((event) => item.positions.find((p) => event.positionId === p.id))
-         .filter((position) => position != null)
-         .map((position, index) => ({
-           latitude: position.latitude,
-           longitude: position.longitude,
-           stopped: `${index+1}`,
-           bgColor: `${devices[item.deviceId].bgColor}`,
-           color: `${devices[item.deviceId].color}`,
-         }))
+    return items.flatMap((item) => {
+      const bgColor = devices[item.deviceId].attributes['web.reportColor'] ? devices[item.deviceId].attributes['web.reportColor'].split(';')[0] : "rgb(189, 12, 18)";
+      const color = devices[item.deviceId].attributes['web.reportColor'] ? devices[item.deviceId].attributes['web.reportColor'].split(';')[1] : "rgb(189, 12, 18)"
+      return item.events
+      .map((event) => item.positions.find((p) => event.positionId === p.id))
+      .filter((position) => position != null)
+      .map((position, index) => ({
+        latitude: position.latitude,
+        longitude: position.longitude,
+        stopped: `${index+1}`,
+        bgColor,
+        color,
+      }))
+    }
      );
    }
 
