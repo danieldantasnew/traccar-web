@@ -49,7 +49,6 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
 
   const createMarkers = () => {
     return items.flatMap((item) => {
-      console.log(item)
       const device = devices[item.deviceId] || {}; 
       const attributes = device.attributes || {};  
       const reportColor = attributes['web.reportColor'] ? attributes['web.reportColor'].split(';') : ["rgb(189, 12, 18)", "rgb(189, 12, 18)"];
