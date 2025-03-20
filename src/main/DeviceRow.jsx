@@ -31,6 +31,7 @@ import { useAdministrator } from '../common/util/permissions';
 import { useAttributePreference } from '../common/util/preferences';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCar, faCircleExclamation, faGaugeHigh, faPowerOff } from '@fortawesome/free-solid-svg-icons';
+import { DynamicIconsComponent } from '../common/components/DynamicIcons';
 
 dayjs.extend(relativeTime);
 
@@ -102,7 +103,7 @@ const DeviceRow = ({ device }) => {
     >
       <ListItemAvatar>
         <Avatar style={devices && position ? { backgroundColor: colors[0], color: colors[1]} : {}}>
-          <FontAwesomeIcon icon={faCar} style={{width: '28px'}}/>
+          <DynamicIconsComponent category={device.category}/>
         </Avatar>
       </ListItemAvatar>
       <ListItemText
