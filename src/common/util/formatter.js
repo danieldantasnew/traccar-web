@@ -14,6 +14,7 @@ import {
   volumeUnitString,
 } from './converter';
 import { prefixString } from './stringUtils';
+import { useTranslation } from '../components/LocalizationProvider';
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -31,12 +32,36 @@ export const formatVoltage = (value, t) => `${value.toFixed(2)} ${t('sharedVoltA
 
 export const formatConsumption = (value, t) => `${value.toFixed(2)} ${t('sharedLiterPerHourAbbreviation')}`;
 
+const dayOfWeek = (day) => {
+  const t = useTranslation();
+  switch (day) {
+    case 0:
+      return `${t('Sunday')}`;
+    case 1:
+      return `${t('Monday')}`;
+    case 2:
+      return `${t('Tuesday')}`;
+    case 3:
+      return `${t('Wednesday')}`;
+    case 4:
+      return `${t('Thursday')}`;
+    case 5:
+      return `${t('Friday')}`;
+    case 6:
+      return `${t('Saturday')}`;
+    default:
+      '';
+  }
+}
+
 export const formatTime = (value, format) => {
   if (value) {
     const d = dayjs(value).toDate();
+    const dayWeek = d.getDay();
     const dateConfig = { year: 'numeric', month: '2-digit', day: '2-digit' };
     const minuteConfig = { hour: '2-digit', minute: '2-digit' };
     const secondConfig = { ...minuteConfig, second: '2-digit' };
+    console.log(dayWeek)
     switch (format) {
       case 'date':
         return d.toLocaleDateString(undefined, dateConfig);
