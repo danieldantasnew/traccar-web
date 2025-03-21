@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import {
   Card,
   Typography,
-  CardActions,
-  IconButton,
   Menu,
   MenuItem,
   CardMedia,
@@ -17,21 +15,17 @@ import {
 import makeStyles from "@mui/styles/makeStyles";
 import { useTranslation } from "./LocalizationProvider";
 import RemoveDialog from "./RemoveDialog";
-import { useDeviceReadonly } from "../util/permissions";
 import { devicesActions } from "../../store";
 import { useCatch, useCatchCallback } from "../../reactHelper";
 import { useAttributePreference } from "../util/preferences";
 import StatusCardDetails from "./StatusCardDetails";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faArrowUpFromBracket,
-  faEllipsis,
-  faPen,
   faPowerOff,
-  faRotateLeft,
-  faTrash,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
+import InfoCar from "./InfoCar";
+import AddressComponent from "./AddressComponent";
 
 function handleWheel(e) {
   if (e.deltaY > 0) {
@@ -62,10 +56,22 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
     },
   },
+  flexRow: {
+    display: "flex",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: "1rem",
+  },
+  flexColumn: {
+    display: "flex",
+    flexDirection: "column",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: "1rem",
+  },
   contentCardTop: {
     display: "flex",
     flexDirection: "column",
-    gap: "1rem",
     height: "100%",
   },
   ignitionState: {
@@ -81,13 +87,27 @@ const useStyles = makeStyles((theme) => ({
       fontSize: ".9rem",
     },
   },
+  box: {
+    display: "flex",
+    alignItems: "center",
+    gap: ".3rem",
+    justifyContent: "flex-start",
+    padding: "2px 4px",
+    "& svg": {
+      width: "18px",
+    },
+    "& h2": {
+      fontSize: ".8rem !important",
+      color: "#444444 !important",
+    },
+  },
   media: {
     display: "flex",
     justifyContent: "flex-end",
     alignItems: "flex-start",
     maxHeight: "35vh",
     height: "100%",
-    backgroundColor: '#f3f3f3',
+    backgroundColor: "#fff",
   },
   red: {
     fill: "red",
@@ -99,8 +119,13 @@ const useStyles = makeStyles((theme) => ({
     border: "2px solid green",
     color: "green",
   },
+  orange: {
+    fill: "orange",
+    border: "2px solid orange",
+    color: "orange",
+  },
   closeButton: {
-    color: 'white',
+    color: "white",
     padding: "4px",
     backgroundColor: theme.palette.primary.main,
     borderRadius: "50%",
@@ -108,9 +133,9 @@ const useStyles = makeStyles((theme) => ({
     width: "18px",
     cursor: "pointer",
     boxShadow: "0 0 4px .5px rgba(255, 255, 255, 0.62)",
-    ['&:hover']: {
-      backgroundColor: 'red',
-    }
+    ["&:hover"]: {
+      backgroundColor: "red",
+    },
   },
   infoTop: {
     display: "flex",
@@ -143,7 +168,7 @@ const useStyles = makeStyles((theme) => ({
     top: "0",
     height: "100vh",
     width: "38vw",
-    maxWidth: "550px",
+    maxWidth: "500px",
     transition: ".3s",
     [theme.breakpoints.down("md")]: {
       top: "50vh",
@@ -158,7 +183,7 @@ const IgnitionState = ({ position, classes }) => {
   if (position.attributes.ignition || position.attributes.motion)
     return (
       <Card className={`${classes.ignitionState} ${classes.green}`}>
-        <FontAwesomeIcon icon={faPowerOff} size="xs"/>
+        <FontAwesomeIcon icon={faPowerOff} size="xs" />
         <Typography>Ligado</Typography>
       </Card>
     );
@@ -179,8 +204,6 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
   const theme = useTheme();
   const desktop = useMediaQuery(theme.breakpoints.down("md"));
   const [axisY, setAxisY] = useState(0);
-
-  const deviceReadonly = useDeviceReadonly();
 
   const shareDisabled = useSelector(
     (state) => state.session.server.attributes.disableShare
@@ -249,31 +272,42 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
         {device && (
           <Card elevation={3} className={classes.card}>
             <Box className={classes.contentCardTop}>
-                <CardMedia
-                  className={classes.media}
-                  image={deviceImage ? `/api/media/${device.uniqueId}/${deviceImage}`: ''}
-                >
-                  <Box component={"div"} className={classes.infoTop}>
-                    {position ? (
-                      <IgnitionState position={position} classes={classes} />
-                    ): <span></span>}
-                    <Tooltip
-                      title="Fechar"
-                      arrow
-                      placement="right"
-                      onClick={onClose}
-                      onTouchStart={onClose}
-                      className={classes.closeButton}
-                    >
-                      <FontAwesomeIcon icon={faXmark} />
-                    </Tooltip>
-                  </Box>
-                </CardMedia>
+              <CardMedia
+                className={classes.media}
+                image={
+                  deviceImage
+                    ? `/api/media/${device.uniqueId}/${deviceImage}`
+                    : ""
+                }
+              >
+                <Box component={"div"} className={classes.infoTop}>
+                  {position ? (
+                    <IgnitionState position={position} classes={classes} />
+                  ) : (
+                    <span></span>
+                  )}
+                  <Tooltip
+                    title="Fechar"
+                    arrow
+                    placement="right"
+                    onClick={onClose}
+                    onTouchStart={onClose}
+                    className={classes.closeButton}
+                  >
+                    <FontAwesomeIcon icon={faXmark} />
+                  </Tooltip>
+                </Box>
+              </CardMedia>
+              
+              <InfoCar device={device} classes={classes}/>
               {position && (
-                <StatusCardDetails position={position} device={device} />
+                <Box style={{padding: '0 .5rem'}}>
+                  <AddressComponent position={position} t={t}/>
+                  <StatusCardDetails position={position} device={device} />
+                </Box>
               )}
             </Box>
-            <CardActions classes={{ root: classes.actions }} disableSpacing>
+            {/* <CardActions classes={{ root: classes.actions }} disableSpacing>
               <Tooltip title={t("sharedExtra")}>
                 <IconButton
                   color="secondary"
@@ -327,11 +361,11 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                   <FontAwesomeIcon icon={faTrash} size="sm" />
                 </IconButton>
               </Tooltip>
-            </CardActions>
+            </CardActions> */}
           </Card>
         )}
       </div>
-      {position && (
+      {/* {position && (
         <Menu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
@@ -366,13 +400,13 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
             </MenuItem>
           )}
         </Menu>
-      )}
-      <RemoveDialog
+      )} */}
+      {/* <RemoveDialog
         open={removing}
         endpoint="devices"
         itemId={deviceId}
         onResult={(removed) => handleRemove(removed)}
-      />
+      /> */}
     </>
   );
 };

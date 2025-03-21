@@ -45,7 +45,7 @@ const MapRoutePoints = ({ positions, onClick, colorDynamic }) => {
       layout: {
         'text-font': findFonts(map),
         'text-field': '▲',
-        'text-size': 24,
+        'text-size': 26,
         'text-allow-overlap': true,
         'text-rotate': ['get', 'rotation'],
       },
