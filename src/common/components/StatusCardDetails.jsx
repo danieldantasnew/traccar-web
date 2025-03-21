@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
   details: {
     display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
+    gridTemplateColumns: "repeat(3, 1fr)",
     gap: "1rem",
   },
   fieldset: {
@@ -89,16 +89,6 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "600",
     [theme.breakpoints.down("lg")]: {
       fontSize: ".8rem !important",
-    },
-  },
-  description: {
-    textAlign: "left !important",
-    "& p": {
-      fontSize: ".9rem !important",
-      color: "black",
-    },
-    "& p:first-child": {
-      fontWeight: "600",
     },
   },
   red: {
@@ -156,6 +146,11 @@ const useStyles = makeStyles((theme) => ({
     border: "2px solid #042940",
     color: "#042940",
   },
+  defaultColor: {
+    fill: "##2C76AC",
+    border: "2px solid #2C76AC",
+    color: "#2C76AC",
+  }
 }));
 
 const getColor = (attribute) => {
@@ -169,15 +164,17 @@ const getColor = (attribute) => {
     case "course":
       return "blue";
     case "id":
-      return "orange";
+      return "brownLight";
     case "motion":
       return "green";
     case "batteryLevel":
       return "greenLight";
     case "ignition":
       return "blueDark";
+    case "sat":
+      return "orange";
     default:
-      return "";
+      return "defaultColor";
   }
 };
 
@@ -230,7 +227,7 @@ const StatusRow = ({ position, keys, positionAttributes }) => {
   );
 };
 
-const StatusCardDetails = ({ position, device }) => {
+const StatusCardDetails = ({ position }) => {
   const t = useTranslation();
   const positionAttributes = usePositionAttributes(t);
   const positionItems = useAttributePreference(
@@ -259,9 +256,6 @@ const StatusCardDetails = ({ position, device }) => {
             />
           ))}
       </Box>
-      <Link component={RouterLink} to={`/position/${position.id}`}>
-        {t("sharedShowDetails")}
-      </Link>
     </div>
   );
 };

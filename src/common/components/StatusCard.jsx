@@ -11,6 +11,7 @@ import {
   useMediaQuery,
   useTheme,
   Box,
+  Tab,
 } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import { useTranslation } from "./LocalizationProvider";
@@ -18,14 +19,11 @@ import RemoveDialog from "./RemoveDialog";
 import { devicesActions } from "../../store";
 import { useCatch, useCatchCallback } from "../../reactHelper";
 import { useAttributePreference } from "../util/preferences";
-import StatusCardDetails from "./StatusCardDetails";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPowerOff,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import {faPowerOff, faXmark } from "@fortawesome/free-solid-svg-icons";
 import InfoCar from "./InfoCar";
-import AddressComponent from "./AddressComponent";
+import TabsDevice from "./TabsDevice";
+
 
 function handleWheel(e) {
   if (e.deltaY > 0) {
@@ -50,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     display: "flex",
     flexDirection: "column",
+    backgroundColor: '#ffffff',
     justifyContent: "space-between",
     gap: ".5rem",
     [theme.breakpoints.down("md")]: {
@@ -167,7 +166,7 @@ const useStyles = makeStyles((theme) => ({
     left: "0",
     top: "0",
     height: "100vh",
-    width: "38vw",
+    width: "50vw",
     maxWidth: "500px",
     transition: ".3s",
     [theme.breakpoints.down("md")]: {
@@ -232,6 +231,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
     setRemoving(false);
   });
 
+
   const handleGeofence = useCatchCallback(async () => {
     const newItem = {
       name: t("sharedGeofence"),
@@ -277,7 +277,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                 image={
                   deviceImage
                     ? `/api/media/${device.uniqueId}/${deviceImage}`
-                    : ""
+                    : '../../../public/withoutPhoto.png'
                 }
               >
                 <Box component={"div"} className={classes.infoTop}>
@@ -298,14 +298,9 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                   </Tooltip>
                 </Box>
               </CardMedia>
-              
-              <InfoCar device={device} classes={classes}/>
-              {position && (
-                <Box style={{padding: '0 .5rem'}}>
-                  <AddressComponent position={position} t={t}/>
-                  <StatusCardDetails position={position} device={device} />
-                </Box>
-              )}
+
+              <InfoCar device={device} classes={classes} />
+              <TabsDevice device={device} position={position} t={t}/>
             </Box>
             {/* <CardActions classes={{ root: classes.actions }} disableSpacing>
               <Tooltip title={t("sharedExtra")}>
