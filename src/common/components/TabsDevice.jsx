@@ -80,29 +80,31 @@ const TabsDevice = ({ device, position, t }) => {
           />
         </TabList>
       </Box>
-      <Slide direction="left" in={tabValue === "1"} mountOnEnter unmountOnExit>
-        <TabPanel value="1" sx={{ padding: "0 .5rem", marginTop: ".5rem" }}>
+      <Slide direction="right" in={tabValue === "1"} mountOnEnter unmountOnExit>
+        <TabPanel value="1" sx={{ padding: ".7rem .5rem", height: '100%' }}>
           {position && (
-            <Box>
-              <AddressComponent position={position} t={t} />
-              <StatusCardDetails position={position} device={device} />
-              <LinkDriver device={device} bgColor={bgColor} subColor={subColor} />
+            <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between',  height: '100%'}}>
+              <Box>
+                <AddressComponent position={position} t={t} />
+                <StatusCardDetails position={position} device={device} />
+              </Box>
+              <LinkDriver device={device} bgColor={bgColor} subColor={subColor} color={color} />
             </Box>
           )}
         </TabPanel>
       </Slide>
       <Slide direction="left" in={tabValue === "2"} mountOnEnter unmountOnExit>
-        <TabPanel value="2" sx={{ padding: "0 .5rem", marginTop: ".8rem" }}>
+        <TabPanel value="2" sx={{ padding: "0 .7rem", marginTop: ".8rem" }}>
           Nada por aqui...
         </TabPanel>
       </Slide>
       <Slide direction="left" in={tabValue === "3"} mountOnEnter unmountOnExit>
-        <TabPanel value="3" sx={{ padding: "0 .5rem", marginTop: ".8rem" }}>
+        <TabPanel value="3" sx={{ padding: "0 .7rem", marginTop: ".8rem" }}>
           Nada por aqui...
         </TabPanel>
       </Slide>
       <Slide direction="left" in={tabValue === "4"} mountOnEnter unmountOnExit>
-        <TabPanel value="4" sx={{ padding: "0 .5rem", marginTop: ".8rem" }}>
+        <TabPanel value="4" sx={{ padding: "0 .7rem", marginTop: ".8rem" }}>
           Nada por aqui...
         </TabPanel>
       </Slide>

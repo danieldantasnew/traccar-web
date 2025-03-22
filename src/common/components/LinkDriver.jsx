@@ -9,18 +9,38 @@ const box = {
   alignItems: "center",
 };
 
-const LinkDriver = ({ device, bgColor, subColor }) => {
+const boxInfo1 = {
+  display: "flex",
+  gap: '.5rem',
+  alignItems: "center",
+}
+
+const boxInfo2 = {
+  display: "flex",
+  flexDirection: 'column',
+  alignItems: "flex-start",
+  justifyContent: 'space-between',
+  '& span': {
+    fontSize: '.8rem',
+    fontWeight: '500',
+    lineHeight: '1rem'
+  }
+}
+
+const icon = { backgroundColor: "#E0E0E0", padding: '8px', borderRadius: '50%', height: '36px', width: '36px', display: 'grid', alignItems: 'center', justifyContent: 'center' }
+
+const LinkDriver = ({ device, bgColor, color, subColor }) => {
   return (
     <Box sx={box}>
-      <Box>
-        <div style={{ backgroundColor: "#E0E0E0", padding: '6px', borderRadius: '50%' }}>
-          <FontAwesomeIcon icon={faUserSlash} />
-        </div>
-        <Box>
-            <Typography component={"h2"}>
+      <Box sx={boxInfo1}>
+        <Box style={icon}>
+          <FontAwesomeIcon icon={faUserSlash} color="#676767"/>
+        </Box>
+        <Box sx={boxInfo2}>
+            <Typography component={"span"} color="#676767">
                 Motorista
             </Typography>
-            <Typography component={"span"}>
+            <Typography component={"span"} color="#989898">
                 Não informado
             </Typography>
         </Box>
@@ -28,9 +48,10 @@ const LinkDriver = ({ device, bgColor, subColor }) => {
       <Button
         size="small"
         sx={{
-          padding: "6px",
+          padding: "6px 12px",
           backgroundColor: `${bgColor}`,
-          color: `#e0e0e0`,
+          color: `${color}`,
+          fontSize: '.85rem',
           "&:hover": {
             color: "white",
             backgroundColor: `${subColor}`,
