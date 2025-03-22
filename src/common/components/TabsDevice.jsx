@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import StatusCardDetails from "./StatusCardDetails";
 import { Box, Slide, Tab } from "@mui/material";
+import LinkDriver from "./LinkDriver";
 
 const TabsDevice = ({ device, position, t }) => {
   if (!device) return null;
@@ -44,9 +45,6 @@ const TabsDevice = ({ device, position, t }) => {
             },
             "& .MuiTab-root.Mui-selected": {
               color: `${color}`,
-            },
-            "& .MuiTabs-indicator": {
-              backgroundColor: `${color}`,
             },
             "& .MuiTabs-indicator": {
               backgroundColor: `${color}`,
@@ -88,6 +86,7 @@ const TabsDevice = ({ device, position, t }) => {
             <Box>
               <AddressComponent position={position} t={t} />
               <StatusCardDetails position={position} device={device} />
+              <LinkDriver device={device} bgColor={bgColor} subColor={subColor} />
             </Box>
           )}
         </TabPanel>
