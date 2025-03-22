@@ -1,7 +1,6 @@
-import { faCar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Avatar, Box, ListItemAvatar, Typography } from "@mui/material";
 import { formatTime } from "../util/formatter";
+import { DynamicIconsComponent } from "./DynamicIcons";
 
 const infoCar = {
     display: "flex",
@@ -33,7 +32,7 @@ const InfoCar = ({ device }) => {
       <Box style={avatarInfo}>
         <ListItemAvatar style={{ minWidth: "initial" }}>
           <Avatar style={{ backgroundColor: colors[0], color: colors[1] }}>
-            <FontAwesomeIcon icon={faCar} style={{ width: "28px" }} />
+            <DynamicIconsComponent category={device.category}/>
           </Avatar>
         </ListItemAvatar>
         <Box>

@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "2px 4px",
   },
   legend: {
-    fontSize: ".6rem",
+    fontSize: ".75rem",
     fontWeight: "500",
   },
   box: {

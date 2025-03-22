@@ -24,6 +24,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faPowerOff, faXmark } from "@fortawesome/free-solid-svg-icons";
 import InfoCar from "./InfoCar";
 import TabsDevice from "./TabsDevice";
+import PlusOpt from "./PlusOpt";
 
 
 function handleWheel(e) {
@@ -108,6 +109,7 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: "35vh",
     height: "100%",
     backgroundColor: "#fff",
+    position: 'relative',
   },
   red: {
     fill: "red",
@@ -298,6 +300,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                     <FontAwesomeIcon icon={faXmark} />
                   </Tooltip>
                 </Box>
+                <PlusOpt device={device}/>
               </CardMedia>
 
               <InfoCar device={device} classes={classes} />

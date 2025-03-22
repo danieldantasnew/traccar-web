@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       justifyContent: "flex-start",
       alignItems: "center",
-      gap: "1rem",
+      gap: ".5rem",
       ["& svg"]: {
         width: "32px",
         height: "32px",
@@ -174,7 +174,6 @@ const MainPage = () => {
             >
               <Box component={"h3"}>
                 <DynamicIconsComponent
-                  style={{ marginBottom: "3px" }}
                   category={"carGroup"}
                 />
                 Meus Veículos
