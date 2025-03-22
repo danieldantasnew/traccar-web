@@ -61,12 +61,10 @@ const useStyles = makeStyles((theme) => ({
   fieldset: {
     borderRadius: ".5rem",
     border: "2px solid black",
-    padding: "0px",
-    paddingLeft: ".5rem",
-    height: "48px",
+    padding: "2px 4px",
   },
   legend: {
-    fontSize: ".8rem",
+    fontSize: ".6rem",
     fontWeight: "500",
   },
   box: {
@@ -85,11 +83,8 @@ const useStyles = makeStyles((theme) => ({
   },
 
   value: {
-    fontSize: ".9rem !important",
+    fontSize: ".75rem !important",
     fontWeight: "600",
-    [theme.breakpoints.down("lg")]: {
-      fontSize: ".8rem !important",
-    },
   },
   red: {
     fill: "red",
@@ -181,27 +176,27 @@ const getColor = (attribute) => {
 const getIcon = (name) => {
   switch (name) {
     case "fixTime":
-      return <FontAwesomeIcon icon={faClock} color="" />;
+      return <FontAwesomeIcon size="sm" icon={faClock} />;
     case "speed":
-      return <FontAwesomeIcon icon={faGaugeHigh} />;
+      return <FontAwesomeIcon size="sm" icon={faGaugeHigh} />;
     case "totalDistance":
-      return <FontAwesomeIcon icon={faMap} />;
+      return <FontAwesomeIcon size="sm" icon={faMap} />;
     case "course":
-      return <FontAwesomeIcon icon={faSignsPost} />;
+      return <FontAwesomeIcon size="sm" icon={faSignsPost} />;
     case "id":
-      return <FontAwesomeIcon icon={faExpand} />;
+      return <FontAwesomeIcon size="sm" icon={faExpand} />;
     case "motion":
-      return <FontAwesomeIcon icon={faGaugeHigh} />;
+      return <FontAwesomeIcon size="sm" icon={faGaugeHigh} />;
     case "batteryLevel":
-      return <FontAwesomeIcon icon={faBatteryFull} />;
+      return <FontAwesomeIcon size="sm" icon={faBatteryFull} />;
     case "ignition":
-      return <FontAwesomeIcon icon={faPowerOff} />;
+      return <FontAwesomeIcon size="sm" icon={faPowerOff} />;
     case "sat":
-      return <FontAwesomeIcon icon={faSatellite} />;
+      return <FontAwesomeIcon size="sm" icon={faSatellite} />;
     case "hours":
-      return <FontAwesomeIcon icon={faClock} />;
+      return <FontAwesomeIcon size="sm" icon={faClock} />;
     default:
-      return <FontAwesomeIcon icon={faGlobe} />;
+      return <FontAwesomeIcon size="sm" icon={faGlobe} />;
   }
 };
 

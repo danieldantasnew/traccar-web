@@ -8,7 +8,7 @@ const infoCar = {
     alignItems: "center",
     justifyContent: "space-between",
     gap: ".3rem",
-    padding: ".7rem .5rem",
+    padding: ".4rem .5rem",
     backgroundColor: "#f3f3f3",
 };
 

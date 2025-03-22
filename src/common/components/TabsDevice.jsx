@@ -38,7 +38,7 @@ const TabsDevice = ({ device, position, t }) => {
           variant="fullWidth"
           sx={{
             "& .MuiTab-root": {
-              fontSize: ".8rem",
+              fontSize: ".75rem",
               textTransform: "none",
               color: `${subColor}`,
               minHeight: "initial",
@@ -57,7 +57,7 @@ const TabsDevice = ({ device, position, t }) => {
           <Tab
             icon={<FontAwesomeIcon size="lg" icon={faFileLines} />}
             iconPosition="top"
-            label="Resumo"
+            label="Resumo do Dia"
             value="1"
           />
           <Tab
@@ -83,7 +83,7 @@ const TabsDevice = ({ device, position, t }) => {
       <Slide direction="right" in={tabValue === "1"} mountOnEnter unmountOnExit>
         <TabPanel value="1" sx={{ padding: ".7rem .5rem", height: '100%' }}>
           {position && (
-            <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between',  height: '100%'}}>
+            <Box sx={{display: 'flex', flexDirection: 'column', gap: '.8rem', justifyContent: 'space-between',  height: '100%'}}>
               <Box>
                 <AddressComponent position={position} t={t} />
                 <StatusCardDetails position={position} device={device} />
