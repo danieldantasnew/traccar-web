@@ -9,13 +9,13 @@ import {
   faTerminal,
 } from "@fortawesome/free-solid-svg-icons";
 import StatusCardDetails from "./StatusCardDetails";
-import { Box, Slide, Tab } from "@mui/material";
+import { Box, Slide, Tab, Typography } from "@mui/material";
 import LinkDriver from "./LinkDriver";
 
 const TabsDevice = ({ device, position, t }) => {
   if (!device) return null;
 
-  const [tabValue, setTabValue] = useState("1");
+  const [tabValue, setTabValue] = useState("tab1");
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
@@ -58,31 +58,31 @@ const TabsDevice = ({ device, position, t }) => {
             icon={<FontAwesomeIcon size="lg" icon={faFileLines} />}
             iconPosition="top"
             label="Resumo do Dia"
-            value="1"
+            value="tab1"
           />
           <Tab
             icon={<FontAwesomeIcon size="lg" icon={faRoute} />}
             iconPosition="top"
             label="Rota"
-            value="2"
+            value="tab2"
           />
           <Tab
             icon={<FontAwesomeIcon size="lg" icon={faMapPin} />}
             iconPosition="top"
             label="Destinos Próximos"
-            value="3"
+            value="tab3"
           />
           <Tab
             icon={<FontAwesomeIcon size="lg" icon={faTerminal} />}
             iconPosition="top"
             label="Comandos"
-            value="4"
+            value="tab4"
           />
         </TabList>
       </Box>
-      <Slide direction="right" in={tabValue === "1"} mountOnEnter unmountOnExit>
-        <TabPanel value="1" sx={{ padding: ".7rem .5rem", height: '100%' }}>
-          {position && (
+      <Slide direction="right" in={tabValue === "tab1"} mountOnEnter unmountOnExit>
+        <TabPanel value="tab1" sx={{ padding: ".7rem .5rem", height: '100%' }}>
+          {position ?(
             <Box sx={{display: 'flex', flexDirection: 'column', gap: '.8rem', justifyContent: 'space-between',  height: '100%'}}>
               <Box>
                 <AddressComponent position={position} t={t} />
@@ -90,21 +90,21 @@ const TabsDevice = ({ device, position, t }) => {
               </Box>
               <LinkDriver device={device} bgColor={bgColor} subColor={subColor} color={color} />
             </Box>
-          )}
+          ): <Typography>Nada por aqui...</Typography>}
         </TabPanel>
       </Slide>
-      <Slide direction="left" in={tabValue === "2"} mountOnEnter unmountOnExit>
-        <TabPanel value="2" sx={{ padding: "0 .7rem", marginTop: ".8rem" }}>
+      <Slide direction="left" in={tabValue === "tab2"} mountOnEnter unmountOnExit>
+        <TabPanel value="tab2" sx={{ padding: "0 .7rem", marginTop: ".8rem" }}>
           Nada por aqui...
         </TabPanel>
       </Slide>
-      <Slide direction="left" in={tabValue === "3"} mountOnEnter unmountOnExit>
-        <TabPanel value="3" sx={{ padding: "0 .7rem", marginTop: ".8rem" }}>
+      <Slide direction="left" in={tabValue === "tab3"} mountOnEnter unmountOnExit>
+        <TabPanel value="tab3" sx={{ padding: "0 .7rem", marginTop: ".8rem" }}>
           Nada por aqui...
         </TabPanel>
       </Slide>
-      <Slide direction="left" in={tabValue === "4"} mountOnEnter unmountOnExit>
-        <TabPanel value="4" sx={{ padding: "0 .7rem", marginTop: ".8rem" }}>
+      <Slide direction="left" in={tabValue === "tab4"} mountOnEnter unmountOnExit>
+        <TabPanel value="tab4" sx={{ padding: "0 .7rem", marginTop: ".8rem" }}>
           Nada por aqui...
         </TabPanel>
       </Slide>

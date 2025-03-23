@@ -1,31 +1,25 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link as RouterLink } from "react-router-dom";
 import {
   Card,
   Typography,
-  Menu,
-  MenuItem,
   CardMedia,
   Tooltip,
   useMediaQuery,
   useTheme,
   Box,
-  Tab,
-  Button,
+  Zoom,
 } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import { useTranslation } from "./LocalizationProvider";
-import RemoveDialog from "./RemoveDialog";
-import { devicesActions } from "../../store";
-import { useCatch, useCatchCallback } from "../../reactHelper";
-import { useAttributePreference } from "../util/preferences";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faPowerOff, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faPowerOff, faXmark } from "@fortawesome/free-solid-svg-icons";
 import InfoCar from "./InfoCar";
 import TabsDevice from "./TabsDevice";
 import PlusOpt from "./PlusOpt";
-
+import { useCatch } from "../../reactHelper";
+import RemoveDialog from "./RemoveDialog";
+import { devicesActions } from '../../store';
 
 function handleWheel(e) {
   if (e.deltaY > 0) {
@@ -50,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     display: "flex",
     flexDirection: "column",
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     justifyContent: "space-between",
     gap: ".5rem",
     [theme.breakpoints.down("md")]: {
@@ -109,7 +103,7 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: "35vh",
     height: "100%",
     backgroundColor: "#fff",
-    position: 'relative',
+    position: "relative",
   },
   red: {
     fill: "red",
@@ -198,29 +192,18 @@ const IgnitionState = ({ position, classes }) => {
   );
 };
 
-const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
+const StatusCard = ({ deviceId, position, onClose }) => {
   const classes = useStyles();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const t = useTranslation();
   const theme = useTheme();
   const desktop = useMediaQuery(theme.breakpoints.down("md"));
   const [axisY, setAxisY] = useState(0);
+  const dispatch = useDispatch();
 
-  const shareDisabled = useSelector(
-    (state) => state.session.server.attributes.disableShare
-  );
-  const user = useSelector((state) => state.session.user);
   const device = useSelector((state) => state.devices.items[deviceId]);
+  const [removing, setRemoving] = React.useState(false);
 
   const deviceImage = device?.attributes?.deviceImage;
-
-  const navigationAppLink = useAttributePreference("navigationAppLink");
-  const navigationAppTitle = useAttributePreference("navigationAppTitle");
-
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  const [removing, setRemoving] = useState(false);
 
   const handleRemove = useCatch(async (removed) => {
     if (removed) {
@@ -234,178 +217,66 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
     setRemoving(false);
   });
 
-
-  const handleGeofence = useCatchCallback(async () => {
-    const newItem = {
-      name: t("sharedGeofence"),
-      area: `CIRCLE (${position.latitude} ${position.longitude}, 50)`,
-    };
-    const response = await fetch("/api/geofences", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newItem),
-    });
-    if (response.ok) {
-      const item = await response.json();
-      const permissionResponse = await fetch("/api/permissions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          deviceId: position.deviceId,
-          geofenceId: item.id,
-        }),
-      });
-      if (!permissionResponse.ok) {
-        throw Error(await permissionResponse.text());
-      }
-      navigate(`/settings/geofence/${item.id}`);
-    } else {
-      throw Error(await response.text());
-    }
-  }, [navigate, position]);
-
   return (
     <>
-      <div
+      <Box
         className={classes.root}
         style={desktop ? {} : { top: "0" }}
         onWheel={desktop ? handleWheel : null}
         onTouchMove={(e) => handleTouch(e, axisY, setAxisY)}
       >
         {device && (
-          <Card elevation={3} className={classes.card}>
-            <Box className={classes.contentCardTop}>
-              <CardMedia
-                className={classes.media}
-                image={
-                  deviceImage
-                    ? `/api/media/${device.uniqueId}/${deviceImage}`
-                    : '../../../public/withoutPhoto.png'
-                }
-              >
-                <Box component={"div"} className={classes.infoTop}>
-                  {position ? (
-                    <IgnitionState position={position} classes={classes} />
-                  ) : (
-                    <span></span>
-                  )}
-                  <Tooltip
-                    title="Fechar"
-                    arrow
-                    placement="right"
-                    onClick={onClose}
-                    onTouchStart={onClose}
-                    className={classes.closeButton}
-                  >
-                    <FontAwesomeIcon icon={faXmark} />
-                  </Tooltip>
-                </Box>
-                <PlusOpt device={device}/>
-              </CardMedia>
-
-              <InfoCar device={device} classes={classes} />
-              <TabsDevice device={device} position={position} t={t}/>
-            </Box>
-            {/* <CardActions classes={{ root: classes.actions }} disableSpacing>
-              <Tooltip title={t("sharedExtra")}>
-                <IconButton
-                  color="secondary"
-                  onClick={(e) => setAnchorEl(e.currentTarget)}
-                  disabled={!position}
-                >
-                  <FontAwesomeIcon
-                    icon={faEllipsis}
-                    size="sm"
-                    style={{
-                      backgroundColor: theme.palette.primary.main,
-                      borderRadius: "50%",
-                      padding: "4px",
-                      color: "white",
-                    }}
-                  />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={t("reportReplay")}>
-                <IconButton
-                  onClick={() => navigate("/replay")}
-                  disabled={disableActions || !position}
-                >
-                  <FontAwesomeIcon icon={faRotateLeft} size="sm" />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={t("commandTitle")}>
-                <IconButton
-                  onClick={() =>
-                    navigate(`/settings/device/${deviceId}/command`)
+          <Zoom in>
+            <Card elevation={3} className={classes.card}>
+              <Box className={classes.contentCardTop}>
+                <CardMedia
+                  className={classes.media}
+                  image={
+                    deviceImage
+                      ? `/api/media/${device.uniqueId}/${deviceImage}`
+                      : "../../../public/withoutPhoto.png"
                   }
-                  disabled={disableActions}
                 >
-                  <FontAwesomeIcon icon={faArrowUpFromBracket} size="sm" />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={t("sharedEdit")}>
-                <IconButton
-                  onClick={() => navigate(`/settings/device/${deviceId}`)}
-                  disabled={disableActions || deviceReadonly}
-                >
-                  <FontAwesomeIcon icon={faPen} size="sm" />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={t("sharedRemove")}>
-                <IconButton
-                  color="error"
-                  onClick={() => setRemoving(true)}
-                  disabled={disableActions || deviceReadonly}
-                >
-                  <FontAwesomeIcon icon={faTrash} size="sm" />
-                </IconButton>
-              </Tooltip>
-            </CardActions> */}
-          </Card>
+                  <Box component={"div"} className={classes.infoTop}>
+                    {position ? (
+                      <IgnitionState position={position} classes={classes} />
+                    ) : (
+                      <span></span>
+                    )}
+                    <Tooltip
+                      title="Fechar"
+                      arrow
+                      placement="right"
+                      onClick={onClose}
+                      onTouchStart={onClose}
+                      className={classes.closeButton}
+                    >
+                      <FontAwesomeIcon icon={faXmark} />
+                    </Tooltip>
+                  </Box>
+                  <PlusOpt
+                    device={device}
+                    position={position}
+                    t={t}
+                    setRemoving={setRemoving}
+                  />
+                </CardMedia>
+
+                <InfoCar device={device} classes={classes} />
+                <TabsDevice device={device} position={position} t={t} />
+              </Box>
+            </Card>
+          </Zoom>
         )}
-      </div>
-      {/* {position && (
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={() => setAnchorEl(null)}
-        >
-          <MenuItem onClick={handleGeofence}>
-            {t("sharedCreateGeofence")}
-          </MenuItem>
-          <MenuItem
-            component="a"
-            target="_blank"
-            href={`https://www.google.com/maps/search/?api=1&query=${position.latitude}%2C${position.longitude}`}
-          >
-            {t("linkGoogleMaps")}
-          </MenuItem>
-          {navigationAppTitle && (
-            <MenuItem
-              component="a"
-              target="_blank"
-              href={navigationAppLink
-                .replace("{latitude}", position.latitude)
-                .replace("{longitude}", position.longitude)}
-            >
-              {navigationAppTitle}
-            </MenuItem>
-          )}
-          {!shareDisabled && !user.temporary && (
-            <MenuItem
-              onClick={() => navigate(`/settings/device/${deviceId}/share`)}
-            >
-              <Typography color="secondary">{t("deviceShare")}</Typography>
-            </MenuItem>
-          )}
-        </Menu>
-      )} */}
-      {/* <RemoveDialog
+      </Box>
+      {device && (
+        <RemoveDialog
         open={removing}
         endpoint="devices"
-        itemId={deviceId}
+        itemId={device.id}
         onResult={(removed) => handleRemove(removed)}
-      /> */}
+      />
+      )}
     </>
   );
 };

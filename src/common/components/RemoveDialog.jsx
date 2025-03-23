@@ -42,7 +42,7 @@ const RemoveDialog = ({
       onClose={() => onResult(false)}
       message={t('sharedRemoveConfirm')}
       action={(
-        <Button size="small" className={classes.button} color="error" onClick={handleRemove}>
+        <Button size="large" className={classes.button} color="error" onClick={handleRemove}>
           {t('sharedRemove')}
         </Button>
       )}
