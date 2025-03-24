@@ -3,10 +3,9 @@ import { Box, IconButton, Paper, Slide, Tooltip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import DeviceList from "./DeviceList";
 import StatusCard from "../common/components/StatusCard";
-import { devicesActions } from "../store";
 import usePersistedState from "../common/util/usePersistedState";
 import EventsDrawer from "./EventsDrawer";
 import useFilter from "./useFilter";
@@ -101,7 +100,6 @@ const useStyles = makeStyles((theme) => ({
 
 const MainPage = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const theme = useTheme();
   const desktop = useMediaQuery(theme.breakpoints.up("md"));
   const mapOnSelect = useAttributePreference("mapOnSelect", true);
@@ -216,7 +214,7 @@ const MainPage = () => {
           </Box>
           <div className={classes.devices}>
             <Paper square className={classes.contentList}>
-              <DeviceList devices={filteredDevices} phraseGroup={phraseGroup} />
+              <DeviceList devices={filteredDevices} setStatusCardOpen={setStatusCardOpen} phraseGroup={phraseGroup} />
             </Paper>
           </div>
         </Paper>

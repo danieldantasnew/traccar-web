@@ -3,10 +3,11 @@ import React from "react";
 import { map } from "../../map/core/MapView";
 import { useAttributePreference } from "../util/preferences";
 import dimensions from "../theme/dimensions.js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { devicesActions } from "../../store";
 import { faEyeSlash, faMapPin } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ColorsDevice from "./ColorsDevice.js";
 
 const styleBox = {
   position: "fixed",
@@ -35,9 +36,11 @@ const controls = {
   },
 };
 
-const ControllersInMap = ({ position }) => {
+const ControllersInMap = ({  position }) => {
   const selectZoom = useAttributePreference("web.selectZoom", 10);
   const dispatch = useDispatch();
+  const devices = useSelector((state) => state.devices.items);
+  const selectedDeviceId = useSelector((state) => state.devices.selectedId);
 
   const centerDevice = () => {
     map.easeTo({
@@ -51,6 +54,8 @@ const ControllersInMap = ({ position }) => {
     dispatch(devicesActions.selectId(null));
   };
 
+  const {bgColor} = ColorsDevice(devices[selectedDeviceId].attributes['web.reportColor']);
+
   return (
     <Box sx={styleBox}>
       <Tooltip
@@ -60,12 +65,12 @@ const ControllersInMap = ({ position }) => {
         arrow
       >
         <Box onClick={centerDevice}>
-          <FontAwesomeIcon icon={faMapPin} />
+          <FontAwesomeIcon icon={faMapPin} color={`${bgColor}`}/>
         </Box>
       </Tooltip>
       <Tooltip sx={controls} title="Ocultar rotas" placement="left" arrow>
         <Box onClick={hideRoutes}>
-          <FontAwesomeIcon icon={faEyeSlash} />
+          <FontAwesomeIcon icon={faEyeSlash} color={`${bgColor}`} />
         </Box>
       </Tooltip>
     </Box>

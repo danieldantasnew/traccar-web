@@ -10,6 +10,7 @@ import "./css/style.css";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
 import { Tooltip } from "@mui/material";
 import { createRoot } from 'react-dom/client';
+import ColorsDevice from "../common/components/ColorsDevice.js";
 
 const MapPositions = ({ positions, onClick, showStatus, selectedPosition, setStatusCardOpen }) => {
   const id = useId();
@@ -108,7 +109,8 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, setSta
   
       const el = document.createElement("div");
       const device = devices[position.deviceId];
-      const colors = device.attributes['web.reportColor']? device.attributes['web.reportColor'].split(';') : ["rgb(189, 12, 18)", "white", "rgb(255, 0, 8)"];
+      const attributes = device.attributes || {};
+      const {bgColor, color} = ColorsDevice(attributes["web.reportColor"]);
   
       el.className = "marker";
   
@@ -125,8 +127,8 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, setSta
         </Tooltip>
       );
   
-      el.style.backgroundColor = colors[0];
-      el.style.color = colors[1];
+      el.style.backgroundColor = bgColor;
+      el.style.color = color;
   
       el.addEventListener("click", (event) => {
         event.stopPropagation();

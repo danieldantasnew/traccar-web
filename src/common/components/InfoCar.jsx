@@ -1,6 +1,7 @@
 import { Avatar, Box, ListItemAvatar, Typography } from "@mui/material";
 import { formatTime } from "../util/formatter";
 import { DynamicIconsComponent } from "./DynamicIcons";
+import ColorsDevice from "./ColorsDevice";
 
 const infoCar = {
     display: "flex",
@@ -23,15 +24,14 @@ const avatarInfo = {
 };
 
 const InfoCar = ({ device }) => {
-  const colors = device.attributes["web.reportColor"]
-    ? device.attributes["web.reportColor"].split(";")
-    : ["rgb(189, 12, 18)", "white", "rgb(255, 0, 8)"];
+  const attributes = device.attributes || {};
+  const {bgColor, color} = ColorsDevice(attributes["web.reportColor"]);
 
   return (
     <Box style={infoCar}>
       <Box style={avatarInfo}>
         <ListItemAvatar style={{ minWidth: "initial" }}>
-          <Avatar style={{ backgroundColor: colors[0], color: colors[1] }}>
+          <Avatar style={{ backgroundColor: bgColor, color }}>
             <DynamicIconsComponent category={device.category}/>
           </Avatar>
         </ListItemAvatar>

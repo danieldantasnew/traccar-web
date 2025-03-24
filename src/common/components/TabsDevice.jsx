@@ -11,6 +11,7 @@ import {
 import StatusCardDetails from "./StatusCardDetails";
 import { Box, Slide, Tab, Typography } from "@mui/material";
 import LinkDriver from "./LinkDriver";
+import ColorsDevice from "./ColorsDevice";
 
 const TabsDevice = ({ device, position, t }) => {
   if (!device) return null;
@@ -21,13 +22,7 @@ const TabsDevice = ({ device, position, t }) => {
   };
 
   const attributes = device.attributes || {};
-  const reportColor = attributes["web.reportColor"]
-    ? attributes["web.reportColor"].split(";")
-    : ["rgb(189, 12, 18)", "rgb(189, 12, 18)"];
-
-  const bgColor = reportColor[0];
-  const color = reportColor[1];
-  const subColor = reportColor[2];
+  const {bgColor, subColor, color} = ColorsDevice(attributes["web.reportColor"]);
 
   return (
     <TabContext value={tabValue}>
