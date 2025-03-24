@@ -18,6 +18,7 @@ import NavMenu from "../common/components/NavMenu.jsx";
 import { useDevices } from "../Context/AllDevices.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import ControllersInMap from "../common/components/ControllersInMap.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -123,6 +124,7 @@ const MainPage = () => {
   const [filterMap, setFilterMap] = usePersistedState("filterMap", false);
 
   const { devicesOpen, setDevicesOpen, heightMenuNavMobile } = useDevices();
+  const [statusCardOpen, setStatusCardOpen] = useState(false);
   const [eventsOpen, setEventsOpen] = useState(false);
 
   const onEventsClick = useCallback(() => setEventsOpen(true), [setEventsOpen]);
@@ -149,6 +151,8 @@ const MainPage = () => {
         filteredPositions={filteredPositions}
         selectedPosition={selectedPosition}
         onEventsClick={onEventsClick}
+        setStatusCardOpen={setStatusCardOpen}
+        statusCardOpen={statusCardOpen}
       />
       <Slide direction="right" in={devicesOpen} timeout={200}>
         <Paper
@@ -225,14 +229,15 @@ const MainPage = () => {
         </Paper>
       )}
       <EventsDrawer open={eventsOpen} onClose={() => setEventsOpen(false)} />
-      {selectedDeviceId && (
+      {selectedDeviceId && statusCardOpen && (
         <StatusCard
           deviceId={selectedDeviceId}
           position={selectedPosition}
-          onClose={() => dispatch(devicesActions.selectId(null))}
+          onClose={() => setStatusCardOpen(false)}
           desktopPadding={theme.dimensions.drawerWidthDesktop}
         />
       )}
+      {selectedDeviceId && (<ControllersInMap position={selectedPosition}/>)}
     </div>
   );
 };

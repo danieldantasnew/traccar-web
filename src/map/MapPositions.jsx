@@ -11,7 +11,7 @@ import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
 import { Tooltip } from "@mui/material";
 import { createRoot } from 'react-dom/client';
 
-const MapPositions = ({ positions, onClick, showStatus, selectedPosition }) => {
+const MapPositions = ({ positions, onClick, showStatus, selectedPosition, setStatusCardOpen }) => {
   const id = useId();
   const clusters = `${id}-clusters`;
   const selected = `${id}-selected`;
@@ -131,6 +131,7 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition }) => {
       el.addEventListener("click", (event) => {
         event.stopPropagation();
         onClick(position.id, position.deviceId);
+        setStatusCardOpen(true)
       });
   
       const marker = new mapboxgl.Marker(el)

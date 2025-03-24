@@ -23,7 +23,7 @@ import dayjs from "dayjs";
 import { useCatch } from "../reactHelper.js";
 import MapRoutePoints from "../map/MapRoutePoints.js";
 
-const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, setStatusCardOpen }) => {
+const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCardOpen, setStatusCardOpen }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const desktop = useMediaQuery(theme.breakpoints.up("md"));
@@ -142,7 +142,7 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, setStatus
         {directions ? <MapRoutePoints positions={directions} colorDynamic={true}/> : ''}
         <MapMarkers markers={createMarkers()} />
         <MapDefaultCamera />
-        <MapSelectedDevice />
+        {statusCardOpen && (<MapSelectedDevice />)}
         <PoiMap />
       </MapView>
       <MapScale />

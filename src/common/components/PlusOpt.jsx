@@ -5,7 +5,6 @@ import {
   faClockRotateLeft,
   faEarthAmericas,
   faEllipsis,
-  faLocationCrosshairs,
   faMapLocationDot,
   faPen,
   faShareNodes,
@@ -16,9 +15,6 @@ import { DynamicIconsComponent } from "./DynamicIcons";
 import { useNavigate } from "react-router-dom";
 import { useCatchCallback } from "../../reactHelper";
 import { useSelector } from "react-redux";
-import { map } from "../../map/core/MapView.jsx";
-import dimensions from "../theme/dimensions.js";
-import { useAttributePreference } from "../util/preferences.js";
 
 const RotateIconButton = styled(IconButton)(({ open }) => ({
   transform: open ? "rotate(90deg)" : "rotate(0deg)",
@@ -35,7 +31,6 @@ const PlusOpt = ({ device, position, t, setRemoving }) => {
     (state) => state.session.server.attributes.disableShare
   );
   const user = useSelector((state) => state.session.user);
-  const selectZoom = useAttributePreference('web.selectZoom', 10);
 
   const attributes = device.attributes || {};
   const reportColor = attributes["web.reportColor"]
@@ -44,15 +39,6 @@ const PlusOpt = ({ device, position, t, setRemoving }) => {
 
   const bgColor = reportColor[0];
   const textColor = reportColor[1];
-
-  const centerDevice = ()=> {
-    map.easeTo({
-      center: [position.longitude, position.latitude],
-      zoom: Math.max(map.getZoom(), selectZoom),
-      offset: [0, -dimensions.popupMapOffset / 2],
-    });
-    setAnchorEl(null);
-  }
 
   const handleEventIcon = (event) => {
     setAnchorEl(event.currentTarget);
@@ -140,15 +126,6 @@ const PlusOpt = ({ device, position, t, setRemoving }) => {
                 style={{ width: "20px", color: "#6D6D6D" }}
               />
               <Typography>Avise-me quando ligar</Typography>
-            </MenuItem>
-
-            <MenuItem sx={styleRow} onClick={centerDevice}>
-              <FontAwesomeIcon
-                icon={faLocationCrosshairs}
-                size="lg"
-                color="#6D6D6D"
-              />
-              <Typography>Centralizar veículo</Typography>
             </MenuItem>
 
             <MenuItem sx={styleRow} onClick={() => navigate("/replay")}>
