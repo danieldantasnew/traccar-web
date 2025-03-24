@@ -13,27 +13,27 @@ const styleBox = {
   zIndex: 100,
   right: 10,
   top: "17.5rem",
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '.5rem',
+  display: "flex",
+  flexDirection: "column",
+  gap: ".5rem",
 };
 
 const controls = {
-    height: '29px',
-    width: '29px',
-    backgroundColor: '#ffff',
-    color: 'black',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    cursor: 'pointer',
-    boxShadow: '0px 0px 1px 1.5px rgba(0, 0, 0, 0.1)',
-    padding: '4px',
-    borderRadius: '4px',
-    "&:hover": {
-        backgroundColor: 'rgb(245, 245, 245)',
-    }
-}
+  height: "29px",
+  width: "29px",
+  backgroundColor: "#ffff",
+  color: "black",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  cursor: "pointer",
+  boxShadow: "0px 0px 1px 1.5px rgba(0, 0, 0, 0.1)",
+  padding: "4px",
+  borderRadius: "4px",
+  "&:hover": {
+    backgroundColor: "rgb(245, 245, 245)",
+  },
+};
 
 const ControllersInMap = ({ position }) => {
   const selectZoom = useAttributePreference("web.selectZoom", 10);
@@ -53,16 +53,21 @@ const ControllersInMap = ({ position }) => {
 
   return (
     <Box sx={styleBox}>
-        <Tooltip sx={controls} title="Centralizar dispositivo" placement="left" arrow>
-        <Box onClick={centerDevice} >
-        <FontAwesomeIcon icon={faMapPin} />
-      </Box>
-        </Tooltip>
-    <Tooltip sx={controls} title="Ocultar rotas" placement="left" arrow>
-    <Box onClick={hideRoutes} >
-        <FontAwesomeIcon icon={faEyeSlash} />
-      </Box>
-    </Tooltip>
+      <Tooltip
+        sx={controls}
+        title="Centralizar dispositivo"
+        placement="left"
+        arrow
+      >
+        <Box onClick={centerDevice}>
+          <FontAwesomeIcon icon={faMapPin} />
+        </Box>
+      </Tooltip>
+      <Tooltip sx={controls} title="Ocultar rotas" placement="left" arrow>
+        <Box onClick={hideRoutes}>
+          <FontAwesomeIcon icon={faEyeSlash} />
+        </Box>
+      </Tooltip>
     </Box>
   );
 };
