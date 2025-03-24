@@ -17,7 +17,6 @@ import { useTranslation } from "./LocalizationProvider";
 import { useRestriction } from "../util/permissions";
 import { nativePostMessage } from "./NativeInterface";
 import { DynamicIconsComponent } from "./DynamicIcons";
-import { useDevices } from "./AllDevices";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowRightFromBracket,
@@ -27,6 +26,7 @@ import {
   faMap,
   faUserPen,
 } from "@fortawesome/free-solid-svg-icons";
+import { useDevices } from "../../Context/AllDevices";
 
 const BottomMenu = () => {
   const navigate = useNavigate();

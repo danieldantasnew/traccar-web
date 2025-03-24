@@ -1,12 +1,10 @@
 import React from "react";
-import { useNavigate, Link as RouterLink } from "react-router-dom";
 import makeStyles from "@mui/styles/makeStyles";
 import usePositionAttributes from "../attributes/usePositionAttributes";
 import { useAttributePreference } from "../util/preferences";
 import PositionValue from "./PositionValue";
 import {
   Box,
-  Link,
   Typography,
 } from "@mui/material";
 import { useTranslation } from "./LocalizationProvider";

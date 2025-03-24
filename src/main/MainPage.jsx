@@ -15,7 +15,7 @@ import MainMap from "./MainMap";
 import { useAttributePreference } from "../common/util/preferences";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
 import NavMenu from "../common/components/NavMenu.jsx";
-import { useDevices } from "../common/components/AllDevices.jsx";
+import { useDevices } from "../Context/AllDevices.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     left: 0,
     width: "28vw",
-    minWidth: '336px',
+    minWidth: "336px",
     maxWidth: "480px",
     zIndex: "6",
     ["& h3"]: {
@@ -122,7 +122,7 @@ const MainPage = () => {
   const [filterSort, setFilterSort] = usePersistedState("filterSort", "");
   const [filterMap, setFilterMap] = usePersistedState("filterMap", false);
 
-  const {devicesOpen, setDevicesOpen, heightMenuNavMobile} = useDevices();
+  const { devicesOpen, setDevicesOpen, heightMenuNavMobile } = useDevices();
   const [eventsOpen, setEventsOpen] = useState(false);
 
   const onEventsClick = useCallback(() => setEventsOpen(true), [setEventsOpen]);
@@ -151,7 +151,15 @@ const MainPage = () => {
         onEventsClick={onEventsClick}
       />
       <Slide direction="right" in={devicesOpen} timeout={200}>
-        <Paper square className={classes.allDevices} style={!desktop? {height: `calc(100% - ${heightMenuNavMobile}px)`}: {height: "100%"}}>
+        <Paper
+          square
+          className={classes.allDevices}
+          style={
+            !desktop
+              ? { height: `calc(100% - ${heightMenuNavMobile}px)` }
+              : { height: "100%" }
+          }
+        >
           <Box
             component={"div"}
             sx={{
@@ -160,8 +168,8 @@ const MainPage = () => {
               color: "white",
               display: "flex",
               justifyContent: "space-between",
-              flexDirection: 'column',
-              gap: '1rem',
+              flexDirection: "column",
+              gap: "1rem",
             }}
           >
             <Box
@@ -173,9 +181,7 @@ const MainPage = () => {
               }}
             >
               <Box component={"h3"}>
-                <DynamicIconsComponent
-                  category={"carGroup"}
-                />
+                <DynamicIconsComponent category={"carGroup"} />
                 Meus Veículos
               </Box>
               <Tooltip title="Fechar" arrow placement="right">
@@ -184,7 +190,10 @@ const MainPage = () => {
                   onClick={() => setDevicesOpen(!devicesOpen)}
                   onTouchStart={() => setDevicesOpen(!devicesOpen)}
                 >
-                  <FontAwesomeIcon icon={faXmark} className={classes.mediaButton}/>
+                  <FontAwesomeIcon
+                    icon={faXmark}
+                    className={classes.mediaButton}
+                  />
                 </IconButton>
               </Tooltip>
             </Box>

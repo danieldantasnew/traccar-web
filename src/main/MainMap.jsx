@@ -23,7 +23,7 @@ import dayjs from "dayjs";
 import { useCatch } from "../reactHelper.js";
 import MapRoutePoints from "../map/MapRoutePoints.js";
 
-const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
+const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, setStatusCardOpen }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const desktop = useMediaQuery(theme.breakpoints.up("md"));
@@ -31,9 +31,10 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
   const features = useFeatures();
   const devices = useSelector((state) => state.devices.items);
   const [items, setItems] = useState([]);
+  const [directions, setDirections] = useState(null);
+  
   const [loading, setLoading] = useState(false);
   const selectedId = useSelector((state) => state.devices.selectedId);
-  const [directions, setDirections] = useState(null);
  
   const deviceIds = useSelector((state) => state.devices.selectedIds);
   const groupIds = useSelector((state) => state.reports.groupIds);
@@ -122,6 +123,7 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
           positions={filteredPositions}
           onClick={onMarkerClick}
           selectedPosition={selectedPosition}
+          setStatusCardOpen={setStatusCardOpen}
           showStatus
         />
         {items.map((item) => {
