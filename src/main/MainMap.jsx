@@ -18,10 +18,12 @@ import MapScale from "../map/MapScale";
 import MapNotification from "../map/notification/MapNotification";
 import useFeatures from "../common/util/useFeatures";
 import MapRouteCoordinates from "../map/MapRouteCoordinates";
-import MapMarkers from "../map/MapMarkers";
+import MapMarkersStops from "../map/MapMarkersStops.js";
 import dayjs from "dayjs";
 import { useCatch } from "../reactHelper.js";
 import MapRoutePoints from "../map/MapRoutePoints.js";
+import ColorsDevice from "../common/components/ColorsDevice.js";
+import MapRoutePath from "../map/MapRoutePath.js";
 
 const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCardOpen, setStatusCardOpen }) => {
   const theme = useTheme();
@@ -30,8 +32,9 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
   const eventsAvailable = useSelector((state) => !!state.events.items.length);
   const features = useFeatures();
   const devices = useSelector((state) => state.devices.items);
-  const [items, setItems] = useState([]);
-  const [directions, setDirections] = useState(null);
+  const [stops, setStops] = useState([])
+  const [positions, setPositions] = useState([]);
+  const [index, setIndex] = useState(0);
   
   const [loading, setLoading] = useState(false);
   const selectedId = useSelector((state) => state.devices.selectedId);
@@ -48,37 +51,31 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
     [dispatch]
   );
 
-  const createMarkers = () => {
-    return items.flatMap((item) => {
-      const device = devices[item.deviceId] || {}; 
+  const createMarkersStops = () => {
+    return stops.map((stop, index) => {
+      const device = devices[stop.deviceId] || {}; 
       const attributes = device.attributes || {};  
-      const reportColor = attributes['web.reportColor'] ? attributes['web.reportColor'].split(';') : ["rgb(189, 12, 18)", "rgb(189, 12, 18)"];
-      
-      const bgColor = reportColor[0];
-      const color = reportColor[1];
-      return item.events
-      .map((event) => item.positions.find((p) => event.positionId === p.id))
-      .filter((position) => position != null)
-      .map((position, index) => ({
-        latitude: position.latitude,
-        longitude: position.longitude,
+      const {bgColor, color} = ColorsDevice(attributes['web.reportColor']);
+
+      return({
+        latitude: stop.latitude,
+        longitude: stop.longitude,
         stopped: `${index+1}`,
         bgColor,
         color,
-      }))
-    }
-     );
-   }
+      })
+    })
+  }
 
-  const handleSubmit = useCatch(async ({ deviceIds, groupIds, from, to }) => {
-    const query = new URLSearchParams({ from, to });
-    deviceIds.forEach((deviceId) => query.append("deviceId", deviceId));
-    groupIds.forEach((groupId) => query.append("groupId", groupId));
+  const handleSubmit = useCatch(async ({ deviceId, from, to }) => {
     setLoading(true);
+    const query = new URLSearchParams({ deviceId, from, to });
     try {
-      const response = await fetch(`/api/reports/combined?${query.toString()}`);
+      const response = await fetch(`/api/positions?${query.toString()}`);
       if (response.ok) {
-        setItems(await response.json());
+        setIndex(0);
+        const positions = await response.json();
+        setPositions(positions);
       } else {
         throw Error(await response.text());
       }
@@ -87,31 +84,53 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
     }
   });
 
-  useEffect(()=> {
-    if(items) {
-      items.forEach((item, index)=> {
-        if(index === 0) {
-          setDirections(items[index].positions)
+    const handleStops = useCatch(async ({ deviceId, from, to, type }) => {
+      const query = new URLSearchParams({ deviceId, from, to });
+      if (type === 'export') {
+        window.location.assign(`/api/reports/stops/xlsx?${query.toString()}`);
+      } else if (type === 'mail') {
+        const response = await fetch(`/api/reports/stops/mail?${query.toString()}`);
+        if (!response.ok) {
+          throw Error(await response.text());
         }
-
-        return null;
-      })
-    }
-  }, [items])
+      } else {
+        setLoading(true);
+        try {
+          const response = await fetch(`/api/reports/stops?${query.toString()}`, {
+            headers: { Accept: 'application/json' },
+          });
+          if (response.ok) {
+            const json = await response.json()
+            setStops(json);
+          } else {
+            throw Error(await response.text());
+          }
+        } finally {
+          setLoading(false);
+        }
+      }
+    });
 
   useEffect(() => {
     if (devices[selectedId] && selectedId) {
       handleSubmit({
-        deviceIds,
+        deviceId: selectedId,
+        groupIds,
+        from: from.toISOString(),
+        to: to.toISOString(),
+      });
+      handleStops({
+        deviceId: selectedId,
         groupIds,
         from: from.toISOString(),
         to: to.toISOString(),
       });
     } else {
-      setItems([]);
-      setDirections(null);
+      setPositions([]);
+      setStops([]);
     }
   }, [selectedId, selectedPosition]);
+
 
   return (
     <>
@@ -126,21 +145,9 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
           setStatusCardOpen={setStatusCardOpen}
           showStatus
         />
-        {items.map((item) => {
-          if(devices[item.deviceId]) {
-            return (
-              <MapRouteCoordinates
-                key={item.deviceId}
-                name={devices[item.deviceId].name}
-                coordinates={item.route}
-                deviceId={item.deviceId}
-              />
-            )
-          }
-          return;
-        })}
-        {directions ? <MapRoutePoints positions={directions} colorDynamic={true}/> : ''}
-        <MapMarkers markers={createMarkers()} />
+        <MapRoutePoints positions={positions} colorStatic={true}/>
+        <MapRoutePath positions={positions} />
+        {stops && <MapMarkersStops markers={createMarkersStops()} />}
         <MapDefaultCamera />
         {statusCardOpen && (<MapSelectedDevice />)}
         <PoiMap />

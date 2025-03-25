@@ -3,10 +3,12 @@ import { useId, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { map } from './core/MapView';
 import getSpeedColor from '../common/util/colors';
+import ColorsDevice from '../common/components/ColorsDevice';
 
 const MapRoutePath = ({ positions }) => {
   const id = useId();
-
+  const devices = useSelector((state) => state.devices.items);
+  const selectedId = useSelector((state) => state.devices.selectedId);
   const theme = useTheme();
 
   const reportColor = useSelector((state) => {
@@ -65,6 +67,10 @@ const MapRoutePath = ({ positions }) => {
     const minSpeed = positions.map((p) => p.speed).reduce((a, b) => Math.min(a, b), Infinity);
     const maxSpeed = positions.map((p) => p.speed).reduce((a, b) => Math.max(a, b), -Infinity);
     const features = [];
+    const device = devices[selectedId] || {}; 
+    const attributes = device.attributes || {};  
+    const {bgColor, subColor} = ColorsDevice(attributes['web.reportColor']);
+
     for (let i = 0; i < positions.length - 1; i += 1) {
       features.push({
         type: 'Feature',
@@ -73,7 +79,7 @@ const MapRoutePath = ({ positions }) => {
           coordinates: [[positions[i].longitude, positions[i].latitude], [positions[i + 1].longitude, positions[i + 1].latitude]],
         },
         properties: {
-          color: reportColor || getSpeedColor(
+          color: subColor || getSpeedColor(
             positions[i + 1].speed,
             minSpeed,
             maxSpeed,

@@ -7,7 +7,7 @@ import { useTranslation } from '../common/components/LocalizationProvider';
 import { useAttributePreference } from '../common/util/preferences';
 import { useSelector } from 'react-redux';
 
-const MapRoutePoints = ({ positions, onClick, colorDynamic }) => {
+const MapRoutePoints = ({ positions, onClick, colorStatic }) => {
   const id = useId();
   const t = useTranslation();
   const speedUnit = useAttributePreference('speedUnit');
@@ -88,7 +88,7 @@ const MapRoutePoints = ({ positions, onClick, colorDynamic }) => {
           index,
           id: position.id,
           rotation: position.course,
-          color: colorDynamic && devices[selectedId] ? devices[selectedId].attributes['web.reportColor'].split(';')[2] : getSpeedColor(position.speed, minSpeed, maxSpeed),
+          color: colorStatic && devices[selectedId] ? devices[selectedId].attributes['web.reportColor'].split(';')[0] : getSpeedColor(position.speed, minSpeed, maxSpeed),
         },
       })),
     });
