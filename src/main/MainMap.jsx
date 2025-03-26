@@ -17,7 +17,6 @@ import MapGeocoder from "../map/geocoder/MapGeocoder";
 import MapScale from "../map/MapScale";
 import MapNotification from "../map/notification/MapNotification";
 import useFeatures from "../common/util/useFeatures";
-import MapRouteCoordinates from "../map/MapRouteCoordinates";
 import MapMarkersStops from "../map/MapMarkersStops.js";
 import dayjs from "dayjs";
 import { useCatch } from "../reactHelper.js";
@@ -34,12 +33,10 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
   const devices = useSelector((state) => state.devices.items);
   const [stops, setStops] = useState([])
   const [positions, setPositions] = useState([]);
-  const [index, setIndex] = useState(0);
   
   const [loading, setLoading] = useState(false);
   const selectedId = useSelector((state) => state.devices.selectedId);
  
-  const deviceIds = useSelector((state) => state.devices.selectedIds);
   const groupIds = useSelector((state) => state.reports.groupIds);
   const from = dayjs().startOf("day");
   const to = dayjs().endOf("day");
@@ -74,7 +71,6 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
     try {
       const response = await fetch(`/api/positions?${query.toString()}`);
       if (response.ok) {
-        setIndex(0);
         const positions = await response.json();
         const positionsFilter = positions.filter((position, index)=> {
           if(index === 0) return position;

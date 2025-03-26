@@ -106,7 +106,6 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, setSta
   
     positions.forEach((position) => {
       if (markersRef.current.some((m) => m.positionId === position.id)) return;
-  
       const el = document.createElement("div");
       const device = devices[position.deviceId];
       const attributes = device.attributes || {};
