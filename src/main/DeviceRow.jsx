@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DeviceRow = ({ device, setStatusCardOpen }) => {
+const DeviceRow = ({ device, setStatusCardOpen, setDevicesOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const t = useTranslation();
@@ -108,6 +108,7 @@ const DeviceRow = ({ device, setStatusCardOpen }) => {
       onClick={() => {
         dispatch(devicesActions.selectId(device.id));
         setStatusCardOpen(true);
+        setDevicesOpen(false);
       }}
       disabled={!admin && device.disabled}
     >

@@ -214,7 +214,7 @@ const MainPage = () => {
           </Box>
           <div className={classes.devices}>
             <Paper square className={classes.contentList}>
-              <DeviceList devices={filteredDevices} setStatusCardOpen={setStatusCardOpen} phraseGroup={phraseGroup} />
+              <DeviceList devices={filteredDevices} setStatusCardOpen={setStatusCardOpen} setDevicesOpen={setDevicesOpen} phraseGroup={phraseGroup} />
             </Paper>
           </div>
         </Paper>

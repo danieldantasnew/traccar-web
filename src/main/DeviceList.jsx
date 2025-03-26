@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DeviceList = ({ devices, filteredPositions, style, phraseGroup, setStatusCardOpen }) => {
+const DeviceList = ({ devices, filteredPositions, style, phraseGroup, setStatusCardOpen, setDevicesOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const listInnerEl = useRef(null);
@@ -134,7 +134,7 @@ const DeviceList = ({ devices, filteredPositions, style, phraseGroup, setStatusC
           </AccordionSummary>
           <AccordionDetails className={classes.accordionDetails}>
             {group.devices.map((device) => (
-              <DeviceRow key={device.id} device={device} setStatusCardOpen={setStatusCardOpen}/>
+              <DeviceRow key={device.id} device={device} setDevicesOpen={setDevicesOpen} setStatusCardOpen={setStatusCardOpen}/>
             ))}
           </AccordionDetails>
         </Accordion>

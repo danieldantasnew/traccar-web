@@ -45,7 +45,7 @@ const MapRoutePoints = ({ positions, onClick, colorStatic }) => {
       layout: {
         'text-font': findFonts(map),
         'text-field': '▲',
-        'text-size': 26,
+        'text-size': 22,
         'text-allow-overlap': true,
         'text-rotate': ['get', 'rotation'],
       },
@@ -54,6 +54,9 @@ const MapRoutePoints = ({ positions, onClick, colorStatic }) => {
     map.on('mouseenter', id, onMouseEnter);
     map.on('mouseleave', id, onMouseLeave);
     map.on('click', id, onMarkerClick);
+    setTimeout(() => {
+      map.moveLayer(id);
+    }, 100);
 
     return () => {
       map.off('mouseenter', id, onMouseEnter);

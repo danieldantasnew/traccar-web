@@ -55,7 +55,7 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
     return stops.map((stop, index) => {
       const device = devices[stop.deviceId] || {}; 
       const attributes = device.attributes || {};  
-      const {bgColor, color} = ColorsDevice(attributes['web.reportColor']);
+      const {bgColor, subColor, color} = ColorsDevice(attributes['web.reportColor']);
 
       return({
         latitude: stop.latitude,
@@ -63,6 +63,7 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
         stopped: `${index+1}`,
         bgColor,
         color,
+        subColor
       })
     })
   }
@@ -75,7 +76,11 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
       if (response.ok) {
         setIndex(0);
         const positions = await response.json();
-        setPositions(positions);
+        const positionsFilter = positions.filter((position, index)=> {
+          if(index === 0) return position;
+          if(index % 4 === 0) return position;
+        });
+        setPositions(positionsFilter);
       } else {
         throw Error(await response.text());
       }
