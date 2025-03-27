@@ -147,8 +147,6 @@ const EditAttributesAccordion = ({ attribute, attributes, setAttributes, definit
     }
   };
 
-  console.log()
-
   return features.disableAttributes ? '' : (
     <Accordion defaultExpanded={!!attribute}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>

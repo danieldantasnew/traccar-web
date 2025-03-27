@@ -142,41 +142,6 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, setSta
     });
   
   }, [map, positions, devices]);
-  
-  useEffect(() => {
-    [id, selected].forEach((source) => {
-      map.getSource(source)?.setData({
-        type: "FeatureCollection",
-        features: positions
-          .filter((it) => devices.hasOwnProperty(it.deviceId))
-          .filter((it) =>
-            source === id
-              ? it.deviceId !== selectedDeviceId
-              : it.deviceId === selectedDeviceId
-          )
-          .map((position) => ({
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: [position.longitude, position.latitude],
-            },
-            properties: createFeature(
-              devices,
-              position,
-              selectedPosition && selectedPosition.id
-            ),
-          })),
-      });
-    });
-  }, [
-    mapCluster,
-    clusters,
-    onMarkerClick,
-    onClusterClick,
-    devices,
-    positions,
-    selectedPosition,
-  ]);
 
   useEffect(()=> {
     setPositions([])

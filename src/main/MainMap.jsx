@@ -24,20 +24,6 @@ import MapRoutePoints from "../map/MapRoutePoints.js";
 import ColorsDevice from "../common/components/ColorsDevice.js";
 import MapRoutePath from "../map/MapRoutePath.js";
 
-function getLastPositions(devices) {
-  const lastPositions = {};
-  
-  devices.forEach(device => {
-      const { deviceId, serverTime } = device;
-      
-      if (!lastPositions[deviceId] || new Date(serverTime) > new Date(lastPositions[deviceId].serverTime)) {
-          lastPositions[deviceId] = device;
-      }
-  });
-  
-  return Object.values(lastPositions);
-}
-
 const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCardOpen, setStatusCardOpen }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -47,7 +33,6 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
   const devices = useSelector((state) => state.devices.items);
   const [stops, setStops] = useState([])
   const [positions, setPositions] = useState([]);
-  const [newFilteredPositions, setNewFilteredPositions] = useState([])
   
   const [loading, setLoading] = useState(false);
   const selectedId = useSelector((state) => state.devices.selectedId);
@@ -147,25 +132,6 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
     }
   }, [selectedId, selectedPosition]);
 
-  useEffect(()=> {
-    if(devices[selectedId]) {
-      const lastPositionOfSelectedDevice = getLastPositions(positions);
-      const updatedPositionsMap = new Map();
-  
-      filteredPositions.forEach(pos => {
-        if (pos.deviceId !== selectedId) {
-          updatedPositionsMap.set(pos.deviceId, pos);
-        }
-      });
-
-      lastPositionOfSelectedDevice.forEach(pos => {
-        updatedPositionsMap.set(pos.deviceId, pos);
-      });
- 
-      setNewFilteredPositions(Array.from(updatedPositionsMap.values()));
-    }
-  }, [filteredPositions, selectedId]);
-
   return (
     <>
       <MapView>
@@ -173,7 +139,7 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
         <MapGeofence />
         <MapAccuracy positions={filteredPositions} />
         <MapPositions
-          positions={selectedId ? newFilteredPositions : filteredPositions}
+          positions={filteredPositions}
           onClick={onMarkerClick}
           selectedPosition={selectedPosition}
           setStatusCardOpen={setStatusCardOpen}
