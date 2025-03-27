@@ -23,6 +23,7 @@ import { useCatch } from "../reactHelper.js";
 import MapRoutePoints from "../map/MapRoutePoints.js";
 import ColorsDevice from "../common/components/ColorsDevice.js";
 import MapRoutePath from "../map/MapRoutePath.js";
+import { useLocation } from "react-router-dom";
 
 const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCardOpen, setStatusCardOpen }) => {
   const theme = useTheme();
@@ -33,6 +34,7 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
   const devices = useSelector((state) => state.devices.items);
   const [stops, setStops] = useState([])
   const [positions, setPositions] = useState([]);
+  const location = useLocation();
   
   const [loading, setLoading] = useState(false);
   const selectedId = useSelector((state) => state.devices.selectedId);
@@ -139,6 +141,7 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
         <MapGeofence />
         <MapAccuracy positions={filteredPositions} />
         <MapPositions
+          location={location}
           positions={filteredPositions}
           onClick={onMarkerClick}
           selectedPosition={selectedPosition}
