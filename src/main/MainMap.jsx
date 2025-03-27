@@ -145,6 +145,8 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
           selectedPosition={selectedPosition}
           setStatusCardOpen={setStatusCardOpen}
           showStatus
+          setStops={setStops}
+          setPositions={setPositions}
         />
         <MapRoutePoints positions={positions} colorStatic={true}/>
         <MapRoutePath positions={positions} />

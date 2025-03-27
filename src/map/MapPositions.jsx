@@ -12,12 +12,11 @@ import { Tooltip } from "@mui/material";
 import { createRoot } from 'react-dom/client';
 import ColorsDevice from "../common/components/ColorsDevice.js";
 
-const MapPositions = ({ positions, onClick, showStatus, selectedPosition, setStatusCardOpen }) => {
+const MapPositions = ({ positions, onClick, showStatus, selectedPosition, setStatusCardOpen, setPositions, setStops }) => {
   const id = useId();
   const clusters = `${id}-clusters`;
   const selected = `${id}-selected`;
   const markersRef = useRef([]);
-
   const devices = useSelector((state) => state.devices.items);
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
 
@@ -178,6 +177,11 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, setSta
     positions,
     selectedPosition,
   ]);
+
+  useEffect(()=> {
+    setPositions([])
+    setStops([])
+  }, [selectedDeviceId]);
 
   return null;
 };
