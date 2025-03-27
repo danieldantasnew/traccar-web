@@ -83,38 +83,47 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, setSta
     if (!map || !positions.length) return;
   
     const newPositionMap = new Map(positions.map(p => [p.id, p]));
+    const removedMarkers = [];
   
-    markersRef.current = markersRef.current.filter(({ marker, root, positionId }) => {
-      const newPosition = newPositionMap.get(positionId);
-      
-      if (!newPosition) {
-        setTimeout(() => {
-          root.unmount();
-          marker.remove();
-        }, 0);
-        return false;
+    // Criar um novo Map para armazenar os marcadores atualizados
+    const newMarkersMap = new Map();
+  
+    markersRef.current.forEach(({ marker, root, positionId }) => {
+      if (!newPositionMap.has(positionId)) {
+        removedMarkers.push({ root, marker }); // Armazena para remover depois
       } else {
-        const { longitude, latitude } = newPosition;
+        // Atualiza a posição do marcador existente, se necessário
+        const { longitude, latitude } = newPositionMap.get(positionId);
         const currentLngLat = marker.getLngLat();
         if (currentLngLat.lng !== longitude || currentLngLat.lat !== latitude) {
           marker.setLngLat([longitude, latitude]);
         }
-        return true;
+        newMarkersMap.set(positionId, { marker, root, positionId });
       }
     });
   
+    // Remove os marcadores antigos depois da renderização
+    setTimeout(() => {
+      removedMarkers.forEach(({ root, marker }) => {
+        root.unmount();
+        marker.remove();
+      });
+    }, 0);
+  
+    // Adicionar novos marcadores apenas se não existirem
     positions.forEach((position) => {
-      if (markersRef.current.some((m) => m.positionId === position.id)) return;
+      if (newMarkersMap.has(position.id)) return;
+  
       const el = document.createElement("div");
-      const device = devices[position.deviceId];
+      const device = devices[position.deviceId] || {};
       const attributes = device.attributes || {};
-      const {bgColor, color} = ColorsDevice(attributes["web.reportColor"]);
+      const { bgColor, color } = ColorsDevice(attributes["web.reportColor"] || "");
   
       el.className = "marker";
   
       const root = createRoot(el);
       root.render(
-        <Tooltip title={device ? `Última atualização: ${formatTime(device.lastUpdate)}` : ""} followCursor arrow>
+        <Tooltip title={device.lastUpdate ? `Última atualização: ${formatTime(device.lastUpdate)}` : ""} followCursor arrow>
           <div style={{ display: "flex", gap: ".8rem", alignItems: "center", justifyContent: "space-between", padding: "2px" }}>
             <DynamicIconsComponent key={device.name} category={device.category} />
             <div>
@@ -131,17 +140,20 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, setSta
       el.addEventListener("click", (event) => {
         event.stopPropagation();
         onClick(position.id, position.deviceId);
-        setStatusCardOpen(true)
+        setStatusCardOpen(true);
       });
   
       const marker = new mapboxgl.Marker(el)
         .setLngLat([position.longitude, position.latitude])
         .addTo(map);
   
-      markersRef.current.push({ marker, root, positionId: position.id });
+      newMarkersMap.set(position.id, { marker, root, positionId: position.id });
     });
   
+    // Atualiza `markersRef.current` com os novos marcadores
+    markersRef.current = newMarkersMap;
   }, [map, positions, devices]);
+  
 
   useEffect(()=> {
     setPositions([])
