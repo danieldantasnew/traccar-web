@@ -9,10 +9,19 @@ import mapboxgl from "mapbox-gl";
 import "./css/style.css";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
 import { Tooltip } from "@mui/material";
-import { createRoot } from 'react-dom/client';
+import { createRoot } from "react-dom/client";
 import ColorsDevice from "../common/components/ColorsDevice.js";
 
-const MapPositions = ({ positions, onClick, showStatus, selectedPosition, setStatusCardOpen, setPositions, setStops }) => {
+const MapPositions = ({
+  positions,
+  onClick,
+  showStatus,
+  selectedPosition,
+  setStatusCardOpen,
+  setPositions,
+  setStops,
+  MainMap,
+}) => {
   const id = useId();
   const clusters = `${id}-clusters`;
   const selected = `${id}-selected`;
@@ -82,95 +91,113 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, setSta
   useEffect(() => {
     if (!map || !positions.length) return;
 
-    // Função para limpar todos os markers
-const clearMarkers = () => {
-    markersRef.current.forEach(({ marker, root }) => {
-        // Agendar a desmontagem do root e a remoção do marker para o próximo ciclo de evento
+    const clearMarkers = () => {
+      markersRef.current.forEach(({ marker, root }) => {
         setTimeout(() => {
-            root.unmount();
-            marker.remove();
+          root.unmount();
+          marker.remove();
         }, 0);
-    });
-    markersRef.current = [];
-};
-
-
-    // Limpar todos os markers ao desmontar o componente
-    return () => {
-        clearMarkers();
+      });
+      markersRef.current = [];
     };
-}, [map]);
 
-useEffect(() => {
+    return () => {
+      clearMarkers();
+    };
+  }, [map]);
+
+  useEffect(() => {
     if (!map || !positions.length) return;
 
-    const newPositionMap = new Map(positions.map(p => [p.id, p]));
+    const newPositionMap = new Map(positions.map((p) => [p.id, p]));
 
-    // Atualizar ou remover markers existentes
-    markersRef.current = markersRef.current.filter(({ marker, root, positionId }) => {
+    markersRef.current = markersRef.current.filter(
+      ({ marker, root, positionId }) => {
         const newPosition = newPositionMap.get(positionId);
 
         if (!newPosition) {
-            setTimeout(() => {
-                root.unmount();
-                marker.remove();
-            }, 0);
-            return false;
+          setTimeout(() => {
+            root.unmount();
+            marker.remove();
+          }, 0);
+          return false;
         } else {
-            const { longitude, latitude } = newPosition;
-            const currentLngLat = marker.getLngLat();
-            if (currentLngLat.lng !== longitude || currentLngLat.lat !== latitude) {
-                marker.setLngLat([longitude, latitude]);
-            }
-            return true;
+          const { longitude, latitude } = newPosition;
+          const currentLngLat = marker.getLngLat();
+          if (
+            currentLngLat.lng !== longitude ||
+            currentLngLat.lat !== latitude
+          ) {
+            marker.setLngLat([longitude, latitude]);
+          }
+          return true;
         }
-    });
+      }
+    );
 
-    // Adicionar novos markers
     positions.forEach((position) => {
-        if (markersRef.current.some((m) => m.positionId === position.id)) return;
+      if (markersRef.current.some((m) => m.positionId === position.id)) return;
 
-        const el = document.createElement("div");
-        const device = devices[position.deviceId];
-        const attributes = device.attributes || {};
-        const { bgColor, color } = ColorsDevice(attributes["web.reportColor"]);
+      const el = document.createElement("div");
+      const device = devices[position.deviceId];
+      const attributes = device.attributes || {};
+      const { bgColor, color } = ColorsDevice(attributes["web.reportColor"]);
 
-        el.className = "marker";
+      el.className = "marker";
 
-        const root = createRoot(el);
-        root.render(
-            <Tooltip title={device ? `Última atualização: ${formatTime(device.lastUpdate)}` : ""} followCursor arrow>
-                <div style={{ display: "flex", gap: ".8rem", alignItems: "center", justifyContent: "space-between", padding: "2px" }}>
-                    <DynamicIconsComponent key={device.name} category={device.category} />
-                    <div>
-                        <p>{device.model}</p>
-                        <p>{device.name}</p>
-                    </div>
-                </div>
-            </Tooltip>
-        );
+      const root = createRoot(el);
+      root.render(
+        <Tooltip
+          title={
+            device ? `Última atualização: ${formatTime(device.lastUpdate)}` : ""
+          }
+          followCursor
+          arrow
+        >
+          <div
+            style={{
+              display: "flex",
+              gap: ".8rem",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "2px",
+            }}
+          >
+            <DynamicIconsComponent
+              key={device.name}
+              category={device.category}
+            />
+            <div>
+              <p>{device.model}</p>
+              <p>{device.name}</p>
+            </div>
+          </div>
+        </Tooltip>
+      );
 
-        el.style.backgroundColor = bgColor;
-        el.style.color = color;
+      el.style.backgroundColor = bgColor;
+      el.style.color = color;
 
-        el.addEventListener("click", (event) => {
-            event.stopPropagation();
-            onClick(position.id, position.deviceId);
-            setStatusCardOpen(true);
-        });
+      el.addEventListener("click", (event) => {
+        event.stopPropagation();
+        onClick(position.id, position.deviceId);
+        setStatusCardOpen(true);
+      });
 
-        const marker = new mapboxgl.Marker(el)
-            .setLngLat([position.longitude, position.latitude])
-            .addTo(map);
+      const marker = new mapboxgl.Marker(el)
+        .setLngLat([position.longitude, position.latitude])
+        .addTo(map);
 
-        markersRef.current.push({ marker, root, positionId: position.id });
+      markersRef.current.push({ marker, root, positionId: position.id });
     });
-}, [map, positions, devices]);
+  }, [map, positions, devices]);
 
-  useEffect(()=> {
-    setPositions([])
-    setStops([])
-  }, [selectedDeviceId]);
+  useEffect(() => {
+    if(MainMap) {
+      setPositions([]);
+      setStops([]);
+    }
+  }, [selectedDeviceId, MainMap]);
 
   return null;
 };

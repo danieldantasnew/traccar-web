@@ -5,7 +5,7 @@ import { map } from './core/MapView';
 import getSpeedColor from '../common/util/colors';
 import ColorsDevice from '../common/components/ColorsDevice';
 
-const MapRoutePath = ({ positions }) => {
+const MapRoutePath = ({ positions, staticColor }) => {
   const id = useId();
   const devices = useSelector((state) => state.devices.items);
   const selectedId = useSelector((state) => state.devices.selectedId);
@@ -69,7 +69,7 @@ const MapRoutePath = ({ positions }) => {
     const features = [];
     const device = devices[selectedId] || {}; 
     const attributes = device.attributes || {};  
-    const {bgColor, subColor} = ColorsDevice(attributes['web.reportColor']);
+    const {subColor} = ColorsDevice(attributes['web.reportColor']);
 
     for (let i = 0; i < positions.length - 1; i += 1) {
       features.push({
@@ -79,7 +79,7 @@ const MapRoutePath = ({ positions }) => {
           coordinates: [[positions[i].longitude, positions[i].latitude], [positions[i + 1].longitude, positions[i + 1].latitude]],
         },
         properties: {
-          color: subColor || getSpeedColor(
+          color: (staticColor  && subColor) || getSpeedColor(
             positions[i + 1].speed,
             minSpeed,
             maxSpeed,

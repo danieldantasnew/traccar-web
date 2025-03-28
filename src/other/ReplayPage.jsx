@@ -165,7 +165,7 @@ const ReplayPage = () => {
     <div className={classes.root}>
       <MapView>
         <MapGeofence />
-        <MapRoutePath positions={positions} />
+        <MapRoutePath positions={positions} staticColor={false} />
         <MapRoutePoints positions={positions} onClick={onPointClick} />
         {index < positions.length && (
           <MapPositions positions={[positions[index]]} onClick={onMarkerClick} titleField="fixTime" />
