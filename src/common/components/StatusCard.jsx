@@ -159,7 +159,7 @@ const useStyles = makeStyles((theme) => ({
   root: () => ({
     pointerEvents: "none",
     position: "fixed",
-    zIndex: 100,
+    zIndex: 10,
     left: "0",
     top: "0",
     height: "100vh",

@@ -57,7 +57,7 @@ const AddAttributeDialog = ({ open, onResult, definitions }) => {
           options={options}
           getOptionLabel={(option) => (option && typeof option === 'object' ? option.name : option)}
           renderOption={(props, option) => (
-            <li {...props}>
+            <li {...props} key={`${props.key}s`}>
               {option.name}
             </li>
           )}

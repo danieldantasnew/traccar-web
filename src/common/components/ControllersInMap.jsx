@@ -11,7 +11,7 @@ import ColorsDevice from "./ColorsDevice.js";
 
 const styleBox = {
   position: "fixed",
-  zIndex: 100,
+  zIndex: 8,
   right: 10,
   top: "17.5rem",
   display: "flex",
