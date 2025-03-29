@@ -54,6 +54,7 @@ const ControllersInMap = ({  position }) => {
     dispatch(devicesActions.selectId(null));
   };
 
+  if(!devices[selectedDeviceId]) return null;
   const {bgColor} = ColorsDevice(devices[selectedDeviceId].attributes['web.reportColor']);
 
   return (
