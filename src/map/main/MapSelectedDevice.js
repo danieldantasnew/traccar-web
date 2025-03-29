@@ -41,7 +41,7 @@ const MapSelectedDevice = () => {
     const interval = setInterval(() => {
       const timeSinceLastZoom = Date.now() - lastUserZoomTime.current;
 
-      if (timeSinceLastZoom >= 5000 && position && mapFollow) {
+      if (timeSinceLastZoom >= 2000 && position && mapFollow) {
         map.easeTo({
           center: [position.longitude, position.latitude],
           zoom: Math.max(map.getZoom(), selectZoom),

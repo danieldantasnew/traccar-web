@@ -73,11 +73,7 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
       const response = await fetch(`/api/positions?${query.toString()}`);
       if (response.ok) {
         const positions = await response.json();
-        const positionsFilter = positions.filter((position, index)=> {
-          if(index === 0) return position;
-          if(index % 4 === 0) return position;
-        });
-        setPositions(positionsFilter);
+        setPositions(positions);
       } else {
         throw Error(await response.text());
       }
@@ -149,7 +145,7 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
           setPositions={setPositions}
           MainMap={true}
         />
-        <MapRoutePoints positions={positions} colorStatic={true}/>
+        <MapRoutePoints positions={positions} colorStatic={true} needFilterPosition={true}/>
         <MapRoutePath positions={positions}  staticColor={true}/>
         {stops && <MapMarkersStops markers={createMarkersStops()} />}
         <MapDefaultCamera />

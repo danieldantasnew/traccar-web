@@ -1,67 +1,74 @@
-import { useId, useCallback, useEffect } from 'react';
-import { map } from './core/MapView';
-import getSpeedColor from '../common/util/colors';
-import { findFonts } from './core/mapUtil';
-import { SpeedLegendControl } from './legend/MapSpeedLegend';
-import { useTranslation } from '../common/components/LocalizationProvider';
-import { useAttributePreference } from '../common/util/preferences';
-import { useSelector } from 'react-redux';
+import { useId, useCallback, useEffect } from "react";
+import { map } from "./core/MapView";
+import getSpeedColor from "../common/util/colors";
+import { findFonts } from "./core/mapUtil";
+import { SpeedLegendControl } from "./legend/MapSpeedLegend";
+import { useTranslation } from "../common/components/LocalizationProvider";
+import { useAttributePreference } from "../common/util/preferences";
+import { useSelector } from "react-redux";
 
-const MapRoutePoints = ({ positions, onClick, colorStatic }) => {
+const MapRoutePoints = ({
+  positions,
+  onClick,
+  colorStatic,
+  needFilterPosition,
+}) => {
   const id = useId();
   const t = useTranslation();
-  const speedUnit = useAttributePreference('speedUnit');
+  const speedUnit = useAttributePreference("speedUnit");
   const devices = useSelector((state) => state.devices.items);
   const selectedId = useSelector((state) => state.devices.selectedId);
 
-  const onMouseEnter = () => map.getCanvas().style.cursor = 'pointer';
-  const onMouseLeave = () => map.getCanvas().style.cursor = '';
+  const onMouseEnter = () => (map.getCanvas().style.cursor = "pointer");
+  const onMouseLeave = () => (map.getCanvas().style.cursor = "");
 
-  const onMarkerClick = useCallback((event) => {
-    event.preventDefault();
-    const feature = event.features[0];
-    if (onClick) {
-      onClick(feature.properties.id, feature.properties.index);
-    }
-  }, [onClick]);
-
+  const onMarkerClick = useCallback(
+    (event) => {
+      event.preventDefault();
+      const feature = event.features[0];
+      if (onClick) {
+        onClick(feature.properties.id, feature.properties.index);
+      }
+    },
+    [onClick]
+  );
 
   useEffect(() => {
     map.addSource(id, {
-      type: 'geojson',
+      type: "geojson",
       data: {
-        type: 'FeatureCollection',
+        type: "FeatureCollection",
         features: [],
       },
     });
 
     map.addLayer({
       id,
-      type: 'symbol',
+      type: "symbol",
       source: id,
       paint: {
-        'text-color': ['get', 'color'],
+        "text-color": ["get", "color"],
       },
       layout: {
-        'text-font': findFonts(map),
-        'text-field': '▲',
-        'text-size': 22,
-        'text-allow-overlap': true,
-        'text-rotate': ['get', 'rotation'],
+        "text-font": findFonts(map),
+        "text-field": "▲",
+        "text-size": 22,
+        "text-allow-overlap": true,
+        "text-rotate": ["get", "rotation"],
       },
     });
 
-    map.on('mouseenter', id, onMouseEnter);
-    map.on('mouseleave', id, onMouseLeave);
-    map.on('click', id, onMarkerClick);
+    map.on("mouseenter", id, onMouseEnter);
+    map.on("mouseleave", id, onMouseLeave);
+    map.on("click", id, onMarkerClick);
     setTimeout(() => {
       map.moveLayer(id);
     }, 100);
 
     return () => {
-      map.off('mouseenter', id, onMouseEnter);
-      map.off('mouseleave', id, onMouseLeave);
-      map.off('click', id, onMarkerClick);
+      map.off("mouseenter", id, onMouseEnter);
+      map.off("mouseleave", id, onMouseLeave);
+      map.off("click", id, onMarkerClick);
 
       if (map.getLayer(id)) {
         map.removeLayer(id);
@@ -73,27 +80,66 @@ const MapRoutePoints = ({ positions, onClick, colorStatic }) => {
   }, [onMarkerClick]);
 
   useEffect(() => {
-    const maxSpeed = positions.map((p) => p.speed).reduce((a, b) => Math.max(a, b), -Infinity);
-    const minSpeed = positions.map((p) => p.speed).reduce((a, b) => Math.min(a, b), Infinity);
+    const maxSpeed = positions
+      .map((p) => p.speed)
+      .reduce((a, b) => Math.max(a, b), -Infinity);
+    const minSpeed = positions
+      .map((p) => p.speed)
+      .reduce((a, b) => Math.min(a, b), Infinity);
 
-    const control = new SpeedLegendControl(positions, speedUnit, t, maxSpeed, minSpeed);
-    map.addControl(control, 'bottom-left');
+    const control = new SpeedLegendControl(
+      positions,
+      speedUnit,
+      t,
+      maxSpeed,
+      minSpeed
+    );
+    const positionsFilter = positions.filter((position, index) => {
+      if (index === 0) return position;
+      if (index % 4 === 0) return position;
+    });
+
+    map.addControl(control, "bottom-left");
 
     map.getSource(id)?.setData({
-      type: 'FeatureCollection',
-      features: positions.map((position, index) => ({
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: [position.longitude, position.latitude],
-        },
-        properties: {
-          index,
-          id: position.id,
-          rotation: position.course,
-          color: colorStatic && devices[selectedId] ? devices[selectedId].attributes['web.reportColor'].split(';')[0] : getSpeedColor(position.speed, minSpeed, maxSpeed),
-        },
-      })),
+      type: "FeatureCollection",
+      features: needFilterPosition
+        ? positionsFilter.map((position, index) => ({
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [position.longitude, position.latitude],
+            },
+            properties: {
+              index,
+              id: position.id,
+              rotation: position.course,
+              color:
+                colorStatic && devices[selectedId]
+                  ? devices[selectedId].attributes["web.reportColor"].split(
+                      ";"
+                    )[0]
+                  : getSpeedColor(position.speed, minSpeed, maxSpeed),
+            },
+          }))
+        : positions.map((position, index) => ({
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [position.longitude, position.latitude],
+            },
+            properties: {
+              index,
+              id: position.id,
+              rotation: position.course,
+              color:
+                colorStatic && devices[selectedId]
+                  ? devices[selectedId].attributes["web.reportColor"].split(
+                      ";"
+                    )[0]
+                  : getSpeedColor(position.speed, minSpeed, maxSpeed),
+            },
+          })),
     });
     return () => map.removeControl(control);
   }, [onMarkerClick, positions]);
