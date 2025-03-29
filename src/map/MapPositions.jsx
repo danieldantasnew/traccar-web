@@ -7,6 +7,7 @@ import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
 import { Tooltip } from "@mui/material";
 import { createRoot } from "react-dom/client";
 import ColorsDevice from "../common/components/ColorsDevice.js";
+import { formatTime } from "../common/util/formatter.js";
 
 const MapPositions = ({
   positions,
