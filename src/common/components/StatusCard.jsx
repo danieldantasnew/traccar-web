@@ -234,7 +234,7 @@ const StatusCard = ({ deviceId, position, onClose }) => {
                   image={
                     deviceImage
                       ? `/api/media/${device.uniqueId}/${deviceImage}`
-                      : "../../../public/withoutPhoto.png"
+                      : "../../../withoutPhoto.png"
                   }
                 >
                   <Box component={"div"} className={classes.infoTop}>

@@ -2,11 +2,11 @@ import { useTheme } from '@mui/styles';
 import { useId, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { map } from './core/MapView';
+import { findFonts } from './core/mapUtil';
+import { useAttributePreference } from '../common/util/preferences';
 
 const MapRouteCoordinates = ({ name, coordinates, deviceId }) => {
   const id = useId();
-  const devices = useSelector((state) => state.devices.items);
-
   const theme = useTheme();
 
   const reportColor = useSelector((state) => {
@@ -19,6 +19,9 @@ const MapRouteCoordinates = ({ name, coordinates, deviceId }) => {
     }
     return theme.palette.geometry.main;
   });
+
+  const mapLineWidth = useAttributePreference('mapLineWidth', 2);
+  const mapLineOpacity = useAttributePreference('mapLineOpacity', 1);
 
   useEffect(() => {
     map.addSource(id, {
@@ -41,7 +44,23 @@ const MapRouteCoordinates = ({ name, coordinates, deviceId }) => {
       },
       paint: {
         'line-color': ['get', 'color'],
-        'line-width': 2,
+        'line-width': ['get', 'width'],
+        'line-opacity': ['get', 'opacity'],
+      },
+    });
+
+    map.addLayer({
+      source: id,
+      id: `${id}-title`,
+      type: 'symbol',
+      layout: {
+        'text-field': '{name}',
+        'text-font': findFonts(map),
+        'text-size': 12,
+      },
+      paint: {
+        'text-halo-color': 'white',
+        'text-halo-width': 1,
       },
     });
 
@@ -59,7 +78,6 @@ const MapRouteCoordinates = ({ name, coordinates, deviceId }) => {
   }, []);
 
   useEffect(() => {
-    const colorDevice = devices[deviceId].attributes['web.reportColor'] ? devices[deviceId].attributes['web.reportColor'].split(';') :["rgb(189, 12, 18)", "white", "rgb(255, 0, 8)"];
     map.getSource(id)?.setData({
       type: 'Feature',
       geometry: {
@@ -68,7 +86,9 @@ const MapRouteCoordinates = ({ name, coordinates, deviceId }) => {
       },
       properties: {
         name,
-        color: colorDevice[2],
+        color: reportColor,
+        width: mapLineWidth,
+        opacity: mapLineOpacity,
       },
     });
   }, [theme, coordinates, reportColor]);

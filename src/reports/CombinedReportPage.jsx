@@ -18,6 +18,7 @@ import { prefixString } from '../common/util/stringUtils';
 import MapMarkers from '../map/MapMarkers';
 import MapRouteCoordinates from '../map/MapRouteCoordinates';
 import MapScale from '../map/MapScale';
+import MapRoutePoints from '../map/MapRoutePoints';
 
 const CombinedReportPage = () => {
   const classes = useReportStyles();
@@ -69,8 +70,6 @@ const CombinedReportPage = () => {
     }
   });
 
-  
-
   return (
     <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportCombined']}>
       <div className={classes.container}>
@@ -86,6 +85,7 @@ const CombinedReportPage = () => {
                   deviceId={item.deviceId}
                 />
               ))}
+              <MapRoutePoints positions={items} colorStatic={false} needFilterPosition={true}/>
               <MapMarkers markers={createMarkers()} />
             </MapView>
             <MapScale />

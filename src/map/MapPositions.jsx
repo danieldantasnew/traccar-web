@@ -21,6 +21,13 @@ const MapPositions = ({
   const devices = useSelector((state) => state.devices.items);
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
 
+  const devicesPropsKey = positions
+  .map((p) => {
+    const d = devices[p.deviceId] || {};
+    return [d.category, d.name, d.model].join("-");
+  })
+  .join("|");
+
   useEffect(() => {
     if (!map || !positions.length) return;
 
@@ -37,7 +44,7 @@ const MapPositions = ({
     return () => {
       clearMarkers();
     };
-  }, [map]);
+  }, [map, devicesPropsKey]);
 
   useEffect(() => {
     if (!map || !positions.length) return;
