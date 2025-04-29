@@ -40,8 +40,8 @@ const DevicePage = () => {
 
   const [item, setItem] = useState(uniqueId ? { uniqueId } : null);
   
-  const [mainColor, setMainColor] = useState('#000000');
-  const [textColor, setTextColor] = useState('#ffffff');
+  const [bgColor, setBgColor] = useState('#000000');
+  const [color, setColor] = useState('#ffffff');
   const [subColor, setSubColor] = useState('#000000');
 
   useEffect(() => {
@@ -54,8 +54,8 @@ const DevicePage = () => {
         subColor: rgbToHexadecimal(subColor),
       }
 
-      setMainColor(normalizeColors.bgColor);
-      setTextColor(normalizeColors.color);
+      setBgColor(normalizeColors.bgColor);
+      setColor(normalizeColors.color);
       setSubColor(normalizeColors.subColor);
     }
   }, [item]);
@@ -85,8 +85,8 @@ const DevicePage = () => {
       validate={validate}
       menu={<SettingsMenu />}
       breadcrumbs={['settingsTitle', 'sharedDevice']}
-      mainColor={mainColor}
-      textColor={textColor} 
+      bgColor={bgColor}
+      color={color} 
       subColor={subColor}
     >
       {item && (
@@ -200,11 +200,11 @@ const DevicePage = () => {
             attributes={item.attributes}
             setAttributes={(attributes) => setItem({ ...item, attributes })}
             definitions={{ ...commonDeviceAttributes, ...deviceAttributes }}
-            mainColor={mainColor}
-            textColor={textColor} 
+            bgColor={bgColor}
+            color={color} 
             subColor={subColor}
-            setMainColor={setMainColor}
-            setTextColor={setTextColor}
+            setBgColor={setBgColor}
+            setColor={setColor}
             setSubColor={setSubColor}
           />
         </>

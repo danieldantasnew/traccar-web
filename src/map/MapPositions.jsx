@@ -24,7 +24,7 @@ const MapPositions = ({
   const devicesPropsKey = positions
   .map((p) => {
     const d = devices[p.deviceId] || {};
-    return [d.category, d.name, d.model].join("-");
+    return [d.category, d.name, d.model, d.attributes?.["web.reportColor"]].join("-");
   })
   .join("|");
 

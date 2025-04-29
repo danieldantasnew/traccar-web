@@ -10,17 +10,17 @@ import useSettingsStyles from '../common/useSettingsStyles';
 import { getRandomColor } from '../../common/util/colors';
 
 const EditItemView = ({
-  children, endpoint, item, setItem, defaultItem, validate, onItemSaved, menu, breadcrumbs, mainColor, textColor, subColor,
+  children, endpoint, item, setItem, defaultItem, validate, onItemSaved, menu, breadcrumbs, bgColor, color, subColor,
 }) => {
   const navigate = useNavigate();
   const classes = useSettingsStyles();
   const t = useTranslation();
-
   const { id } = useParams();
+  const [webColor, setWebColor] = React.useState(null);
 
   useEffect(()=> {
-    console.log(mainColor, textColor, subColor)
-  }, [mainColor, textColor, subColor]);
+    setWebColor(`${bgColor};${color};${subColor}`);
+  }, [bgColor, color, subColor]);
 
   useEffectAsync(async () => {
     if (!item) {
@@ -46,7 +46,10 @@ const EditItemView = ({
     const updatedItem = !id ? { 
       ...item, 
       attributes: { ...item.attributes, ['web.reportColor']: getRandomColor() }
-    } : item;
+    } : {
+      ...item,
+      attributes: { ...item.attributes, ['web.reportColor']: webColor },
+    };
     
     setItem(updatedItem);
 

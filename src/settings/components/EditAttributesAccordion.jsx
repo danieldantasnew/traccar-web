@@ -28,7 +28,7 @@ import useFeatures from '../../common/util/useFeatures';
 import useSettingsStyles from '../common/useSettingsStyles';
 import ColorPicker from '../ColorPicker.jsx';
 
-const EditAttributesAccordion = ({ attribute, attributes, setAttributes, definitions, focusAttribute, mainColor,textColor, subColor, setMainColor, setTextColor, setSubColor }) => {
+const EditAttributesAccordion = ({ attribute, attributes, setAttributes, definitions, focusAttribute, bgColor,color, subColor, setBgColor, setColor, setSubColor }) => {
   const classes = useSettingsStyles();
   const t = useTranslation();
 
@@ -156,8 +156,8 @@ const EditAttributesAccordion = ({ attribute, attributes, setAttributes, definit
         </Typography>
       </AccordionSummary>
       <AccordionDetails className={classes.details}>
-        <ColorPicker label={'Cor Principal'} value={mainColor} setValue={setMainColor} />
-        <ColorPicker label={'Cor do texto'} value={textColor} setValue={setTextColor} />
+        <ColorPicker label={'Cor Principal'} value={bgColor} setValue={setBgColor} />
+        <ColorPicker label={'Cor do texto'} value={color} setValue={setColor} />
         <ColorPicker label={'Cor Secundária'} value={subColor} setValue={setSubColor} />
         {convertToList(attributes).map(({
           key, value, type, subtype,
