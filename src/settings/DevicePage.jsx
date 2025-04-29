@@ -23,6 +23,8 @@ import useQuery from '../common/util/useQuery';
 import useSettingsStyles from './common/useSettingsStyles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import ColorsDevice from '../common/components/ColorsDevice';
+import rgbToHexadecimal from '../common/util/rgbToHexadecimal';
 
 const DevicePage = () => {
   const classes = useSettingsStyles();
@@ -37,7 +39,27 @@ const DevicePage = () => {
   const uniqueId = query.get('uniqueId');
 
   const [item, setItem] = useState(uniqueId ? { uniqueId } : null);
+  
+  const [mainColor, setMainColor] = useState('#000000');
+  const [textColor, setTextColor] = useState('#ffffff');
+  const [subColor, setSubColor] = useState('#000000');
 
+  useEffect(() => {
+    const reportColor = item?.attributes?.['web.reportColor'];
+    if (reportColor) {
+      const { bgColor, color, subColor } = ColorsDevice(reportColor);
+      const normalizeColors = {
+        bgColor: rgbToHexadecimal(bgColor),
+        color: rgbToHexadecimal(color),
+        subColor: rgbToHexadecimal(subColor),
+      }
+
+      setMainColor(normalizeColors.bgColor);
+      setTextColor(normalizeColors.color);
+      setSubColor(normalizeColors.subColor);
+    }
+  }, [item]);
+  
 
   const handleFiles = useCatch(async (files) => {
     if (files.length > 0) {
@@ -63,6 +85,9 @@ const DevicePage = () => {
       validate={validate}
       menu={<SettingsMenu />}
       breadcrumbs={['settingsTitle', 'sharedDevice']}
+      mainColor={mainColor}
+      textColor={textColor} 
+      subColor={subColor}
     >
       {item && (
         <>
@@ -175,6 +200,12 @@ const DevicePage = () => {
             attributes={item.attributes}
             setAttributes={(attributes) => setItem({ ...item, attributes })}
             definitions={{ ...commonDeviceAttributes, ...deviceAttributes }}
+            mainColor={mainColor}
+            textColor={textColor} 
+            subColor={subColor}
+            setMainColor={setMainColor}
+            setTextColor={setTextColor}
+            setSubColor={setSubColor}
           />
         </>
       )}

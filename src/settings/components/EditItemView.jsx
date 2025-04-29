@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   Container, Button, Accordion, AccordionDetails, AccordionSummary, Skeleton, Typography, TextField,
@@ -10,13 +10,17 @@ import useSettingsStyles from '../common/useSettingsStyles';
 import { getRandomColor } from '../../common/util/colors';
 
 const EditItemView = ({
-  children, endpoint, item, setItem, defaultItem, validate, onItemSaved, menu, breadcrumbs,
+  children, endpoint, item, setItem, defaultItem, validate, onItemSaved, menu, breadcrumbs, mainColor, textColor, subColor,
 }) => {
   const navigate = useNavigate();
   const classes = useSettingsStyles();
   const t = useTranslation();
 
   const { id } = useParams();
+
+  useEffect(()=> {
+    console.log(mainColor, textColor, subColor)
+  }, [mainColor, textColor, subColor]);
 
   useEffectAsync(async () => {
     if (!item) {

@@ -85,7 +85,6 @@ const CombinedReportPage = () => {
                   deviceId={item.deviceId}
                 />
               ))}
-              <MapRoutePoints positions={items} colorStatic={false} needFilterPosition={true}/>
               <MapMarkers markers={createMarkers()} />
             </MapView>
             <MapScale />

@@ -26,12 +26,12 @@ const ReportsMenu = () => {
   return (
     <>
       <List>
-        <MenuItem
+        {/* <MenuItem
           title={t('reportCombined')}
           link="/reports/combined"
           icon={<StarIcon />}
           selected={location.pathname === '/reports/combined'}
-        />
+        /> */}
         <MenuItem
           title={t('reportRoute')}
           link="/reports/route"
