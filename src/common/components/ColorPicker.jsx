@@ -1,5 +1,5 @@
 import { Box, InputLabel } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const ColorPicker = ({ label, value, setValue }) => {
     const [temporaryColor, setTemporaryColor] = useState(value);
@@ -11,6 +11,10 @@ const ColorPicker = ({ label, value, setValue }) => {
     const handleBlur = () => {
       setValue(temporaryColor);
     };
+
+  useEffect(() => {
+    setTemporaryColor(value);
+  }, [value]);
   
   return (
     <Box component={"div"} key={label+'uniq329102'}>

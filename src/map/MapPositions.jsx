@@ -93,21 +93,34 @@ const MapPositions = ({
           }
           followCursor
           arrow
+          slotProps={{
+            popper: {
+              modifiers: [
+                {
+                  name: 'offset',
+                  options: {
+                    offset: [0, 24],
+                  },
+                },
+              ],
+            },
+          }}
         >
           <div
             style={{
               display: "flex",
-              gap: ".8rem",
+              gap: ".4rem",
               alignItems: "center",
               justifyContent: "space-between",
-              padding: "2px",
+              padding: "1px",
+              maxWidth: '100%',
             }}
           >
             <DynamicIconsComponent
               key={device.name}
               category={device.category}
             />
-            <div>
+            <div className="marker-text">
               <p>{device.model}</p>
               <p>{device.name}</p>
             </div>

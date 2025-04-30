@@ -66,6 +66,7 @@ const AddressComponent = ({ position, t }) => {
               fontWeight: 400,
               whiteSpace: "nowrap",
               overflow: "hidden",
+              whiteSpace: "nowrap",
               textOverflow: "ellipsis",
             }}
           >

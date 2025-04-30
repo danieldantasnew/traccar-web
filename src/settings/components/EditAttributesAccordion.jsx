@@ -26,7 +26,7 @@ import {
 } from '../../common/util/converter';
 import useFeatures from '../../common/util/useFeatures';
 import useSettingsStyles from '../common/useSettingsStyles';
-import ColorPicker from '../ColorPicker.jsx';
+import ColorPicker from '../../common/components/ColorPicker.jsx';
 
 const EditAttributesAccordion = ({ attribute, attributes, setAttributes, definitions, focusAttribute, bgColor,color, subColor, setBgColor, setColor, setSubColor }) => {
   const classes = useSettingsStyles();
