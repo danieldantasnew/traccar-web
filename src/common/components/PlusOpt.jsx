@@ -19,6 +19,8 @@ import { useSelector } from "react-redux";
 const RotateIconButton = styled(IconButton)(({ open }) => ({
   transform: open ? "rotate(90deg)" : "rotate(0deg)",
   transition: "transform 0.3s ease",
+  width: "2.2rem",
+  height: "2.2rem",
 }));
 
 const styleRow = { display: "flex", gap: ".5rem" };
@@ -31,14 +33,6 @@ const PlusOpt = ({ device, position, t, setRemoving }) => {
     (state) => state.session.server.attributes.disableShare
   );
   const user = useSelector((state) => state.session.user);
-
-  const attributes = device.attributes || {};
-  const reportColor = attributes["web.reportColor"]
-    ? attributes["web.reportColor"].split(";")
-    : ["rgb(189, 12, 18)", "rgb(189, 12, 18)"];
-
-  const bgColor = reportColor[0];
-  const textColor = reportColor[1];
 
   const handleEventIcon = (event) => {
     setAnchorEl(event.currentTarget);
@@ -83,9 +77,13 @@ const PlusOpt = ({ device, position, t, setRemoving }) => {
         position: "absolute",
         right: ".5rem",
         bottom: "1rem",
-        backgroundColor: bgColor,
+        backgroundColor: "#bababa",
         borderRadius: "50%",
         cursor: "pointer",
+        "&:hover": {
+          backgroundColor: "#6D6D6D",
+          transition: "background-color 0.3s ease",
+        },
       }}
     >
       <RotateIconButton
@@ -93,7 +91,7 @@ const PlusOpt = ({ device, position, t, setRemoving }) => {
         onClick={handleEventIcon}
         title="Mais opções"
       >
-        <FontAwesomeIcon icon={faEllipsis} size="sm" color={`${textColor}`} />
+        <FontAwesomeIcon icon={faEllipsis} size="sm" color={`white`} />
       </RotateIconButton>
 
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>

@@ -53,7 +53,7 @@ const LinkDriver = ({ device, bgColor, color, subColor }) => {
           color: `${color}`,
           fontSize: '.85rem',
           "&:hover": {
-            color: "white",
+            color: `${color}`,
             backgroundColor: `${subColor}`,
           },
         }}

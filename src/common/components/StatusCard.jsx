@@ -123,10 +123,10 @@ const useStyles = makeStyles((theme) => ({
   closeButton: {
     color: "white",
     padding: "4px",
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: '#bababa',
     borderRadius: "50%",
-    height: "18px",
-    width: "18px",
+    height: "22px",
+    width: "22px",
     cursor: "pointer",
     boxShadow: "0 0 4px .5px rgba(255, 255, 255, 0.62)",
     ["&:hover"]: {
