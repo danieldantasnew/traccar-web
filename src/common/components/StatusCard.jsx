@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Card,
@@ -19,7 +19,7 @@ import TabsDevice from "./TabsDevice";
 import PlusOpt from "./PlusOpt";
 import { useCatch } from "../../reactHelper";
 import RemoveDialog from "./RemoveDialog";
-import { devicesActions } from '../../store';
+import { devicesActions } from "../../store";
 
 function handleWheel(e) {
   if (e.deltaY > 0) {
@@ -192,7 +192,12 @@ const IgnitionState = ({ position, classes }) => {
   );
 };
 
-const StatusCard = ({ deviceId, position, onClose }) => {
+const StatusCard = ({
+  deviceId,
+  position,
+  statusCardOpen,
+  setStatusCardOpen,
+}) => {
   const classes = useStyles();
   const t = useTranslation();
   const theme = useTheme();
@@ -202,7 +207,7 @@ const StatusCard = ({ deviceId, position, onClose }) => {
 
   const device = useSelector((state) => state.devices.items[deviceId]);
   const [removing, setRemoving] = React.useState(false);
-
+  const [zoom, setZoom] = useState(false);
   const deviceImage = device?.attributes?.deviceImage;
 
   const handleRemove = useCatch(async (removed) => {
@@ -217,6 +222,15 @@ const StatusCard = ({ deviceId, position, onClose }) => {
     setRemoving(false);
   });
 
+  const onClose = () => {
+    setZoom(false);
+    setAxisY(0);
+  };
+
+  useEffect(() => {
+    if (device) setZoom(true);
+  }, [device]);
+
   return (
     <>
       <Box
@@ -225,57 +239,55 @@ const StatusCard = ({ deviceId, position, onClose }) => {
         onWheel={desktop ? handleWheel : null}
         onTouchMove={(e) => handleTouch(e, axisY, setAxisY)}
       >
-        {device && (
-          <Zoom in>
-            <Card elevation={3} className={classes.card}>
-              <Box className={classes.contentCardTop}>
-                <CardMedia
-                  className={classes.media}
-                  image={
-                    deviceImage
-                      ? `/api/media/${device.uniqueId}/${deviceImage}`
-                      : "../../../withoutPhoto.png"
-                  }
-                >
-                  <Box component={"div"} className={classes.infoTop}>
-                    {position ? (
-                      <IgnitionState position={position} classes={classes} />
-                    ) : (
-                      <span></span>
-                    )}
-                    <Tooltip
-                      title="Fechar"
-                      arrow
-                      placement="right"
-                      onClick={onClose}
-                      onTouchStart={onClose}
-                      className={classes.closeButton}
-                    >
-                      <FontAwesomeIcon icon={faXmark} />
-                    </Tooltip>
-                  </Box>
-                  <PlusOpt
-                    device={device}
-                    position={position}
-                    t={t}
-                    setRemoving={setRemoving}
-                  />
-                </CardMedia>
+        <Zoom in={zoom} onExited={() => setStatusCardOpen(false)}>
+          <Card elevation={3} className={classes.card}>
+            <Box className={classes.contentCardTop}>
+              <CardMedia
+                className={classes.media}
+                image={
+                  deviceImage
+                    ? `/api/media/${device.uniqueId}/${deviceImage}`
+                    : "../../../withoutPhoto.png"
+                }
+              >
+                <Box component={"div"} className={classes.infoTop}>
+                  {position ? (
+                    <IgnitionState position={position} classes={classes} />
+                  ) : (
+                    <span></span>
+                  )}
+                  <Tooltip
+                    title="Fechar"
+                    arrow
+                    placement="right"
+                    onClick={onClose}
+                    onTouchStart={onClose}
+                    className={classes.closeButton}
+                  >
+                    <FontAwesomeIcon icon={faXmark} />
+                  </Tooltip>
+                </Box>
+                <PlusOpt
+                  device={device}
+                  position={position}
+                  t={t}
+                  setRemoving={setRemoving}
+                />
+              </CardMedia>
 
-                <InfoCar device={device} classes={classes} />
-                <TabsDevice device={device} position={position} t={t} />
-              </Box>
-            </Card>
-          </Zoom>
-        )}
+              <InfoCar device={device} classes={classes} />
+              <TabsDevice device={device} position={position} t={t} />
+            </Box>
+          </Card>
+        </Zoom>
       </Box>
       {device && (
         <RemoveDialog
-        open={removing}
-        endpoint="devices"
-        itemId={device.id}
-        onResult={(removed) => handleRemove(removed)}
-      />
+          open={removing}
+          endpoint="devices"
+          itemId={device.id}
+          onResult={(removed) => handleRemove(removed)}
+        />
       )}
     </>
   );

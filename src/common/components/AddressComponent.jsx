@@ -25,7 +25,7 @@ const handleCopyAddress = (copiedAddress, setAlertCopied, timeOutAlert) => {
   }
 };
 
-const AddressComponent = ({position, t}) => {
+const AddressComponent = ({ position, t }) => {
   const timeOutAlert = useRef();
   const [copiedAddress, setAddress] = useState(null);
   const [alertCopied, setAlertCopied] = useState(false);
@@ -47,12 +47,28 @@ const AddressComponent = ({position, t}) => {
           Endereço copiado para área de transferência
         </Alert>
       </Snackbar>
-      <h4 style={{fontSize: '.75rem', fontWeight: 500, margin: 0}}>Endereço atual:</h4>
+      <h4 style={{ fontSize: ".75rem", fontWeight: 500, margin: 0 }}>
+        Endereço atual:
+      </h4>
       {position && (
         <Box
-          style={{display: 'flex', alignItems: 'center', justifyContent: "space-between" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
         >
-          <Typography style={{ maxWidth: "360px", margin: 0, fontSize: '.95rem', fontWeight: 400 }}>
+          <Typography
+            style={{
+              maxWidth: "340px",
+              margin: 0,
+              fontSize: ".95rem",
+              fontWeight: 400,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
             <AddressValue
               latitude={position.latitude}
               longitude={position.longitude}
@@ -60,9 +76,15 @@ const AddressComponent = ({position, t}) => {
               setStateAddress={setAddress}
             />
           </Typography>
-          <Box style={{display: 'flex', alignItems: 'center', justifyContent: "flex-end" }}>
+          <Box
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+            }}
+          >
             <Tooltip
-            arrow
+              arrow
               title={"Copiar endereço"}
               onClick={() =>
                 handleCopyAddress(copiedAddress, setAlertCopied, timeOutAlert)

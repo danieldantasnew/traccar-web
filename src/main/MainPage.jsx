@@ -231,7 +231,8 @@ const MainPage = () => {
         <StatusCard
           deviceId={selectedDeviceId}
           position={selectedPosition}
-          onClose={() => setStatusCardOpen(false)}
+          statusCardOpen={statusCardOpen}
+          setStatusCardOpen={setStatusCardOpen}
           desktopPadding={theme.dimensions.drawerWidthDesktop}
         />
       )}
