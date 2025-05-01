@@ -24,19 +24,26 @@ import MapRoutePoints from "../map/MapRoutePoints.js";
 import ColorsDevice from "../common/components/ColorsDevice.js";
 import MapRoutePath from "../map/MapRoutePath.js";
 
-
-const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCardOpen, setStatusCardOpen, setLoading }) => {
+const MainMap = ({
+  filteredPositions,
+  selectedPosition,
+  onEventsClick,
+  statusCardOpen,
+  setStatusCardOpen,
+  setLoading,
+  firstLoadDevice,
+}) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const desktop = useMediaQuery(theme.breakpoints.up("md"));
   const eventsAvailable = useSelector((state) => !!state.events.items.length);
   const features = useFeatures();
   const devices = useSelector((state) => state.devices.items);
-  const [stops, setStops] = useState([])
+  const [stops, setStops] = useState([]);
   const [positions, setPositions] = useState([]);
-  
+
   const selectedId = useSelector((state) => state.devices.selectedId);
- 
+
   const groupIds = useSelector((state) => state.reports.groupIds);
   const from = dayjs().startOf("day");
   const to = dayjs().endOf("day");
@@ -50,47 +57,49 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
 
   const createMarkersStops = () => {
     return stops.map((stop, index) => {
-      const device = devices[stop.deviceId] || {}; 
-      const attributes = device.attributes || {};  
-      const {bgColor, subColor, color} = ColorsDevice(attributes['web.reportColor']);
+      const device = devices[stop.deviceId] || {};
+      const attributes = device.attributes || {};
+      const { bgColor, subColor, color } = ColorsDevice(
+        attributes["web.reportColor"]
+      );
 
-      return({
+      return {
         latitude: stop.latitude,
         longitude: stop.longitude,
-        stopped: `${index+1}`,
+        stopped: `${index + 1}`,
         bgColor,
         color,
-        subColor
-      })
-    })
-  }
+        subColor,
+      };
+    });
+  };
 
   const handlePositionsAndStops = useCatch(async ({ deviceId, from, to }) => {
     setLoading(true);
     const query = new URLSearchParams({ deviceId, from, to });
-  
-    const fetchPositions = fetch(`/api/positions?${query.toString()}`)
-      .then(async response => {
+
+    const fetchPositions = fetch(`/api/positions?${query.toString()}`).then(
+      async (response) => {
         if (response.ok) {
           const positions = await response.json();
           setPositions(positions);
         } else {
           throw Error(await response.text());
         }
-      });
-  
+      }
+    );
+
     const fetchStops = fetch(`/api/reports/stops?${query.toString()}`, {
-      headers: { Accept: 'application/json' },
-    })
-      .then(async response => {
-        if (response.ok) {
-          const json = await response.json();
-          setStops(json);
-        } else {
-          throw Error(await response.text());
-        }
-      });
-  
+      headers: { Accept: "application/json" },
+    }).then(async (response) => {
+      if (response.ok) {
+        const json = await response.json();
+        setStops(json);
+      } else {
+        throw Error(await response.text());
+      }
+    });
+
     await Promise.all([fetchPositions, fetchStops]);
     setLoading(false);
   });
@@ -125,11 +134,21 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
           setPositions={setPositions}
           MainMap={true}
         />
-        <MapRoutePoints positions={positions} colorStatic={true} needFilterPosition={true}/>
-        <MapRoutePath positions={positions}  staticColor={true}/>
-        {stops && <MapMarkersStops markers={createMarkersStops()} />}
+        {firstLoadDevice ? (
+          <></>
+        ) : (
+          <>
+            <MapRoutePoints
+              positions={positions}
+              colorStatic={true}
+              needFilterPosition={true}
+            />
+            <MapRoutePath positions={positions} staticColor={true} />
+            {stops && <MapMarkersStops markers={createMarkersStops()} />}
+          </>
+        )}
         <MapDefaultCamera />
-        {statusCardOpen && (<MapSelectedDevice />)}
+        {statusCardOpen && <MapSelectedDevice />}
         <PoiMap />
       </MapView>
       <MapScale />

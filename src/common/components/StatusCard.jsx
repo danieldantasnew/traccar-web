@@ -9,6 +9,7 @@ import {
   useTheme,
   Box,
   Zoom,
+  Skeleton,
 } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import { useTranslation } from "./LocalizationProvider";
@@ -20,6 +21,7 @@ import PlusOpt from "./PlusOpt";
 import { useCatch } from "../../reactHelper";
 import RemoveDialog from "./RemoveDialog";
 import { devicesActions } from "../../store";
+import SkeletonStatusCard from "./SkeletonStatusCard";
 
 function handleWheel(e) {
   if (e.deltaY > 0) {
@@ -123,7 +125,7 @@ const useStyles = makeStyles((theme) => ({
   closeButton: {
     color: "white",
     padding: "4px",
-    backgroundColor: '#bababa',
+    backgroundColor: "#bababa",
     borderRadius: "50%",
     height: "22px",
     width: "22px",
@@ -196,7 +198,7 @@ const StatusCard = ({
   deviceId,
   position,
   setStatusCardOpen,
-  loading,
+  firstLoadDevice,
 }) => {
   const classes = useStyles();
   const t = useTranslation();
@@ -241,43 +243,47 @@ const StatusCard = ({
       >
         <Zoom in={zoom} onExited={() => setStatusCardOpen(false)}>
           <Card elevation={3} className={classes.card}>
-            <Box className={classes.contentCardTop}>
-              <CardMedia
-                className={classes.media}
-                image={
-                  deviceImage
-                    ? `/api/media/${device.uniqueId}/${deviceImage}`
-                    : "../../../withoutPhoto.png"
-                }
-              >
-                <Box component={"div"} className={classes.infoTop}>
-                  {position ? (
-                    <IgnitionState position={position} classes={classes} />
-                  ) : (
-                    <span></span>
-                  )}
-                  <Tooltip
-                    title="Fechar"
-                    arrow
-                    placement="right"
-                    onClick={onClose}
-                    onTouchStart={onClose}
-                    className={classes.closeButton}
-                  >
-                    <FontAwesomeIcon icon={faXmark} />
-                  </Tooltip>
-                </Box>
-                <PlusOpt
-                  device={device}
-                  position={position}
-                  t={t}
-                  setRemoving={setRemoving}
-                />
-              </CardMedia>
+            {firstLoadDevice ? (
+              <SkeletonStatusCard classes={classes} />
+            ) : (
+              <Box className={classes.contentCardTop}>
+                <CardMedia
+                  className={classes.media}
+                  image={
+                    deviceImage
+                      ? `/api/media/${device.uniqueId}/${deviceImage}`
+                      : "../../../withoutPhoto.png"
+                  }
+                >
+                  <Box component={"div"} className={classes.infoTop}>
+                    {position ? (
+                      <IgnitionState position={position} classes={classes} />
+                    ) : (
+                      <span></span>
+                    )}
+                    <Tooltip
+                      title="Fechar"
+                      arrow
+                      placement="right"
+                      onClick={onClose}
+                      onTouchStart={onClose}
+                      className={classes.closeButton}
+                    >
+                      <FontAwesomeIcon icon={faXmark} />
+                    </Tooltip>
+                  </Box>
+                  <PlusOpt
+                    device={device}
+                    position={position}
+                    t={t}
+                    setRemoving={setRemoving}
+                  />
+                </CardMedia>
 
-              <InfoCar device={device} classes={classes} />
-              <TabsDevice device={device} position={position} t={t} />
-            </Box>
+                <InfoCar device={device} classes={classes} />
+                <TabsDevice device={device} position={position} t={t} />
+              </Box>
+            )}
           </Card>
         </Zoom>
       </Box>

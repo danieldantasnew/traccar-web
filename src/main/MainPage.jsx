@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { Box, IconButton, Paper, Slide, Tooltip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -124,7 +124,8 @@ const MainPage = () => {
   const { devicesOpen, setDevicesOpen, heightMenuNavMobile } = useDevices();
   const [statusCardOpen, setStatusCardOpen] = useState(false);
   const [eventsOpen, setEventsOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const[firstLoadDevice, setFirstLoadDevice] = useState(true)
 
   const onEventsClick = useCallback(() => setEventsOpen(true), [setEventsOpen]);
 
@@ -132,7 +133,16 @@ const MainPage = () => {
     if (!desktop && mapOnSelect && selectedDeviceId) {
       setDevicesOpen(false);
     }
+    if (selectedDeviceId) setFirstLoadDevice(true);
   }, [desktop, mapOnSelect, selectedDeviceId]);
+
+  
+  useEffect(() => {
+    if (!loading) {
+      setFirstLoadDevice(false);
+    }
+  }, [loading, setFirstLoadDevice, setLoading]);
+  
 
   useFilter(
     keyword,
@@ -153,6 +163,7 @@ const MainPage = () => {
         setStatusCardOpen={setStatusCardOpen}
         statusCardOpen={statusCardOpen}
         setLoading={setLoading}
+        firstLoadDevice={firstLoadDevice}
       />
       <Slide direction="right" in={devicesOpen} timeout={200}>
         <Paper
@@ -236,7 +247,7 @@ const MainPage = () => {
           statusCardOpen={statusCardOpen}
           setStatusCardOpen={setStatusCardOpen}
           desktopPadding={theme.dimensions.drawerWidthDesktop}
-          loading={loading}
+          firstLoadDevice={firstLoadDevice}
         />
       )}
       {selectedDeviceId && (<ControllersInMap position={selectedPosition}/>)}
