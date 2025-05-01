@@ -25,7 +25,7 @@ import ColorsDevice from "../common/components/ColorsDevice.js";
 import MapRoutePath from "../map/MapRoutePath.js";
 
 
-const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCardOpen, setStatusCardOpen }) => {
+const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCardOpen, setStatusCardOpen, setLoading }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const desktop = useMediaQuery(theme.breakpoints.up("md"));
@@ -35,7 +35,6 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
   const [stops, setStops] = useState([])
   const [positions, setPositions] = useState([]);
   
-  const [loading, setLoading] = useState(false);
   const selectedId = useSelector((state) => state.devices.selectedId);
  
   const groupIds = useSelector((state) => state.reports.groupIds);
@@ -66,58 +65,39 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, statusCar
     })
   }
 
-  const handleSubmit = useCatch(async ({ deviceId, from, to }) => {
+  const handlePositionsAndStops = useCatch(async ({ deviceId, from, to }) => {
     setLoading(true);
     const query = new URLSearchParams({ deviceId, from, to });
-    try {
-      const response = await fetch(`/api/positions?${query.toString()}`);
-      if (response.ok) {
-        const positions = await response.json();
-        setPositions(positions);
-      } else {
-        throw Error(await response.text());
-      }
-    } finally {
-      setLoading(false);
-    }
-  });
-
-    const handleStops = useCatch(async ({ deviceId, from, to, type }) => {
-      const query = new URLSearchParams({ deviceId, from, to });
-      if (type === 'export') {
-        window.location.assign(`/api/reports/stops/xlsx?${query.toString()}`);
-      } else if (type === 'mail') {
-        const response = await fetch(`/api/reports/stops/mail?${query.toString()}`);
-        if (!response.ok) {
+  
+    const fetchPositions = fetch(`/api/positions?${query.toString()}`)
+      .then(async response => {
+        if (response.ok) {
+          const positions = await response.json();
+          setPositions(positions);
+        } else {
           throw Error(await response.text());
         }
-      } else {
-        setLoading(true);
-        try {
-          const response = await fetch(`/api/reports/stops?${query.toString()}`, {
-            headers: { Accept: 'application/json' },
-          });
-          if (response.ok) {
-            const json = await response.json()
-            setStops(json);
-          } else {
-            throw Error(await response.text());
-          }
-        } finally {
-          setLoading(false);
+      });
+  
+    const fetchStops = fetch(`/api/reports/stops?${query.toString()}`, {
+      headers: { Accept: 'application/json' },
+    })
+      .then(async response => {
+        if (response.ok) {
+          const json = await response.json();
+          setStops(json);
+        } else {
+          throw Error(await response.text());
         }
-      }
-    });
+      });
+  
+    await Promise.all([fetchPositions, fetchStops]);
+    setLoading(false);
+  });
 
   useEffect(() => {
     if (devices[selectedId] && selectedId) {
-      handleSubmit({
-        deviceId: selectedId,
-        groupIds,
-        from: from.toISOString(),
-        to: to.toISOString(),
-      });
-      handleStops({
+      handlePositionsAndStops({
         deviceId: selectedId,
         groupIds,
         from: from.toISOString(),

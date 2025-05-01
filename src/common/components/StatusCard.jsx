@@ -195,8 +195,8 @@ const IgnitionState = ({ position, classes }) => {
 const StatusCard = ({
   deviceId,
   position,
-  statusCardOpen,
   setStatusCardOpen,
+  loading,
 }) => {
   const classes = useStyles();
   const t = useTranslation();

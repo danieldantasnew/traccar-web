@@ -124,6 +124,7 @@ const MainPage = () => {
   const { devicesOpen, setDevicesOpen, heightMenuNavMobile } = useDevices();
   const [statusCardOpen, setStatusCardOpen] = useState(false);
   const [eventsOpen, setEventsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const onEventsClick = useCallback(() => setEventsOpen(true), [setEventsOpen]);
 
@@ -151,6 +152,7 @@ const MainPage = () => {
         onEventsClick={onEventsClick}
         setStatusCardOpen={setStatusCardOpen}
         statusCardOpen={statusCardOpen}
+        setLoading={setLoading}
       />
       <Slide direction="right" in={devicesOpen} timeout={200}>
         <Paper
@@ -234,6 +236,7 @@ const MainPage = () => {
           statusCardOpen={statusCardOpen}
           setStatusCardOpen={setStatusCardOpen}
           desktopPadding={theme.dimensions.drawerWidthDesktop}
+          loading={loading}
         />
       )}
       {selectedDeviceId && (<ControllersInMap position={selectedPosition}/>)}

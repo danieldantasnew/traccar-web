@@ -1,6 +1,5 @@
 import * as React from "react";
-import { Menu, MenuItem, IconButton, Box, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Menu, MenuItem, Box, Typography } from "@mui/material";
 import {
   faClockRotateLeft,
   faEarthAmericas,
@@ -16,19 +15,13 @@ import { useNavigate } from "react-router-dom";
 import { useCatchCallback } from "../../reactHelper";
 import { useSelector } from "react-redux";
 
-const RotateIconButton = styled(IconButton)(({ open }) => ({
-  transform: open ? "rotate(90deg)" : "rotate(0deg)",
-  transition: "transform 0.3s ease",
-  width: "2.2rem",
-  height: "2.2rem",
-}));
-
 const styleRow = { display: "flex", gap: ".5rem" };
 
 const PlusOpt = ({ device, position, t, setRemoving }) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const colorForAll = "#878787";
   const shareDisabled = useSelector(
     (state) => state.session.server.attributes.disableShare
   );
@@ -77,29 +70,48 @@ const PlusOpt = ({ device, position, t, setRemoving }) => {
         position: "absolute",
         right: ".5rem",
         bottom: "1rem",
-        backgroundColor: "#bababa",
-        borderRadius: "50%",
         cursor: "pointer",
-        "&:hover": {
-          backgroundColor: "#6D6D6D",
-          transition: "background-color 0.3s ease",
-        },
+        borderRadius: ".4rem",
+        overflow: "hidden",
+        boxShadow: "0 0 .5rem 0 rgba(0,0,0,.2)",
       }}
     >
-      <RotateIconButton
-        open={open}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: ".2rem",
+          backgroundColor: "white",
+          "&:hover": { backgroundColor: "#E0E0E0", transition: "background-color .3s" },
+        }}
         onClick={handleEventIcon}
-        title="Mais opções"
+        open={open}
       >
-        <FontAwesomeIcon icon={faEllipsis} size="sm" color={`white`} />
-      </RotateIconButton>
+        <FontAwesomeIcon
+          icon={faEllipsis}
+          size="xl"
+          color={`${colorForAll}`}
+          style={{ padding: ".4rem" }}
+        />
+        <Box
+          component={"div"}
+          sx={{
+            backgroundColor: `${colorForAll}`,
+            padding: ".4rem",
+            color: "white",
+            fontWeight: "500",
+          }}
+        >
+          Opções
+        </Box>
+      </Box>
 
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
         <MenuItem
           sx={styleRow}
           onClick={() => navigate(`/settings/device/${device.id}`)}
         >
-          <FontAwesomeIcon icon={faPen} size="lg" color="#6D6D6D" />
+          <FontAwesomeIcon icon={faPen} size="lg" color={`${colorForAll}`} />
           <Typography>Editar veículo</Typography>
         </MenuItem>
         {position && (
@@ -112,7 +124,7 @@ const PlusOpt = ({ device, position, t, setRemoving }) => {
                 <FontAwesomeIcon
                   icon={faShareNodes}
                   size="lg"
-                  color="#6D6D6D"
+                  color={`${colorForAll}`}
                 />
                 <Typography>Compartilhar localização</Typography>
               </MenuItem>
@@ -121,7 +133,7 @@ const PlusOpt = ({ device, position, t, setRemoving }) => {
             <MenuItem sx={styleRow}>
               <DynamicIconsComponent
                 category={"bellRing"}
-                style={{ width: "20px", color: "#6D6D6D" }}
+                style={{ width: "20px", color: `${colorForAll}` }}
               />
               <Typography>Avise-me quando ligar</Typography>
             </MenuItem>
@@ -130,7 +142,7 @@ const PlusOpt = ({ device, position, t, setRemoving }) => {
               <FontAwesomeIcon
                 icon={faClockRotateLeft}
                 size="lg"
-                color="#6D6D6D"
+                color={`${colorForAll}`}
               />
               <Typography>Replay</Typography>
             </MenuItem>
@@ -144,7 +156,7 @@ const PlusOpt = ({ device, position, t, setRemoving }) => {
               <FontAwesomeIcon
                 icon={faMapLocationDot}
                 size="lg"
-                color="#6D6D6D"
+                color={`${colorForAll}`}
               />
               <Typography>Ver no Google Maps</Typography>
             </MenuItem>
@@ -153,7 +165,7 @@ const PlusOpt = ({ device, position, t, setRemoving }) => {
               <FontAwesomeIcon
                 icon={faEarthAmericas}
                 size="lg"
-                color="#6D6D6D"
+                color={`${colorForAll}`}
               />
               <Typography>Criar cerca</Typography>
             </MenuItem>
