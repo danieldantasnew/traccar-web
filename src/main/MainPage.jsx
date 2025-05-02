@@ -143,7 +143,6 @@ const MainPage = () => {
     }
   }, [loading, setFirstLoadDevice, setLoading]);
   
-
   useFilter(
     keyword,
     filter,

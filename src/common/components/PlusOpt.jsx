@@ -89,9 +89,9 @@ const PlusOpt = ({ device, position, t, setRemoving }) => {
       >
         <FontAwesomeIcon
           icon={faEllipsis}
-          size="xl"
+          size="lg"
           color={`${colorForAll}`}
-          style={{ padding: ".4rem" }}
+          style={{ padding: "0 .4rem" }}
         />
         <Box
           component={"div"}
@@ -100,6 +100,8 @@ const PlusOpt = ({ device, position, t, setRemoving }) => {
             padding: ".4rem",
             color: "white",
             fontWeight: "500",
+            fontSize: ".85rem",
+            height: "100% !important",
           }}
         >
           Opções

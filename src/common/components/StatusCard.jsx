@@ -9,7 +9,6 @@ import {
   useTheme,
   Box,
   Zoom,
-  Skeleton,
 } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import { useTranslation } from "./LocalizationProvider";
@@ -244,7 +243,7 @@ const StatusCard = ({
         <Zoom in={zoom} onExited={() => setStatusCardOpen(false)}>
           <Card elevation={3} className={classes.card}>
             {firstLoadDevice ? (
-              <SkeletonStatusCard classes={classes} />
+              <SkeletonStatusCard classes={classes} onClose={onClose}/>
             ) : (
               <Box className={classes.contentCardTop}>
                 <CardMedia

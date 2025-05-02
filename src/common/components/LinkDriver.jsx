@@ -34,7 +34,7 @@ const LinkDriver = ({ device, bgColor, color, subColor }) => {
     <Box sx={box}>
       <Box sx={boxInfo1}>
         <Box style={icon}>
-          <FontAwesomeIcon icon={faUserSlash} color="#676767"/>
+          <FontAwesomeIcon icon={faUserSlash}  color="#676767"/>
         </Box>
         <Box sx={boxInfo2}>
             <Typography component={"span"} color="#676767">
