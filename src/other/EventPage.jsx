@@ -12,7 +12,7 @@ import MapView from '../map/core/MapView';
 import MapCamera from '../map/MapCamera';
 import MapPositions from '../map/MapPositions.jsx';
 import MapGeofence from '../map/MapGeofence';
-import StatusCard from '../common/components/StatusCard';
+import StatusCard from '../common/components/StatusCard.jsx';
 import { formatNotificationTitle } from '../common/util/formatter';
 import MapScale from '../map/MapScale';
 

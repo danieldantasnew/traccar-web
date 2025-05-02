@@ -1,11 +1,11 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Box, IconButton, Paper, Slide, Tooltip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSelector } from "react-redux";
 import DeviceList from "./DeviceList";
-import StatusCard from "../common/components/StatusCard";
+import StatusCard from "../common/components/StatusCard.jsx";
 import usePersistedState from "../common/util/usePersistedState";
 import EventsDrawer from "./EventsDrawer";
 import useFilter from "./useFilter";
@@ -18,7 +18,7 @@ import { useDevices } from "../Context/AllDevices.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import ControllersInMap from "../common/components/ControllersInMap.jsx";
-import StopsModal from "../common/components/StopsModal.jsx";
+import StopCard from "../common/components/StopCard.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -127,7 +127,7 @@ const MainPage = () => {
   const [loading, setLoading] = useState(true);
   const [firstLoadDevice, setFirstLoadDevice] = useState(true)
 
-  const [stopModal, setStopModal] = useState(null);
+  const [stopCard, setStopCard] = useState(null);
 
   const onEventsClick = useCallback(() => setEventsOpen(true), [setEventsOpen]);
 
@@ -165,7 +165,7 @@ const MainPage = () => {
         statusCardOpen={statusCardOpen}
         setLoading={setLoading}
         firstLoadDevice={firstLoadDevice}
-        setStopModal={setStopModal}
+        setStopCard={setStopCard}
       />
       <Slide direction="right" in={devicesOpen} timeout={200}>
         <Paper
@@ -250,10 +250,11 @@ const MainPage = () => {
           setStatusCardOpen={setStatusCardOpen}
           desktopPadding={theme.dimensions.drawerWidthDesktop}
           firstLoadDevice={firstLoadDevice}
+          setStopCard={setStopCard}
         />
       )}
       {selectedDeviceId && (<ControllersInMap position={selectedPosition}/>)}
-      {stopModal && (<StopsModal stop={stopModal} setStopModal={setStopModal} />)}
+      {stopCard && (<StopCard stop={stopCard} setStopCard={setStopCard} setStatusCardOpen={setStatusCardOpen} />)}
     </div>
   );
 };

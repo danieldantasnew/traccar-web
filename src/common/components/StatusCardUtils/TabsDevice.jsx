@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AddressComponent from "./AddressComponent";
+import AddressComponent from "../AddressComponent";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,7 +11,7 @@ import {
 import StatusCardDetails from "./StatusCardDetails";
 import { Box, Slide, Tab, Typography } from "@mui/material";
 import LinkDriver from "./LinkDriver";
-import ColorsDevice from "./ColorsDevice";
+import ColorsDevice from "../ColorsDevice";
 
 const TabsDevice = ({ device, position, t }) => {
   if (!device) return null;

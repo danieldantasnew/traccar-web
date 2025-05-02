@@ -157,7 +157,7 @@ const EditAttributesAccordion = ({ attribute, attributes, setAttributes, definit
       </AccordionSummary>
       <AccordionDetails className={classes.details}>
         <ColorPicker label={'Cor Principal'} value={bgColor} setValue={setBgColor} />
-        <ColorPicker label={'Cor do texto'} value={color} setValue={setColor} />
+        <ColorPicker label={'Cor do texto (reflete nos ícones)'} value={color} setValue={setColor} />
         <ColorPicker label={'Cor Secundária'} value={subColor} setValue={setSubColor} />
         {convertToList(attributes).map(({
           key, value, type, subtype,

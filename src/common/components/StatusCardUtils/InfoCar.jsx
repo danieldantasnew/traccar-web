@@ -1,7 +1,7 @@
 import { Avatar, Box, ListItemAvatar, Typography } from "@mui/material";
-import { formatTime } from "../util/formatter";
-import { DynamicIconsComponent } from "./DynamicIcons";
-import ColorsDevice from "./ColorsDevice";
+import { formatTime } from "../../util/formatter";
+import { DynamicIconsComponent } from "../DynamicIcons";
+import ColorsDevice from "../ColorsDevice";
 
 const infoCar = {
     display: "flex",

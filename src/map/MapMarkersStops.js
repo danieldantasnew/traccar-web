@@ -3,16 +3,16 @@ import { map } from "./core/MapView";
 import { findFonts } from "./core/mapUtil";
 import { useSelector } from "react-redux";
 
-const MapMarkers = ({ markers, setStopModal }) => {
+const MapMarkers = ({ markers, setStopCard }) => {
   const devices = useSelector((state) => state.devices.items);
   const selectedId = useSelector((state) => state.devices.selectedId);
   const id = `stops-layer-${selectedId || "default"}`;
 
   function handleClick(e) {
-    setStopModal(null);
+    setStopCard(null);
     const feature = e.features && e.features[0];
     if (feature) {
-      setStopModal(feature.properties);
+      setStopCard(feature.properties);
     }
   }
 
@@ -101,6 +101,8 @@ const MapMarkers = ({ markers, setStopModal }) => {
           coordinates: [longitude, latitude],
         },
         properties: {
+          latitude,
+          longitude,
           stopped,
           bgColor,
           color,

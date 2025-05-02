@@ -10,9 +10,9 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { DynamicIconsComponent } from "./DynamicIcons";
+import { DynamicIconsComponent } from "../DynamicIcons";
 import { useNavigate } from "react-router-dom";
-import { useCatchCallback } from "../../reactHelper";
+import { useCatchCallback } from "../../../reactHelper";
 import { useSelector } from "react-redux";
 
 const styleRow = { display: "flex", gap: ".5rem" };

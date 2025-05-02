@@ -14,13 +14,13 @@ import makeStyles from "@mui/styles/makeStyles";
 import { useTranslation } from "./LocalizationProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPowerOff, faXmark } from "@fortawesome/free-solid-svg-icons";
-import InfoCar from "./InfoCar";
-import TabsDevice from "./TabsDevice";
-import PlusOpt from "./PlusOpt";
+import InfoCar from "./StatusCardUtils/InfoCar";
+import TabsDevice from "./StatusCardUtils/TabsDevice";
+import PlusOpt from "./StatusCardUtils/PlusOpt";
 import { useCatch } from "../../reactHelper";
 import RemoveDialog from "./RemoveDialog";
 import { devicesActions } from "../../store";
-import SkeletonStatusCard from "./SkeletonStatusCard";
+import SkeletonStatusCard from "./StatusCardUtils/SkeletonStatusCard";
 
 function handleWheel(e) {
   if (e.deltaY > 0) {
@@ -198,6 +198,7 @@ const StatusCard = ({
   position,
   setStatusCardOpen,
   firstLoadDevice,
+  setStopCard,
 }) => {
   const classes = useStyles();
   const t = useTranslation();
@@ -229,6 +230,7 @@ const StatusCard = ({
   };
 
   useEffect(() => {
+    setStopCard(null);
     if (device) setZoom(true);
   }, [device]);
 

@@ -1,13 +1,13 @@
 import React from "react";
 import makeStyles from "@mui/styles/makeStyles";
-import usePositionAttributes from "../attributes/usePositionAttributes";
-import { useAttributePreference } from "../util/preferences";
-import PositionValue from "./PositionValue";
+import usePositionAttributes from "../../attributes/usePositionAttributes";
+import { useAttributePreference } from "../../util/preferences";
+import PositionValue from "../PositionValue";
 import {
   Box,
   Typography,
 } from "@mui/material";
-import { useTranslation } from "./LocalizationProvider";
+import { useTranslation } from "../LocalizationProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBatteryFull,

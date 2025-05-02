@@ -25,7 +25,7 @@ const handleCopyAddress = (copiedAddress, setAlertCopied, timeOutAlert) => {
   }
 };
 
-const AddressComponent = ({ position, t }) => {
+const AddressComponent = ({ position, t, labelAdress="Endereço atual" }) => {
   const timeOutAlert = useRef();
   const [copiedAddress, setAddress] = useState(null);
   const [alertCopied, setAlertCopied] = useState(false);
@@ -48,7 +48,7 @@ const AddressComponent = ({ position, t }) => {
         </Alert>
       </Snackbar>
       <h4 style={{ fontSize: ".75rem", fontWeight: 500, margin: 0 }}>
-        Endereço atual:
+        {labelAdress}
       </h4>
       {position && (
         <Box
