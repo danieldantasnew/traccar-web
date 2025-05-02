@@ -1,12 +1,20 @@
-import { useId, useEffect } from "react";
+import { useEffect } from "react";
 import { map } from "./core/MapView";
 import { findFonts } from "./core/mapUtil";
 import { useSelector } from "react-redux";
 
-const MapMarkers = ({ markers }) => {
-  const id = useId();
+const MapMarkers = ({ markers, setStopModal }) => {
   const devices = useSelector((state) => state.devices.items);
   const selectedId = useSelector((state) => state.devices.selectedId);
+  const id = `stops-layer-${selectedId || "default"}`;
+
+  function handleClick(e) {
+    setStopModal(null);
+    const feature = e.features && e.features[0];
+    if (feature) {
+      setStopModal(feature.properties);
+    }
+  }
 
   useEffect(() => {
     if (!map || !devices[selectedId]) return;
@@ -21,7 +29,7 @@ const MapMarkers = ({ markers }) => {
           type: "FeatureCollection",
           features: [],
         },
-      }); 
+      });
     }
 
     if (!map.getLayer(`${id}-circle`)) {
@@ -31,7 +39,7 @@ const MapMarkers = ({ markers }) => {
         source: id,
         paint: {
           "circle-color": ["get", "bgColor"],
-          "circle-radius": 18,
+          "circle-radius": 14,
           "circle-opacity": 1,
           "circle-stroke-width": 1,
           "circle-stroke-color": ["get", "subColor"],
@@ -46,19 +54,22 @@ const MapMarkers = ({ markers }) => {
         source: id,
         layout: {
           "text-field": "{stopped}",
-          "text-size": 18,
+          "text-size": 16,
           "text-font": findFonts(map),
           "text-allow-overlap": true,
           "text-anchor": "center",
         },
-        paint: { 
+        paint: {
           "text-halo-width": 2,
           "text-color": ["get", "color"],
         },
       });
     }
 
+    map.on("click", `${id}-circle`, handleClick);
+
     return () => {
+      map.off("click", `${id}-circle`, handleClick);
       if (map.getLayer(id)) map.removeLayer(id);
       if (map.getLayer(`${id}-circle`)) map.removeLayer(`${id}-circle`);
       if (map.getSource(id)) map.removeSource(id);
@@ -68,19 +79,42 @@ const MapMarkers = ({ markers }) => {
   useEffect(() => {
     if (!map || !map.getSource(id)) return;
 
-    const features = markers.map(({ latitude, longitude, stopped, bgColor, color, subColor }) => ({
-      type: "Feature",
-      geometry: {
-        type: "Point",
-        coordinates: [longitude, latitude],
-      },
-      properties: {
+    const features = markers.map(
+      ({
+        latitude,
+        longitude,
         stopped,
         bgColor,
         color,
-        subColor
-      },
-    }));
+        subColor,
+        address,
+        averageSpeed,
+        deviceId,
+        deviceName,
+        duration,
+        endTime,
+        startTime,
+      }) => ({
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [longitude, latitude],
+        },
+        properties: {
+          stopped,
+          bgColor,
+          color,
+          subColor,
+          address,
+          averageSpeed,
+          deviceId,
+          deviceName,
+          duration,
+          endTime,
+          startTime,
+        },
+      })
+    );
 
     map.getSource(id)?.setData({
       type: "FeatureCollection",
@@ -91,7 +125,6 @@ const MapMarkers = ({ markers }) => {
       if (map.getLayer(id)) map.moveLayer(id);
       if (map.getLayer(`${id}-circle`)) map.moveLayer(`${id}-circle`, id);
     });
-    
   }, [markers, map]);
 
   return null;

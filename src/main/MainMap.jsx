@@ -18,7 +18,7 @@ import MapScale from "../map/MapScale";
 import MapNotification from "../map/notification/MapNotification";
 import useFeatures from "../common/util/useFeatures";
 import MapMarkersStops from "../map/MapMarkersStops.js";
-import dayjs from "dayjs";
+import dayjs, { duration } from "dayjs";
 import { useCatch } from "../reactHelper.js";
 import MapRoutePoints from "../map/MapRoutePoints.js";
 import ColorsDevice from "../common/components/ColorsDevice.js";
@@ -32,6 +32,7 @@ const MainMap = ({
   setStatusCardOpen,
   setLoading,
   firstLoadDevice,
+  setStopModal,
 }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -70,6 +71,13 @@ const MainMap = ({
         bgColor,
         color,
         subColor,
+        address: stop.address,
+        averageSpeed: stop.averageSpeed,
+        deviceId: stop.deviceId,
+        deviceName: stop.deviceName,
+        duration: stop.duration,
+        endTime: stop.endTime,
+        startTime: stop.startTime,
       };
     });
   };
@@ -144,7 +152,7 @@ const MainMap = ({
               needFilterPosition={true}
             />
             <MapRoutePath positions={positions} staticColor={true} />
-            {stops && <MapMarkersStops markers={createMarkersStops()} />}
+            {stops && <MapMarkersStops markers={createMarkersStops()} setStopModal={setStopModal} />}
           </>
         )}
         <MapDefaultCamera />

@@ -18,6 +18,7 @@ import { useDevices } from "../Context/AllDevices.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import ControllersInMap from "../common/components/ControllersInMap.jsx";
+import StopsModal from "../common/components/StopsModal.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -112,7 +113,6 @@ const MainPage = () => {
   const phraseGroup = "OUTROS";
 
   const [filteredDevices, setFilteredDevices] = useState([]);
-
   const [keyword, setKeyword] = useState("");
   const [filter, setFilter] = usePersistedState("filter", {
     statuses: [],
@@ -125,7 +125,9 @@ const MainPage = () => {
   const [statusCardOpen, setStatusCardOpen] = useState(false);
   const [eventsOpen, setEventsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const[firstLoadDevice, setFirstLoadDevice] = useState(true)
+  const [firstLoadDevice, setFirstLoadDevice] = useState(true)
+
+  const [stopModal, setStopModal] = useState(null);
 
   const onEventsClick = useCallback(() => setEventsOpen(true), [setEventsOpen]);
 
@@ -163,6 +165,7 @@ const MainPage = () => {
         statusCardOpen={statusCardOpen}
         setLoading={setLoading}
         firstLoadDevice={firstLoadDevice}
+        setStopModal={setStopModal}
       />
       <Slide direction="right" in={devicesOpen} timeout={200}>
         <Paper
@@ -250,6 +253,7 @@ const MainPage = () => {
         />
       )}
       {selectedDeviceId && (<ControllersInMap position={selectedPosition}/>)}
+      {stopModal && (<StopsModal stop={stopModal} setStopModal={setStopModal} />)}
     </div>
   );
 };
