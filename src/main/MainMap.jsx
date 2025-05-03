@@ -58,13 +58,22 @@ const MainMap = ({
 
   const createMarkersStops = () => {
     return stops.map((stop, index) => {
+      let stopPosition;
+      if(positions) stopPosition = positions.find((position)=> position.id === stop.positionId);
       const device = devices[stop.deviceId] || {};
       const attributes = device.attributes || {};
       const { bgColor, subColor, color } = ColorsDevice(
         attributes["web.reportColor"]
       );
 
+      const model = device?.model || '';
+      const safeStopPosition = stopPosition || {};
+      const attributesStopPosition = safeStopPosition.attributes || {};
+
       return {
+        ...safeStopPosition,
+        ...attributesStopPosition,
+        model,
         latitude: stop.latitude,
         longitude: stop.longitude,
         stopped: `${index + 1}`,

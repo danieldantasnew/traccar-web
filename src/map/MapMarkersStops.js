@@ -81,6 +81,11 @@ const MapMarkers = ({ markers, setStopCard }) => {
 
     const features = markers.map(
       ({
+        sat,
+        ignition,
+        odometer,
+        accuracy,
+        attributes,
         latitude,
         longitude,
         stopped,
@@ -101,6 +106,11 @@ const MapMarkers = ({ markers, setStopCard }) => {
           coordinates: [longitude, latitude],
         },
         properties: {
+          sat,
+          ignition,
+          odometer,
+          accuracy,
+          attributes,
           latitude,
           longitude,
           stopped,
