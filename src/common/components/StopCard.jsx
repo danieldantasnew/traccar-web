@@ -1,9 +1,14 @@
 import { useTheme } from "@emotion/react";
-import { faLocationDot, faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMapLocationDot,
+  faPowerOff,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Box,
   Card,
+  IconButton,
   Tooltip,
   Typography,
   useMediaQuery,
@@ -13,8 +18,7 @@ import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "./LocalizationProvider";
 import AddressComponent from "./AddressComponent";
-import { formatTime } from "../util/formatter";
-import durationOfStop from "../util/durationOfStop";
+import AttributesStop from "./StopCardUtils/AttributesStop";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -25,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     backgroundColor: "#ffffff",
     justifyContent: "flex-start",
-    gap: ".5rem",
     [theme.breakpoints.down("md")]: {
       width: "100%",
     },
@@ -56,6 +59,12 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: "wrap",
     alignItems: "center",
     gap: "1rem",
+  },
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    columnGap: "2rem",
+    rowGap: "1.4rem",
   },
   root: () => ({
     pointerEvents: "none",
@@ -119,16 +128,22 @@ const StopCard = ({ stop, setStopCard, setStatusCardOpen }) => {
       >
         <Zoom in={zoom} onExited={() => setStopCard(null)}>
           <Card elevation={3} className={classes.card}>
-            <Box className={classes.flexRow} sx={{ padding: "2.4rem .5rem", backgroundColor: stop.bgColor }}>
+            <Box
+              className={classes.flexRow}
+              sx={{ padding: "1.7rem .5rem", backgroundColor: stop.bgColor }}
+            >
               <Typography
                 variant="h2"
                 fontSize="1.6rem"
                 fontWeight="bold"
                 color={`${stop.color}`}
-                sx={{display: "flex", alignItems: "center", gap: ".4rem"}}
+                sx={{ display: "flex", alignItems: "center", gap: ".4rem" }}
               >
-                <FontAwesomeIcon icon={faLocationDot} style={{ fontSize: '26px' }}/>
-                Informações da Parada
+                <FontAwesomeIcon
+                  icon={faMapLocationDot}
+                  style={{ fontSize: "26px" }}
+                />
+                Dados da Parada
               </Typography>
               <Tooltip
                 title="Fechar"
@@ -141,28 +156,97 @@ const StopCard = ({ stop, setStopCard, setStatusCardOpen }) => {
                 <FontAwesomeIcon size="xl" icon={faXmark} />
               </Tooltip>
             </Box>
-            <Box sx={{ padding: ".5rem", }}>
-              <Box>
-                <Typography variant="h4" fontSize="1.2rem" fontWeight="bold">
-                  {stop.stopped + '° parada'}
-                </Typography>
-                <Typography variant="h4" fontSize="1.2rem" fontWeight="bold">
-                  Dispositivo
-                </Typography>
-                <Typography>{stop.deviceName}</Typography>
+            <Box
+              sx={{ padding: "1rem .5rem", backgroundColor: "#ECECEC" }}
+              className={classes.flexRow}
+            >
+              <Box className={classes.flexRow} sx={{ gap: ".5rem !important" }}>
+                <Tooltip
+                  title={`${stop.stopped}° Parada`}
+                  arrow
+                  placement="bottom"
+                >
+                  <IconButton
+                    sx={{
+                      fontSize: "1.9rem",
+                      fontWeight: "600",
+                      width: "48px",
+                      height: "48px",
+                      boxShadow: `0 0 0 3px ${stop.color}`,
+                      backgroundColor: `${stop.bgColor}`,
+                      color: `${stop.color}`,
+                      "&:hover": {
+                        backgroundColor: `${stop.subColor} !important`,
+                      },
+                    }}
+                  >
+                    {stop.stopped}
+                  </IconButton>
+                </Tooltip>
+                <Tooltip
+                  title={`Dispositivo estava ${
+                    stop.ignition ? "Ligado" : "Desligado"
+                  }`}
+                  arrow
+                  placement="bottom"
+                >
+                  <IconButton
+                    sx={{
+                      fontSize: "1.9rem",
+                      fontWeight: "600",
+                      width: "48px",
+                      height: "48px",
+                      boxShadow: `0 0 0 3px white`,
+                      backgroundColor: `${
+                        stop.ignition ? "#4CAF50" : "#FF0000"
+                      }`,
+                      color: `${stop.color}`,
+                      "&:hover": {
+                        backgroundColor: `${
+                          stop.ignition ? "#38883B" : "#C00000"
+                        } !important`,
+                      },
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faPowerOff} />
+                  </IconButton>
+                </Tooltip>
               </Box>
-              <Box sx={{'& h4': { fontSize: '.9rem !important'}}}>
-                <AddressComponent position={{latitude: stop.latitude, longitude: stop.longitude, address: stop.address}} t={t} labelAdress="Endereço da Parada"/>
-              </Box>
-
-              <Box>
-                <Box>Horario de início: {formatTime(stop.startTime, 'seconds')}</Box>
-                <Box>Horario de fim: {formatTime(stop.endTime, 'seconds')}</Box>
-                <Box>Duração da parada: {durationOfStop(stop.startTime, stop.endTime).formatted}</Box>
-                <Box>Latitude: {parseFloat(stop.latitude).toFixed(6)}</Box>
-                <Box>Logitude: {parseFloat(stop.longitude).toFixed(6)}</Box>
+              <Box
+                className={classes.flexColumn}
+                sx={{ gap: "0 !important", alignItems: "flex-end !important" }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: "1rem",
+                    fontWeight: "600",
+                    lineHeight: "1rem",
+                  }}
+                >
+                  {stop.deviceName}
+                </Typography>
+                <Typography sx={{ fontSize: "1rem", fontWeight: "400" }}>
+                  {stop.model}
+                </Typography>
               </Box>
             </Box>
+            <Box
+              sx={{
+                padding: "0 .5rem",
+                " & h4": { fontSize: "1.4rem !important", lineHeight: "1rem" },
+              }}
+            >
+              <AddressComponent
+                position={{
+                  latitude: stop.latitude,
+                  longitude: stop.longitude,
+                  address: stop.address,
+                }}
+                t={t}
+                labelAdress="Local"
+              />
+            </Box>
+            <AttributesStop stop={stop} classes={classes}/>
           </Card>
         </Zoom>
       </Box>

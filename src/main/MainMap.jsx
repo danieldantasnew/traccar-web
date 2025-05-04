@@ -67,9 +67,10 @@ const MainMap = ({
       );
 
       const model = device?.model || '';
-      const safeStopPosition = stopPosition || {};
-      const attributesStopPosition = safeStopPosition.attributes || {};
-
+      const safeStopPosition = Object.fromEntries(
+        Object.entries(stopPosition).filter(([key]) => key !== 'attributes')
+      );
+      const attributesStopPosition = stopPosition.attributes || {};
       return {
         ...safeStopPosition,
         ...attributesStopPosition,
