@@ -47,7 +47,7 @@ const MapMarkers = ({ markers, setStopCard }) => {
           "circle-color": ["get", "bgColor"],
           "circle-radius": 14,
           "circle-opacity": 1,
-          "circle-stroke-width": 1,
+          "circle-stroke-width": 1.6,
           "circle-stroke-color": ["get", "subColor"],
         },
       });
