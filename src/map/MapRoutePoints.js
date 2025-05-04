@@ -12,6 +12,7 @@ const MapRoutePoints = ({
   onClick,
   colorStatic,
   needFilterPosition,
+  speedRoutes,
 }) => {
   const id = useId();
   const t = useTranslation();
@@ -81,16 +82,15 @@ const MapRoutePoints = ({
   }, [onMarkerClick]);
 
   useEffect(() => {
+    if (!map.getSource(id)) return;
+  
     const maxSpeed = positions.reduce((a, b) => Math.max(a, b.speed), -Infinity);
     const minSpeed = positions.reduce((a, b) => Math.min(a, b.speed), Infinity);
-
-    const control = new SpeedLegendControl(positions, speedUnit, t, maxSpeed, minSpeed);
-    map.addControl(control, "bottom-left");
-
+  
     const filterFactor = zoomLevel < 13 ? 10 : zoomLevel < 14 ? 8 : 5;
     const filteredPositions = positions.filter((_, index) => index % filterFactor === 0);
-
-    map.getSource(id)?.setData({
+  
+    const data = {
       type: "FeatureCollection",
       features: (needFilterPosition ? filteredPositions : positions).map((position, index) => ({
         type: "Feature",
@@ -105,10 +105,21 @@ const MapRoutePoints = ({
               : getSpeedColor(position.speed, minSpeed, maxSpeed),
         },
       })),
-    });
+    };
+  
+    map.getSource(id)?.setData(data);
+  }, [positions, zoomLevel, speedRoutes, colorStatic, needFilterPosition, devices, selectedId]);
 
+  useEffect(() => {
+    const maxSpeed = positions.reduce((a, b) => Math.max(a, b.speed), -Infinity);
+    const minSpeed = positions.reduce((a, b) => Math.min(a, b.speed), Infinity);
+  
+    const control = new SpeedLegendControl(positions, speedUnit, t, maxSpeed, minSpeed);
+    map.addControl(control, "bottom-left");
+  
     return () => map.removeControl(control);
-  }, [onMarkerClick, positions, zoomLevel]);
+  }, [positions, speedUnit, t, speedRoutes]);
+  
 
   return null;
 };

@@ -1,6 +1,6 @@
 import {
   faClock,
-  faLocationArrow,
+  faCompass,
   faRoad,
   faSatellite,
   faSatelliteDish,
@@ -11,6 +11,7 @@ import { Box, Typography } from "@mui/material";
 import React from "react";
 import durationOfStop from "../../util/durationOfStop";
 import { formatTime } from "../../util/formatter";
+import accuracy from "../../util/accuracy";
 
 const OrganizeBox = ({ icon, sizeIcon, title, value, color }) => {
   return (
@@ -66,7 +67,7 @@ const AttributesStop = ({ stop, classes }) => {
       <OrganizeBox
         icon={faRoad}
         sizeIcon={sizeIcons}
-        title="Hodômetro"
+        title="Odômetro"
         value={stop.odometer ? `${stop.odometer} km` : "Não informado"}
         color={color}
       />
@@ -74,7 +75,7 @@ const AttributesStop = ({ stop, classes }) => {
         icon={faSatelliteDish}
         sizeIcon={sizeIcons}
         title="Precisão GPS"
-        value={stop.accuracy ? stop.accuracy : 0}
+        value={accuracy(stop.accuracy)}
         color={color}
       />
       <OrganizeBox
@@ -85,14 +86,14 @@ const AttributesStop = ({ stop, classes }) => {
         color={color}
       />
       <OrganizeBox
-        icon={faLocationArrow}
+        icon={faCompass}
         sizeIcon={sizeIcons}
         title="Latitude"
         value={parseFloat(stop.latitude).toFixed(6)}
         color={color}
       />
       <OrganizeBox
-        icon={faLocationArrow}
+        icon={faCompass}
         sizeIcon={sizeIcons}
         title="Logitude"
         value={parseFloat(stop.longitude).toFixed(6)}

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { map } from "./core/MapView";
 import { findFonts } from "./core/mapUtil";
 import { useSelector } from "react-redux";
+import dimensions from "../common/theme/dimensions";
 
 const MapMarkers = ({ markers, setStopCard }) => {
   const devices = useSelector((state) => state.devices.items);
@@ -13,6 +14,11 @@ const MapMarkers = ({ markers, setStopCard }) => {
     const feature = e.features && e.features[0];
     if (feature) {
       setStopCard(feature.properties);
+      map.easeTo({
+        center: [feature.properties.longitude, feature.properties.latitude],
+        zoom: 18,
+        offset: [0, -dimensions.popupMapOffset / 2],
+      });
     }
   }
 

@@ -199,6 +199,7 @@ const StatusCard = ({
   setStatusCardOpen,
   firstLoadDevice,
   setStopCard,
+  setSpeedRoutes,
 }) => {
   const classes = useStyles();
   const t = useTranslation();
@@ -278,6 +279,7 @@ const StatusCard = ({
                     position={position}
                     t={t}
                     setRemoving={setRemoving}
+                    setSpeedRoutes={setSpeedRoutes}
                   />
                 </CardMedia>
 

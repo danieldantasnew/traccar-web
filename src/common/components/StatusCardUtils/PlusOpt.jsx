@@ -6,6 +6,7 @@ import {
   faEllipsis,
   faMapLocationDot,
   faPen,
+  faRoute,
   faShareNodes,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
@@ -17,7 +18,7 @@ import { useSelector } from "react-redux";
 
 const styleRow = { display: "flex", gap: ".5rem" };
 
-const PlusOpt = ({ device, position, t, setRemoving }) => {
+const PlusOpt = ({ device, position, t, setRemoving, setSpeedRoutes, }) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -115,6 +116,16 @@ const PlusOpt = ({ device, position, t, setRemoving }) => {
         >
           <FontAwesomeIcon icon={faPen} size="lg" color={`${colorForAll}`} />
           <Typography>Editar veículo</Typography>
+        </MenuItem>
+        <MenuItem
+          sx={styleRow}
+          onClick={() => {
+            setSpeedRoutes((speedRoutes)=> !speedRoutes) 
+            handleClose()}
+          }
+        >
+          <FontAwesomeIcon icon={faRoute} size="lg" color={`${colorForAll}`} />
+          <Typography>Alterar cor das rotas</Typography>
         </MenuItem>
         {position && (
           <>

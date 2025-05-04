@@ -33,6 +33,7 @@ const MainMap = ({
   setLoading,
   firstLoadDevice,
   setStopCard,
+  speedRoutes
 }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -158,10 +159,10 @@ const MainMap = ({
           <>
             <MapRoutePoints
               positions={positions}
-              colorStatic={true}
+              colorStatic={speedRoutes}
               needFilterPosition={true}
             />
-            <MapRoutePath positions={positions} staticColor={true} />
+            <MapRoutePath positions={positions} staticColor={speedRoutes} />
             {stops && <MapMarkersStops markers={createMarkersStops()} setStopCard={setStopCard} />}
           </>
         )}
