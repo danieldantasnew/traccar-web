@@ -26,7 +26,7 @@ import {
   faMap,
   faUserPen,
 } from "@fortawesome/free-solid-svg-icons";
-import { useDevices } from "../../Context/AllDevices";
+import { useDevices } from "../../Context/App";
 
 const BottomMenu = () => {
   const navigate = useNavigate();

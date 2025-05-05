@@ -20,6 +20,8 @@ import {
   faSatellite,
   faSignsPost,
 } from "@fortawesome/free-solid-svg-icons";
+import { DynamicIconsComponent } from "../DynamicIcons";
+import { useDevices } from "../../../Context/App";
 
 const useStyles = makeStyles((theme) => ({
   success: {
@@ -71,6 +73,7 @@ const useStyles = makeStyles((theme) => ({
     display: "grid",
     gridTemplateColumns: "repeat(3, 1fr)",
     gap: "1rem",
+    maxHeight: '100%',
   },
 
   fieldset: {
@@ -262,7 +265,7 @@ const StatusRow = ({ position, keys, positionAttributes }) => {
   );
 };
 
-const StatusCardDetails = ({ position, stops }) => {
+const StatusCardDetails = ({ position }) => {
   const t = useTranslation();
   const positionAttributes = usePositionAttributes(t);
   const positionItems = useAttributePreference(
@@ -271,6 +274,7 @@ const StatusCardDetails = ({ position, stops }) => {
   );
 
   const classes = useStyles();
+  const { totalStops } = useDevices();
 
   return (
     <div className={classes.cardDetails}>
@@ -290,17 +294,15 @@ const StatusCardDetails = ({ position, stops }) => {
               positionAttributes={positionAttributes}
             />
           ))}
-        <fieldset className={`${classes.fieldset} ${classes[getColor("stops")]}`}>
-          <legend className={`${classes.legend}`}>
-            Stops
-          </legend>
-          <div className={classes.box}>
-            {getIcon("stops", null, classes)}
-            <Typography className={`${classes.value}`}>
-              
-            </Typography>
-          </div>
-        </fieldset>
+        {totalStops && (
+          <fieldset className={`${classes.fieldset} ${classes.red}`}>
+            <legend className={`${classes.legend}`}>Total de Paradas</legend>
+            <div className={classes.box}>
+              <DynamicIconsComponent category={"stop"} />
+              <Typography className={`${classes.value}`}>{totalStops}</Typography>
+            </div>
+          </fieldset>
+        )}
       </Box>
     </div>
   );

@@ -14,7 +14,7 @@ import MainMap from "./MainMap";
 import { useAttributePreference } from "../common/util/preferences";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
 import NavMenu from "../common/components/NavMenu.jsx";
-import { useDevices } from "../Context/AllDevices.jsx";
+import { useDevices } from "../Context/App.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import ControllersInMap from "../common/components/ControllersInMap.jsx";
@@ -111,7 +111,6 @@ const MainPage = () => {
     (position) => selectedDeviceId && position.deviceId === selectedDeviceId
   );
   const phraseGroup = "OUTROS";
-  const [staticRoutes, setStaticRoutes] = useState(true);
   const [filteredDevices, setFilteredDevices] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [filter, setFilter] = usePersistedState("filter", {
@@ -121,14 +120,18 @@ const MainPage = () => {
   const [filterSort, setFilterSort] = usePersistedState("filterSort", "");
   const [filterMap, setFilterMap] = usePersistedState("filterMap", false);
 
-  const { devicesOpen, setDevicesOpen, heightMenuNavMobile } = useDevices();
-  const [statusCardOpen, setStatusCardOpen] = useState(false);
+  const {
+    devicesOpen,
+    heightMenuNavMobile,
+    statusCardOpen,
+    stopCard,
+    setDevicesOpen,
+    setStatusCardOpen,
+    setFirstLoadDevice,
+    setStaticRoutes,
+  } = useDevices();
   const [eventsOpen, setEventsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [firstLoadDevice, setFirstLoadDevice] = useState(true)
-
-  const [stopCard, setStopCard] = useState(null);
-
   const onEventsClick = useCallback(() => setEventsOpen(true), [setEventsOpen]);
 
   useEffect(() => {
@@ -137,17 +140,16 @@ const MainPage = () => {
     }
     if (selectedDeviceId) {
       setFirstLoadDevice(true);
-      setStaticRoutes(true)
+      setStaticRoutes(true);
     }
   }, [desktop, mapOnSelect, selectedDeviceId]);
 
-  
   useEffect(() => {
     if (!loading) {
       setFirstLoadDevice(false);
     }
   }, [loading, setFirstLoadDevice, setLoading]);
-  
+
   useFilter(
     keyword,
     filter,
@@ -164,12 +166,7 @@ const MainPage = () => {
         filteredPositions={filteredPositions}
         selectedPosition={selectedPosition}
         onEventsClick={onEventsClick}
-        setStatusCardOpen={setStatusCardOpen}
-        statusCardOpen={statusCardOpen}
         setLoading={setLoading}
-        firstLoadDevice={firstLoadDevice}
-        setStopCard={setStopCard}
-        staticRoutes={staticRoutes}
       />
       <Slide direction="right" in={devicesOpen} timeout={200}>
         <Paper
@@ -233,7 +230,12 @@ const MainPage = () => {
           </Box>
           <div className={classes.devices}>
             <Paper square className={classes.contentList}>
-              <DeviceList devices={filteredDevices} setStatusCardOpen={setStatusCardOpen} setDevicesOpen={setDevicesOpen} phraseGroup={phraseGroup} />
+              <DeviceList
+                devices={filteredDevices}
+                setStatusCardOpen={setStatusCardOpen}
+                setDevicesOpen={setDevicesOpen}
+                phraseGroup={phraseGroup}
+              />
             </Paper>
           </div>
         </Paper>
@@ -250,18 +252,11 @@ const MainPage = () => {
         <StatusCard
           deviceId={selectedDeviceId}
           position={selectedPosition}
-          statusCardOpen={statusCardOpen}
-          setStatusCardOpen={setStatusCardOpen}
           desktopPadding={theme.dimensions.drawerWidthDesktop}
-          firstLoadDevice={firstLoadDevice}
-          setStopCard={setStopCard}
-          stops={stopCard}
-          setStaticRoutes={setStaticRoutes}
-          staticRoutes={staticRoutes}
         />
       )}
-      {selectedDeviceId && (<ControllersInMap position={selectedPosition} setStopCard={setStopCard} />)}
-      {selectedDeviceId && stopCard && (<StopCard stop={stopCard} setStopCard={setStopCard} setStatusCardOpen={setStatusCardOpen} />)}
+      {selectedDeviceId && <ControllersInMap position={selectedPosition} />}
+      {selectedDeviceId && stopCard && <StopCard stop={stopCard} />}
     </div>
   );
 };

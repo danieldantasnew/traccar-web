@@ -11,7 +11,7 @@ import { sessionActions } from './store';
 import UpdateController from './UpdateController';
 import TermsDialog from './common/components/TermsDialog';
 import Loader from './common/components/Loader';
-import { DevicesProvider } from './Context/AllDevices';
+import { DevicesProvider } from './Context/App';
 
 const useStyles = makeStyles(() => ({
   page: {

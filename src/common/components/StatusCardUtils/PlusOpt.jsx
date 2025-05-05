@@ -15,12 +15,14 @@ import { DynamicIconsComponent } from "../DynamicIcons";
 import { useNavigate } from "react-router-dom";
 import { useCatchCallback } from "../../../reactHelper";
 import { useSelector } from "react-redux";
+import { useDevices } from "../../../Context/App";
 
 const styleRow = { display: "flex", gap: ".5rem" };
 
-const PlusOpt = ({ device, position, t, setRemoving, setStaticRoutes, staticRoutes }) => {
+const PlusOpt = ({ device, position, t, setRemoving,}) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const {setStaticRoutes, staticRoutes } = useDevices();
   const open = Boolean(anchorEl);
   const colorForAll = "#878787";
   const shareDisabled = useSelector(
@@ -146,7 +148,8 @@ const PlusOpt = ({ device, position, t, setRemoving, setStaticRoutes, staticRout
             <MenuItem sx={styleRow}>
               <DynamicIconsComponent
                 category={"bellRing"}
-                style={{ width: "20px", color: `${colorForAll}` }}
+                style={{ width: "20px" }}
+                color={`${colorForAll}`}
               />
               <Typography>Avise-me quando ligar</Typography>
             </MenuItem>

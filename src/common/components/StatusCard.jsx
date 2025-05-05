@@ -21,6 +21,7 @@ import { useCatch } from "../../reactHelper";
 import RemoveDialog from "./RemoveDialog";
 import { devicesActions } from "../../store";
 import SkeletonStatusCard from "./StatusCardUtils/SkeletonStatusCard";
+import { useDevices } from "../../Context/App";
 
 function handleWheel(e) {
   if (e.deltaY > 0) {
@@ -183,36 +184,38 @@ const IgnitionState = ({ position, classes }) => {
   if (!position) return null;
   if (position.attributes.ignition || position.attributes.motion)
     return (
-      <Card className={`${classes.ignitionState} ${classes.green}`} style={{color: 'white'}}>
-        <FontAwesomeIcon icon={faPowerOff} size="xs" color="currentColor"/>
+      <Card
+        className={`${classes.ignitionState} ${classes.green}`}
+        style={{ color: "white" }}
+      >
+        <FontAwesomeIcon icon={faPowerOff} size="xs" color="currentColor" />
         <Typography>Ligado</Typography>
       </Card>
     );
 
   return (
-    <Card className={`${classes.ignitionState} ${classes.red}`} style={{color: 'white'}}>
+    <Card
+      className={`${classes.ignitionState} ${classes.red}`}
+      style={{ color: "white" }}
+    >
       <FontAwesomeIcon icon={faPowerOff} size="xs" />
       <Typography>Desligado</Typography>
     </Card>
   );
 };
 
-const StatusCard = ({
-  deviceId,
-  position,
-  setStatusCardOpen,
-  firstLoadDevice,
-  setStopCard,
-  stops,
-  setStaticRoutes,
-  staticRoutes,
-}) => {
+const StatusCard = ({ deviceId, position }) => {
   const classes = useStyles();
   const t = useTranslation();
   const theme = useTheme();
   const desktop = useMediaQuery(theme.breakpoints.down("md"));
   const [axisY, setAxisY] = useState(0);
   const dispatch = useDispatch();
+  const {
+    firstLoadDevice,
+    setStopCard,
+    setStatusCardOpen,
+  } = useDevices();
 
   const device = useSelector((state) => state.devices.items[deviceId]);
   const [removing, setRemoving] = React.useState(false);
@@ -252,7 +255,7 @@ const StatusCard = ({
         <Zoom in={zoom} onExited={() => setStatusCardOpen(false)}>
           <Card elevation={3} className={classes.card}>
             {firstLoadDevice ? (
-              <SkeletonStatusCard classes={classes} onClose={onClose}/>
+              <SkeletonStatusCard classes={classes} onClose={onClose} />
             ) : (
               <Box className={classes.contentCardTop}>
                 <CardMedia
@@ -285,12 +288,10 @@ const StatusCard = ({
                     position={position}
                     t={t}
                     setRemoving={setRemoving}
-                    setStaticRoutes={setStaticRoutes}
-                    staticRoutes={staticRoutes}
                   />
                 </CardMedia>
                 <InfoCar device={device} classes={classes} />
-                <TabsDevice device={device} position={position} stops={stops} t={t} />
+                <TabsDevice device={device} position={position} t={t} />
               </Box>
             )}
           </Card>

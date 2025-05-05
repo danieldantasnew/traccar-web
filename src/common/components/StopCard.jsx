@@ -19,6 +19,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "./LocalizationProvider";
 import AddressComponent from "./AddressComponent";
 import AttributesStop from "./StopCardUtils/AttributesStop";
+import { useDevices } from "../../Context/App";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -102,13 +103,14 @@ function handleTouch(e, state, setState) {
   return (e.currentTarget.style.top = "0");
 }
 
-const StopCard = ({ stop, setStopCard, setStatusCardOpen }) => {
+const StopCard = ({ stop, }) => {
   const classes = useStyles();
   const [zoom, setZoom] = useState(true);
   const theme = useTheme();
   const t = useTranslation();
   const desktop = useMediaQuery(theme.breakpoints.down("md"));
   const [axisY, setAxisY] = useState(0);
+  const {setStopCard, setStatusCardOpen} = useDevices();
 
   const onClose = () => {
     setZoom(false);

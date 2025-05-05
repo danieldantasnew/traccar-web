@@ -9,24 +9,16 @@ import {
   ListItemText,
   ListItemButton,
 } from "@mui/material";
-import BatteryFullIcon from "@mui/icons-material/BatteryFull";
-import BatteryChargingFullIcon from "@mui/icons-material/BatteryChargingFull";
-import Battery60Icon from "@mui/icons-material/Battery60";
-import BatteryCharging60Icon from "@mui/icons-material/BatteryCharging60";
-import Battery20Icon from "@mui/icons-material/Battery20";
-import BatteryCharging20Icon from "@mui/icons-material/BatteryCharging20";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { devicesActions } from "../store";
 import {
   formatAlarm,
-  formatBoolean,
   formatPercentage,
   formatStatus,
   getStatusColor,
 } from "../common/util/formatter";
 import { useTranslation } from "../common/components/LocalizationProvider";
-import { mapIconKey, mapIcons } from "../map/core/preloadImages";
 import { useAdministrator } from "../common/util/permissions";
 import { useAttributePreference } from "../common/util/preferences";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

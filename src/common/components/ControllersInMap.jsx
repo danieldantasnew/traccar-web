@@ -8,6 +8,7 @@ import { devicesActions } from "../../store";
 import { faEyeSlash, faMapPin } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ColorsDevice from "./ColorsDevice.js";
+import { useDevices } from "../../Context/App.jsx";
 
 const styleBox = {
   position: "fixed",
@@ -36,11 +37,12 @@ const controls = {
   },
 };
 
-const ControllersInMap = ({  position, setStopCard }) => {
+const ControllersInMap = ({  position, }) => {
   const selectZoom = useAttributePreference("web.selectZoom", 10);
   const dispatch = useDispatch();
   const devices = useSelector((state) => state.devices.items);
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
+  const {setStopCard} = useDevices();
 
   const centerDevice = () => {
     map.easeTo({

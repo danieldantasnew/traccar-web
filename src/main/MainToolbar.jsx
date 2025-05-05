@@ -15,12 +15,9 @@ import {
   FormControlLabel,
   Checkbox,
   Badge,
-  useTheme,
   Button,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import TuneRoundedIcon from "@mui/icons-material/TuneRounded";
 import { useTranslation } from "../common/components/LocalizationProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faSliders } from "@fortawesome/free-solid-svg-icons";
