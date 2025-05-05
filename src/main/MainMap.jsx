@@ -174,12 +174,13 @@ const MainMap = ({
               needFilterPosition={true}
             />
             <MapRoutePath positions={positions} staticColor={staticRoutes} />
-            {stops?.length > 0 && (
+            {stops?.length > 0 ? (
               <MapMarkersStops
                 markers={createMarkersStops}
                 setStopCard={setStopCard}
+                key={`stops-${stops.length}`} 
               />
-            )}
+            ) : null}
           </>
         )}
         <MapDefaultCamera />
