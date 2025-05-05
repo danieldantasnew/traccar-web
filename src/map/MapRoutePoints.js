@@ -89,7 +89,7 @@ const MapRoutePoints = ({
     const maxSpeed = positions.reduce((a, b) => Math.max(a, b.speed), -Infinity);
     const minSpeed = positions.reduce((a, b) => Math.min(a, b.speed), Infinity);
   
-    const filterFactor = zoomLevel < 13 ? 10 : zoomLevel < 14 ? 8 : 5;
+    const filterFactor = zoomLevel < 15 ? 16 : zoomLevel > 15 && zoomLevel < 16 ? 8 : 4;
     const filteredPositions = positions.filter((_, index) => index % filterFactor === 0);
   
     const data = {

@@ -12,19 +12,15 @@ const MapRoutePath = ({ positions, staticColor }) => {
   const theme = useTheme();
 
   const reportColor = useSelector((state) => {
-    const position = positions?.find(() => true);
+    const position = positions?.[0];
     if (position) {
       const attributes = state.devices.items[position.deviceId]?.attributes;
-      if (attributes) {
-        const color = attributes['web.reportColor'];
-        if (color) {
-          return color;
-        }
-      }
+      const color = attributes?.['web.reportColor'];
+      return color || null;
     }
     return null;
   });
-
+  
   useEffect(() => {
     map.addSource(id, {
       type: 'geojson',
@@ -46,7 +42,14 @@ const MapRoutePath = ({ positions, staticColor }) => {
       },
       paint: {
         'line-color': ['get', 'color'],
-        'line-width': 2.5,
+        'line-width': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          4, 2,
+          14, 2.6,
+          18, 3.3,
+        ],
       },
     });
 

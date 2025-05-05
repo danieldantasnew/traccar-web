@@ -164,7 +164,7 @@ const StopCard = ({ stop, }) => {
               sx={{ padding: "1rem .5rem", backgroundColor: "#ECECEC" }}
               className={classes.flexRow}
             >
-              <Box className={classes.flexRow} sx={{ gap: ".5rem !important" }}>
+              <Box className={classes.flexRow} sx={{ gap: ".6rem !important" }}>
                 <Tooltip
                   title={`${stop.stopped == "INI" ? 'No estacionamento' : stop.stopped + '° Parada'}`}
                   arrow
