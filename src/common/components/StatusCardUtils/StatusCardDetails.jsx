@@ -3,14 +3,14 @@ import makeStyles from "@mui/styles/makeStyles";
 import usePositionAttributes from "../../attributes/usePositionAttributes";
 import { useAttributePreference } from "../../util/preferences";
 import PositionValue from "../PositionValue";
-import {
-  Box,
-  Typography,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useTranslation } from "../LocalizationProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBatteryFull,
+  faBatteryHalf,
+  faBatteryQuarter,
+  faBatteryThreeQuarters,
   faClock,
   faExpand,
   faGaugeHigh,
@@ -22,6 +22,19 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const useStyles = makeStyles((theme) => ({
+  success: {
+    color: theme.palette.success.main,
+  },
+
+  warning: {
+    color: theme.palette.warning.main,
+  },
+
+  error: {
+    color: theme.palette.error.main,
+    fill: theme.palette.error.main,
+  },
+
   cardDetails: {
     display: "flex",
     flexDirection: "column",
@@ -38,12 +51,14 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "1rem",
     },
   },
+
   flexRow: {
     display: "flex",
     alignItems: "center",
     flexWrap: "wrap",
     gap: "1rem",
   },
+
   flexColumn: {
     display: "flex",
     flexDirection: "column",
@@ -51,20 +66,24 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     gap: "1rem",
   },
+
   details: {
     display: "grid",
     gridTemplateColumns: "repeat(3, 1fr)",
     gap: "1rem",
   },
+
   fieldset: {
     borderRadius: ".5rem",
     border: "2px solid black",
     padding: "2px 4px",
   },
+
   legend: {
     fontSize: ".75rem",
     fontWeight: "500",
   },
+
   box: {
     display: "flex",
     alignItems: "center",
@@ -84,16 +103,19 @@ const useStyles = makeStyles((theme) => ({
     fontSize: ".75rem !important",
     fontWeight: "600",
   },
+
   red: {
     fill: "red",
     border: "2px solid red",
     color: "red",
   },
+
   gray: {
     fill: "gray",
     border: "2px solid gray",
     color: "gray",
   },
+
   brownLight: {
     fill: "#753F32",
     border: "2px solid #753F32",
@@ -129,21 +151,24 @@ const useStyles = makeStyles((theme) => ({
     border: "2px solid green",
     color: "green",
   },
+
   greenLight: {
     fill: "#005C53",
     border: "2px solid #005C53",
     color: "#005C53",
   },
+
   blueDark: {
     fill: "#042940",
     border: "2px solid #042940",
     color: "#042940",
   },
+
   defaultColor: {
-    fill: "##2C76AC",
+    fill: "#2C76AC",
     border: "2px solid #2C76AC",
     color: "#2C76AC",
-  }
+  },
 }));
 
 const getColor = (attribute) => {
@@ -171,7 +196,7 @@ const getColor = (attribute) => {
   }
 };
 
-const getIcon = (name) => {
+const getIcon = (name, batteryLevel, classes) => {
   switch (name) {
     case "fixTime":
       return <FontAwesomeIcon size="sm" icon={faClock} />;
@@ -186,7 +211,23 @@ const getIcon = (name) => {
     case "motion":
       return <FontAwesomeIcon size="sm" icon={faGaugeHigh} />;
     case "batteryLevel":
-      return <FontAwesomeIcon size="sm" icon={faBatteryFull} />;
+      if (batteryLevel > 70)
+        return <FontAwesomeIcon size="sm" icon={faBatteryFull} />;
+      else if (batteryLevel > 50)
+        return (
+          <FontAwesomeIcon
+            icon={faBatteryThreeQuarters}
+            className={classes.success}
+          />
+        );
+      else if (batteryLevel > 30)
+        return (
+          <FontAwesomeIcon icon={faBatteryHalf} className={classes.warning} />
+        );
+      else
+        return (
+          <FontAwesomeIcon icon={faBatteryQuarter} className={classes.error} />
+        );
     case "ignition":
       return <FontAwesomeIcon size="sm" icon={faPowerOff} />;
     case "sat":
@@ -201,13 +242,14 @@ const getIcon = (name) => {
 const StatusRow = ({ position, keys, positionAttributes }) => {
   const classes = useStyles();
   if (keys == "address" || keys == "fixTime") return null;
+  const battery = keys == "batteryLevel" ? position.attributes[keys] : null;
   return (
     <fieldset className={`${classes.fieldset} ${classes[getColor(keys)]}`}>
       <legend className={`${classes.legend}`}>
         {positionAttributes[keys].name}
       </legend>
       <div className={classes.box}>
-        {getIcon(keys)}
+        {getIcon(keys, battery, classes)}
         <Typography className={`${classes.value}`}>
           <PositionValue
             position={position}
@@ -220,7 +262,7 @@ const StatusRow = ({ position, keys, positionAttributes }) => {
   );
 };
 
-const StatusCardDetails = ({ position }) => {
+const StatusCardDetails = ({ position, stops }) => {
   const t = useTranslation();
   const positionAttributes = usePositionAttributes(t);
   const positionItems = useAttributePreference(
@@ -248,6 +290,17 @@ const StatusCardDetails = ({ position }) => {
               positionAttributes={positionAttributes}
             />
           ))}
+        <fieldset className={`${classes.fieldset} ${classes[getColor("stops")]}`}>
+          <legend className={`${classes.legend}`}>
+            Stops
+          </legend>
+          <div className={classes.box}>
+            {getIcon("stops", null, classes)}
+            <Typography className={`${classes.value}`}>
+              
+            </Typography>
+          </div>
+        </fieldset>
       </Box>
     </div>
   );

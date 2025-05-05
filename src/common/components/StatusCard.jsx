@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     gap: ".3rem",
-    backgroundColor: "#f3f3f3",
+    color: "#fff",
     borderRadius: ".5rem",
     boxShadow: "0 0 4px 0px rgba(0, 0, 0, 0.34)",
     "& p": {
@@ -110,11 +110,13 @@ const useStyles = makeStyles((theme) => ({
     fill: "red",
     border: "2px solid red",
     color: "red",
+    backgroundColor: "red",
   },
   green: {
     fill: "green",
     border: "2px solid green",
     color: "green",
+    backgroundColor: "green",
   },
   orange: {
     fill: "orange",
@@ -171,6 +173,8 @@ const useStyles = makeStyles((theme) => ({
       top: "50vh",
       width: "100vw",
       maxWidth: "initial",
+      borderRadius: ".6rem",
+      overflow: "hidden",
     },
   }),
 }));
@@ -179,14 +183,14 @@ const IgnitionState = ({ position, classes }) => {
   if (!position) return null;
   if (position.attributes.ignition || position.attributes.motion)
     return (
-      <Card className={`${classes.ignitionState} ${classes.green}`}>
-        <FontAwesomeIcon icon={faPowerOff} size="xs" />
+      <Card className={`${classes.ignitionState} ${classes.green}`} style={{color: 'white'}}>
+        <FontAwesomeIcon icon={faPowerOff} size="xs" color="currentColor"/>
         <Typography>Ligado</Typography>
       </Card>
     );
 
   return (
-    <Card className={`${classes.ignitionState} ${classes.red}`}>
+    <Card className={`${classes.ignitionState} ${classes.red}`} style={{color: 'white'}}>
       <FontAwesomeIcon icon={faPowerOff} size="xs" />
       <Typography>Desligado</Typography>
     </Card>
@@ -199,7 +203,9 @@ const StatusCard = ({
   setStatusCardOpen,
   firstLoadDevice,
   setStopCard,
-  setSpeedRoutes,
+  stops,
+  setStaticRoutes,
+  staticRoutes,
 }) => {
   const classes = useStyles();
   const t = useTranslation();
@@ -279,12 +285,12 @@ const StatusCard = ({
                     position={position}
                     t={t}
                     setRemoving={setRemoving}
-                    setSpeedRoutes={setSpeedRoutes}
+                    setStaticRoutes={setStaticRoutes}
+                    staticRoutes={staticRoutes}
                   />
                 </CardMedia>
-
                 <InfoCar device={device} classes={classes} />
-                <TabsDevice device={device} position={position} t={t} />
+                <TabsDevice device={device} position={position} stops={stops} t={t} />
               </Box>
             )}
           </Card>

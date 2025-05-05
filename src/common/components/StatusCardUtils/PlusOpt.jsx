@@ -18,7 +18,7 @@ import { useSelector } from "react-redux";
 
 const styleRow = { display: "flex", gap: ".5rem" };
 
-const PlusOpt = ({ device, position, t, setRemoving, setSpeedRoutes, }) => {
+const PlusOpt = ({ device, position, t, setRemoving, setStaticRoutes, staticRoutes }) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -120,12 +120,12 @@ const PlusOpt = ({ device, position, t, setRemoving, setSpeedRoutes, }) => {
         <MenuItem
           sx={styleRow}
           onClick={() => {
-            setSpeedRoutes((speedRoutes)=> !speedRoutes) 
+            setStaticRoutes((staticRoutes)=> !staticRoutes) 
             handleClose()}
           }
         >
           <FontAwesomeIcon icon={faRoute} size="lg" color={`${colorForAll}`} />
-          <Typography>Alterar cor das rotas</Typography>
+          <Typography>Alterar rotas para {staticRoutes ? 'velocidade' : 'cor estática'}</Typography>
         </MenuItem>
         {position && (
           <>

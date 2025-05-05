@@ -33,7 +33,7 @@ const MainMap = ({
   setLoading,
   firstLoadDevice,
   setStopCard,
-  speedRoutes
+  staticRoutes,
 }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -60,16 +60,19 @@ const MainMap = ({
   const createMarkersStops = () => {
     return stops.map((stop, index) => {
       let stopPosition;
-      if(positions) stopPosition = positions.find((position)=> position.id === stop.positionId);
+      if (positions)
+        stopPosition = positions.find(
+          (position) => position.id === stop.positionId
+        );
       const device = devices[stop.deviceId] || {};
       const attributes = device.attributes || {};
       const { bgColor, subColor, color } = ColorsDevice(
         attributes["web.reportColor"]
       );
 
-      const model = device?.model || '';
+      const model = device?.model || "";
       const safeStopPosition = Object.fromEntries(
-        Object.entries(stopPosition).filter(([key]) => key !== 'attributes')
+        Object.entries(stopPosition).filter(([key]) => key !== "attributes")
       );
       const attributesStopPosition = stopPosition.attributes || {};
       return {
@@ -78,7 +81,7 @@ const MainMap = ({
         model,
         latitude: stop.latitude,
         longitude: stop.longitude,
-        stopped: `${index + 1}`,
+        stopped: `${index == 0 ? "INI" : index}`,
         bgColor,
         color,
         subColor,
@@ -153,17 +156,20 @@ const MainMap = ({
           setPositions={setPositions}
           MainMap={true}
         />
-        {firstLoadDevice ? (
-          <></>
-        ) : (
+        {!firstLoadDevice && selectedId && (
           <>
             <MapRoutePoints
               positions={positions}
-              colorStatic={speedRoutes}
+              colorStatic={staticRoutes}
               needFilterPosition={true}
             />
-            <MapRoutePath positions={positions} staticColor={speedRoutes} />
-            {stops && <MapMarkersStops markers={createMarkersStops()} setStopCard={setStopCard} />}
+            <MapRoutePath positions={positions} staticColor={staticRoutes} />
+            {stops?.length > 0 && (
+              <MapMarkersStops
+                markers={createMarkersStops()}
+                setStopCard={setStopCard}
+              />
+            )}
           </>
         )}
         <MapDefaultCamera />

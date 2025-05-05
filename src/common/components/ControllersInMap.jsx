@@ -36,7 +36,7 @@ const controls = {
   },
 };
 
-const ControllersInMap = ({  position }) => {
+const ControllersInMap = ({  position, setStopCard }) => {
   const selectZoom = useAttributePreference("web.selectZoom", 10);
   const dispatch = useDispatch();
   const devices = useSelector((state) => state.devices.items);
@@ -51,6 +51,7 @@ const ControllersInMap = ({  position }) => {
   };
 
   const hideRoutes = () => {
+    setStopCard(null);
     dispatch(devicesActions.selectId(null));
   };
 

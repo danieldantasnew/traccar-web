@@ -62,9 +62,11 @@ const MapRoutePoints = ({
     map.on("click", id, onMarkerClick);
     map.on("zoom", updateZoomLevel);
 
-    setTimeout(() => {
-      map.moveLayer(id);
-    }, 100);
+    map.once('styledata', () => {
+      if (map.getLayer(id)) {
+        map.moveLayer(id);
+      }
+    });
 
     return () => {
       map.off("mouseenter", id, onMouseEnter);

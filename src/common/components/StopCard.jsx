@@ -80,6 +80,8 @@ const useStyles = makeStyles((theme) => ({
       top: "50vh",
       width: "100vw",
       maxWidth: "initial",
+      borderRadius: ".6rem",
+      overflow: "hidden",
     },
   }),
 }));
@@ -162,13 +164,13 @@ const StopCard = ({ stop, setStopCard, setStatusCardOpen }) => {
             >
               <Box className={classes.flexRow} sx={{ gap: ".5rem !important" }}>
                 <Tooltip
-                  title={`${stop.stopped}° Parada`}
+                  title={`${stop.stopped == "INI" ? 'No estacionamento' : stop.stopped + '° Parada'}`}
                   arrow
                   placement="bottom"
                 >
                   <IconButton
                     sx={{
-                      fontSize: "1.9rem",
+                      fontSize: `${stop.stopped == "INI"  ? "1.5rem" : "1.9rem"}`,
                       fontWeight: "600",
                       width: "48px",
                       height: "48px",
@@ -200,7 +202,7 @@ const StopCard = ({ stop, setStopCard, setStatusCardOpen }) => {
                       backgroundColor: `${
                         stop.ignition ? "#4CAF50" : "#FF0000"
                       }`,
-                      color: `${stop.color}`,
+                      color: `white`,
                       "&:hover": {
                         backgroundColor: `${
                           stop.ignition ? "#38883B" : "#C00000"

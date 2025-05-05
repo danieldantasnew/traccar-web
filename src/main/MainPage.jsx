@@ -111,7 +111,7 @@ const MainPage = () => {
     (position) => selectedDeviceId && position.deviceId === selectedDeviceId
   );
   const phraseGroup = "OUTROS";
-  const [speedRoutes, setSpeedRoutes] = useState(true);
+  const [staticRoutes, setStaticRoutes] = useState(true);
   const [filteredDevices, setFilteredDevices] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [filter, setFilter] = usePersistedState("filter", {
@@ -137,7 +137,7 @@ const MainPage = () => {
     }
     if (selectedDeviceId) {
       setFirstLoadDevice(true);
-      setSpeedRoutes(true)
+      setStaticRoutes(true)
     }
   }, [desktop, mapOnSelect, selectedDeviceId]);
 
@@ -169,7 +169,7 @@ const MainPage = () => {
         setLoading={setLoading}
         firstLoadDevice={firstLoadDevice}
         setStopCard={setStopCard}
-        speedRoutes={speedRoutes}
+        staticRoutes={staticRoutes}
       />
       <Slide direction="right" in={devicesOpen} timeout={200}>
         <Paper
@@ -255,10 +255,12 @@ const MainPage = () => {
           desktopPadding={theme.dimensions.drawerWidthDesktop}
           firstLoadDevice={firstLoadDevice}
           setStopCard={setStopCard}
-          setSpeedRoutes={setSpeedRoutes}
+          stops={stopCard}
+          setStaticRoutes={setStaticRoutes}
+          staticRoutes={staticRoutes}
         />
       )}
-      {selectedDeviceId && (<ControllersInMap position={selectedPosition}/>)}
+      {selectedDeviceId && (<ControllersInMap position={selectedPosition} setStopCard={setStopCard} />)}
       {selectedDeviceId && stopCard && (<StopCard stop={stopCard} setStopCard={setStopCard} setStatusCardOpen={setStatusCardOpen} />)}
     </div>
   );

@@ -31,10 +31,12 @@ import { useAdministrator } from "../common/util/permissions";
 import { useAttributePreference } from "../common/util/preferences";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCar,
+  faBatteryFull,
+  faBatteryHalf,
+  faBatteryQuarter,
+  faBatteryThreeQuarters,
   faCircleExclamation,
   faGaugeHigh,
-  faPowerOff,
 } from "@fortawesome/free-solid-svg-icons";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons";
 
@@ -134,10 +136,7 @@ const DeviceRow = ({ device, setStatusCardOpen, setDevicesOpen }) => {
           {position.attributes.motion && (
             <Tooltip title="Em movimento">
               <IconButton size="small">
-                <FontAwesomeIcon
-                  icon={faGaugeHigh}
-                  color="#455cdb"
-                />
+                <FontAwesomeIcon icon={faGaugeHigh} color="#455cdb" />
               </IconButton>
             </Tooltip>
           )}
@@ -156,28 +155,6 @@ const DeviceRow = ({ device, setStatusCardOpen, setDevicesOpen }) => {
               </IconButton>
             </Tooltip>
           )}
-          {position.attributes.hasOwnProperty("ignition") && (
-            <Tooltip
-              title={`${t("positionIgnition")}: ${formatBoolean(
-                position.attributes.ignition,
-                t
-              )}`}
-            >
-              <IconButton size="small">
-                {position.attributes.ignition ? (
-                  <FontAwesomeIcon
-                    icon={faPowerOff}
-                    className={classes.success}
-                  />
-                ) : (
-                  <FontAwesomeIcon
-                    icon={faPowerOff}
-                    className={classes.error}
-                  />
-                )}
-              </IconButton>
-            </Tooltip>
-          )}
           {position.attributes.hasOwnProperty("batteryLevel") && (
             <Tooltip
               title={`${t("positionBatteryLevel")}: ${formatPercentage(
@@ -187,35 +164,54 @@ const DeviceRow = ({ device, setStatusCardOpen, setDevicesOpen }) => {
               <IconButton size="small">
                 {position.attributes.batteryLevel > 70 ? (
                   position.attributes.charge ? (
-                    <BatteryChargingFullIcon
-                      fontSize="small"
+                    <DynamicIconsComponent
+                      category={"batteryBolt"}
                       className={classes.success}
+                      style={{width: '20px', height: '20px'}}
                     />
                   ) : (
-                    <BatteryFullIcon
-                      fontSize="small"
+                    <FontAwesomeIcon
+                      icon={faBatteryFull}
+                      className={classes.success}
+                    />
+                  )
+                ) : position.attributes.batteryLevel > 50 ? (
+                  position.attributes.charge ? (
+                    <DynamicIconsComponent
+                      category={"batteryBolt"}
+                      className={classes.success}
+                      style={{width: '20px', height: '20px'}}
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={faBatteryThreeQuarters}
                       className={classes.success}
                     />
                   )
                 ) : position.attributes.batteryLevel > 30 ? (
                   position.attributes.charge ? (
-                    <BatteryCharging60Icon
-                      fontSize="small"
+                    <DynamicIconsComponent
+                      category={"batteryBolt"}
                       className={classes.warning}
+                      style={{width: '20px', height: '20px'}}
                     />
                   ) : (
-                    <Battery60Icon
-                      fontSize="small"
+                    <FontAwesomeIcon
+                      icon={faBatteryHalf}
                       className={classes.warning}
                     />
                   )
                 ) : position.attributes.charge ? (
-                  <BatteryCharging20Icon
-                    fontSize="small"
+                  <DynamicIconsComponent
+                    category={"batteryBolt"}
                     className={classes.error}
+                    style={{width: '20px', height: '20px'}}
                   />
                 ) : (
-                  <Battery20Icon fontSize="small" className={classes.error} />
+                  <FontAwesomeIcon
+                    icon={faBatteryQuarter}
+                    className={classes.error}
+                  />
                 )}
               </IconButton>
             </Tooltip>

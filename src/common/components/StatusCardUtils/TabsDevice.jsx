@@ -13,7 +13,7 @@ import { Box, Slide, Tab, Typography } from "@mui/material";
 import LinkDriver from "./LinkDriver";
 import ColorsDevice from "../ColorsDevice";
 
-const TabsDevice = ({ device, position, t }) => {
+const TabsDevice = ({ device, position, t, stops }) => {
   if (!device) return null;
 
   const [tabValue, setTabValue] = useState("tab1");
@@ -81,7 +81,7 @@ const TabsDevice = ({ device, position, t }) => {
             <Box sx={{display: 'flex', flexDirection: 'column', gap: '.8rem', justifyContent: 'space-between',  height: '100%'}}>
               <Box>
                 <AddressComponent position={position} t={t} />
-                <StatusCardDetails position={position} device={device} />
+                <StatusCardDetails position={position} device={device} stops={stops} />
               </Box>
               <LinkDriver device={device} bgColor={bgColor} subColor={subColor} color={color} />
             </Box>
