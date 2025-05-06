@@ -10,12 +10,26 @@ import alarm from "./resources/alarm.mp3";
 import { eventsActions } from "./store/events";
 import useFeatures from "./common/util/useFeatures";
 import { useAttributePreference } from "./common/util/preferences";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { formatNotificationTitle } from "./common/util/formatter";
-import { DynamicIconsComponent } from "./common/components/DynamicIcons";
 import BellOn from "./common/components/IconsAnimated/BellOn";
+import { formatTime } from "./common/util/formatter";
 
 const logoutCode = 4000;
+
+const convertMessages = (message, translation)=> {
+  if(message) {
+    const regex = /^(.*?)\s+(.*? at)\s+(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})$/;
+    const match = message.trim().match(regex);
+    if (match) {
+      const device = match[1];
+      const action = translation(match[2]);
+      const date = formatTime(match[3], "seconds");
+      return `${device} ${action} ${date}`;
+    } else {
+      return "Mensagem de teste";
+    }
+  }
+  return null;
+}
 
 const SocketController = () => {
   const dispatch = useDispatch();
@@ -141,7 +155,8 @@ const SocketController = () => {
   return (
     <>
       {notifications.map((notification) => {
-        const notificationMessage = notification?.message;
+        const teste = "STRADA ITA ANTIGA stopped at 2025-05-06 10:13:46\n"
+        const notificationMessage = convertMessages(notification?.message, t);
 
         return (
           <Snackbar
