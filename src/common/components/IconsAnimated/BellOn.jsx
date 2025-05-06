@@ -42,10 +42,10 @@ const useStyles = makeStyles((theme) => ({
     fill: "white",
   },
   crown: {
-    animation: `$crown 1.5s infinite cubic-bezier(0.25, 0.46, 0.45, 1)`,
+    animation: `$crown 1s infinite cubic-bezier(0.25, 0.46, 0.45, 1)`,
   },
   pendulum: {
-    animation: `$pendulum 1.5s infinite cubic-bezier(0.25, 0.46, 0.45, 1)`,
+    animation: `$pendulum 1s infinite cubic-bezier(0.25, 0.46, 0.45, 1)`,
   },
 }));
 

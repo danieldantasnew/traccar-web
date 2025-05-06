@@ -14,22 +14,56 @@ import BellOn from "./common/components/IconsAnimated/BellOn";
 import { formatTime } from "./common/util/formatter";
 
 const logoutCode = 4000;
+const translations = {
+  ["moving"]: "em movimento",
+  ["stopped"]: "está parado",
+  ["ignition on"]: "está ligado",
+  ["ignition off"]: "está ligado",
+  ["ignition off"]: "está ligado",
+  ["alarm"]: "alarme",
+  ["commandResult"]: "resultado do comando",
+  ["deviceExpiration"]: "expiração do dispositivo",
+  ["deviceExpirationReminder"]: "lembrete de expiração do dispositivo",
+  ["deviceFuelDrop"]: "queda de combustível do dispositivo",
+  ["deviceFuelIncrease"]: "aumento de combustível do dispositivo",
+  ["deviceInactive"]: "dispositivo inativo",
+  ["deviceMoving"]: "dispositivo em movimento",
+  ["deviceOffline"]: "dispositivo offline",
+  ["deviceOnline"]: "dispositivo online",
+  ["deviceOverspeed"]: "dispositivo em alta velocidade",
+  ["deviceUnknown"]: "dispositivo desconhecido",
+  ["driverChanged"]: "motorista alterado",
+  ["geofenceEnter"]: "entrada na cerca virtual",
+  ["geofenceExit"]: "saída da cerca virtual",
+  ["ignitionOff"]: "ignição desligada",
+  ["ignitionOn"]: "ignição ligada",
+  ["maintenance"]: "manutenção",
+  ["media"]: "mídia",
+  ["passwordReset"]: "redefinição de senha",
+  ["queuedCommandSent"]: "comando enfileirado enviado",
+  ["test"]: "teste",
+  ["textMessage"]: "mensagem de texto",
+  ["userExpiration"]: "expiração do usuário",
+  ["userExpirationReminder"]: "lembrete de expiração do usuário",
+};
 
-const convertMessages = (message, translation)=> {
-  if(message) {
-    const regex = /^(.*?)\s+(.*? at)\s+(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})$/;
+const convertMessages = (message) => {
+  if (message) {
+    const regex = /^(.+?)\s+(\w+)\s+at\s+(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})$/;
     const match = message.trim().match(regex);
     if (match) {
       const device = match[1];
-      const action = translation(match[2]);
+      const action = translations[match[2].toLowerCase()];
+      console.log(action)
       const date = formatTime(match[3], "seconds");
-      return `${device} ${action} ${date}`;
+      return `${device} ${action} ${date.toLowerCase()}`;
     } else {
       return "Mensagem de teste";
     }
   }
   return null;
-}
+};
+
 
 const SocketController = () => {
   const dispatch = useDispatch();
@@ -154,23 +188,29 @@ const SocketController = () => {
 
   return (
     <>
-      {notifications.map((notification) => {
-        const teste = "STRADA ITA ANTIGA stopped at 2025-05-06 10:13:46\n"
-        const notificationMessage = convertMessages(notification?.message, t);
+      {notifications.map((notification) => {;
+        const notificationMessage = convertMessages(notification.message);
 
         return (
           <Snackbar
             key={notification.id}
             open={notification.show}
-            message={notification.message}
+            message={notificationMessage}
             autoHideDuration={snackBarDurationLongMs}
             TransitionComponent={Slide}
             onClose={() =>
               setEvents(events.filter((e) => e.id !== notification.id))
             }
           >
-            <Alert icon={<BellOn color="red"/>} sx={{backgroundColor: "rgb(37, 37, 37)", color: "white",  alignItems: "center"}}>
-              <AlertTitle sx={{margin: 0}}>Nova Notificação</AlertTitle>
+            <Alert
+              icon={<BellOn color="red" />}
+              sx={{
+                backgroundColor: "rgb(37, 37, 37)",
+                color: "white",
+                alignItems: "center",
+              }}
+            >
+              <AlertTitle sx={{ margin: 0 }}>Nova Notificação</AlertTitle>
               {notificationMessage}
             </Alert>
           </Snackbar>
