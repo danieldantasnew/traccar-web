@@ -294,7 +294,7 @@ const StatusCardDetails = ({ position }) => {
               positionAttributes={positionAttributes}
             />
           ))}
-        {totalStops && (
+        {!!totalStops && (
           <fieldset className={`${classes.fieldset} ${classes.red}`}>
             <legend className={`${classes.legend}`}>Total de Paradas</legend>
             <div className={classes.box}>
