@@ -57,7 +57,8 @@ import AnnouncementPage from "./settings/AnnouncementPage";
 import EmulatorPage from "./other/EmulatorPage";
 import Loader from "./common/components/Loader";
 import { sessionActions } from "./store";
-import ProtectedRoute from "./common/ProtectedRoute";
+import ProtectedRoute from "./Navigation/ProtectedRoute";
+import NotFound from "./Navigation/NotFound";
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -65,8 +66,10 @@ const Navigation = () => {
 
   const newServer = useSelector((state) => state.session.server.newServer);
   const user = useSelector((state) => state.session.user);
+  const [loading, setLoading] = useState(false);
 
   useEffectAsync(async () => {
+    setLoading(true);
     if (!user) {
       const response = await fetch("/api/session");
       if (response.ok) {
@@ -77,6 +80,7 @@ const Navigation = () => {
         navigate("/login");
       }
     }
+    setLoading(false);
     return null;
   }, [user]);
 
@@ -119,7 +123,7 @@ const Navigation = () => {
       <Route
         path="/login"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute loading={loading}>
             <LoginPage />
           </ProtectedRoute>
         }
@@ -128,7 +132,7 @@ const Navigation = () => {
       <Route
         path="/register"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute loading={loading}>
             <RegisterPage />
           </ProtectedRoute>
         }
@@ -136,7 +140,7 @@ const Navigation = () => {
       <Route
         path="/reset-password"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute loading={loading}>
             <ResetPasswordPage />
           </ProtectedRoute>
         }
@@ -215,6 +219,8 @@ const Navigation = () => {
           <Route path="logs" element={<LogsPage />} />
         </Route>
       </Route>
+
+      <Route path='*' element={<NotFound/>}/>
     </Routes>
   );
 };
