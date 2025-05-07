@@ -1,67 +1,84 @@
-import React, { useState } from 'react';
-import {
-  Route, Routes, useLocation, useNavigate,
-} from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import MainPage from './main/MainPage';
-import CombinedReportPage from './reports/CombinedReportPage';
-import RouteReportPage from './reports/RouteReportPage';
-import ServerPage from './settings/ServerPage';
-import UsersPage from './settings/UsersPage';
-import DevicePage from './settings/DevicePage';
-import UserPage from './settings/UserPage';
-import NotificationsPage from './settings/NotificationsPage';
-import NotificationPage from './settings/NotificationPage';
-import GroupsPage from './settings/GroupsPage';
-import GroupPage from './settings/GroupPage';
-import PositionPage from './other/PositionPage';
-import NetworkPage from './other/NetworkPage';
-import EventReportPage from './reports/EventReportPage';
-import ReplayPage from './other/ReplayPage';
-import TripReportPage from './reports/TripReportPage';
-import StopReportPage from './reports/StopReportPage';
-import SummaryReportPage from './reports/SummaryReportPage';
-import ChartReportPage from './reports/ChartReportPage';
-import DriversPage from './settings/DriversPage';
-import DriverPage from './settings/DriverPage';
-import CalendarsPage from './settings/CalendarsPage';
-import CalendarPage from './settings/CalendarPage';
-import ComputedAttributesPage from './settings/ComputedAttributesPage';
-import ComputedAttributePage from './settings/ComputedAttributePage';
-import MaintenancesPage from './settings/MaintenancesPage';
-import MaintenancePage from './settings/MaintenancePage';
-import CommandsPage from './settings/CommandsPage';
-import CommandPage from './settings/CommandPage';
-import StatisticsPage from './reports/StatisticsPage';
-import LoginPage from './login/LoginPage';
-import RegisterPage from './login/RegisterPage';
-import ResetPasswordPage from './login/ResetPasswordPage';
-import GeofencesPage from './other/GeofencesPage';
-import GeofencePage from './settings/GeofencePage';
-import useQuery from './common/util/useQuery';
-import { useEffectAsync } from './reactHelper';
-import { devicesActions } from './store';
-import EventPage from './other/EventPage';
-import PreferencesPage from './settings/PreferencesPage';
-import AccumulatorsPage from './settings/AccumulatorsPage';
-import CommandDevicePage from './settings/CommandDevicePage';
-import CommandGroupPage from './settings/CommandGroupPage';
-import App from './App';
-import ChangeServerPage from './login/ChangeServerPage';
-import DevicesPage from './settings/DevicesPage';
-import ScheduledPage from './reports/ScheduledPage';
-import DeviceConnectionsPage from './settings/DeviceConnectionsPage';
-import GroupConnectionsPage from './settings/GroupConnectionsPage';
-import UserConnectionsPage from './settings/UserConnectionsPage';
-import LogsPage from './reports/LogsPage';
-import SharePage from './settings/SharePage';
-import AnnouncementPage from './settings/AnnouncementPage';
-import EmulatorPage from './other/EmulatorPage';
-import Loader from './common/components/Loader';
+import React, { useState } from "react";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import MainPage from "./main/MainPage";
+import CombinedReportPage from "./reports/CombinedReportPage";
+import RouteReportPage from "./reports/RouteReportPage";
+import ServerPage from "./settings/ServerPage";
+import UsersPage from "./settings/UsersPage";
+import DevicePage from "./settings/DevicePage";
+import UserPage from "./settings/UserPage";
+import NotificationsPage from "./settings/NotificationsPage";
+import NotificationPage from "./settings/NotificationPage";
+import GroupsPage from "./settings/GroupsPage";
+import GroupPage from "./settings/GroupPage";
+import PositionPage from "./other/PositionPage";
+import NetworkPage from "./other/NetworkPage";
+import EventReportPage from "./reports/EventReportPage";
+import ReplayPage from "./other/ReplayPage";
+import TripReportPage from "./reports/TripReportPage";
+import StopReportPage from "./reports/StopReportPage";
+import SummaryReportPage from "./reports/SummaryReportPage";
+import ChartReportPage from "./reports/ChartReportPage";
+import DriversPage from "./settings/DriversPage";
+import DriverPage from "./settings/DriverPage";
+import CalendarsPage from "./settings/CalendarsPage";
+import CalendarPage from "./settings/CalendarPage";
+import ComputedAttributesPage from "./settings/ComputedAttributesPage";
+import ComputedAttributePage from "./settings/ComputedAttributePage";
+import MaintenancesPage from "./settings/MaintenancesPage";
+import MaintenancePage from "./settings/MaintenancePage";
+import CommandsPage from "./settings/CommandsPage";
+import CommandPage from "./settings/CommandPage";
+import StatisticsPage from "./reports/StatisticsPage";
+import LoginPage from "./login/LoginPage";
+import RegisterPage from "./login/RegisterPage";
+import ResetPasswordPage from "./login/ResetPasswordPage";
+import GeofencesPage from "./other/GeofencesPage";
+import GeofencePage from "./settings/GeofencePage";
+import useQuery from "./common/util/useQuery";
+import { useEffectAsync } from "./reactHelper";
+import { devicesActions } from "./store";
+import EventPage from "./other/EventPage";
+import PreferencesPage from "./settings/PreferencesPage";
+import AccumulatorsPage from "./settings/AccumulatorsPage";
+import CommandDevicePage from "./settings/CommandDevicePage";
+import CommandGroupPage from "./settings/CommandGroupPage";
+import App from "./App";
+import ChangeServerPage from "./login/ChangeServerPage";
+import DevicesPage from "./settings/DevicesPage";
+import ScheduledPage from "./reports/ScheduledPage";
+import DeviceConnectionsPage from "./settings/DeviceConnectionsPage";
+import GroupConnectionsPage from "./settings/GroupConnectionsPage";
+import UserConnectionsPage from "./settings/UserConnectionsPage";
+import LogsPage from "./reports/LogsPage";
+import SharePage from "./settings/SharePage";
+import AnnouncementPage from "./settings/AnnouncementPage";
+import EmulatorPage from "./other/EmulatorPage";
+import Loader from "./common/components/Loader";
+import { sessionActions } from "./store";
+import ProtectedRoute from "./common/ProtectedRoute";
 
 const Navigation = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const newServer = useSelector((state) => state.session.server.newServer);
+  const user = useSelector((state) => state.session.user);
+
+  useEffectAsync(async () => {
+    if (!user) {
+      const response = await fetch("/api/session");
+      if (response.ok) {
+        dispatch(sessionActions.updateUser(await response.json()));
+      } else if (newServer) {
+        navigate("/register");
+      } else {
+        navigate("/login");
+      }
+    }
+    return null;
+  }, [user]);
 
   const [redirectsHandled, setRedirectsHandled] = useState(false);
 
@@ -69,12 +86,12 @@ const Navigation = () => {
   const query = useQuery();
 
   useEffectAsync(async () => {
-    if (query.get('token')) {
-      const token = query.get('token');
+    if (query.get("token")) {
+      const token = query.get("token");
       await fetch(`/api/session?token=${encodeURIComponent(token)}`);
       navigate(pathname);
-    } else if (query.get('deviceId')) {
-      const deviceId = query.get('deviceId');
+    } else if (query.get("deviceId")) {
+      const deviceId = query.get("deviceId");
       const response = await fetch(`/api/devices?uniqueId=${deviceId}`);
       if (response.ok) {
         const items = await response.json();
@@ -84,9 +101,9 @@ const Navigation = () => {
       } else {
         throw Error(await response.text());
       }
-      navigate('/');
-    } else if (query.get('eventId')) {
-      const eventId = parseInt(query.get('eventId'), 10);
+      navigate("/");
+    } else if (query.get("eventId")) {
+      const eventId = parseInt(query.get("eventId"), 10);
       navigate(`/event/${eventId}`);
     } else {
       setRedirectsHandled(true);
@@ -94,13 +111,36 @@ const Navigation = () => {
   }, [query]);
 
   if (!redirectsHandled) {
-    return (<Loader />);
+    return <Loader />;
   }
+
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route path="/reset-password" element={<ResetPasswordPage />} />
+      <Route
+        path="/login"
+        element={
+          <ProtectedRoute>
+            <LoginPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/register"
+        element={
+          <ProtectedRoute>
+            <RegisterPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/reset-password"
+        element={
+          <ProtectedRoute>
+            <ResetPasswordPage />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/change-server" element={<ChangeServerPage />} />
       <Route path="/" element={<App />}>
         <Route index element={<MainPage />} />
@@ -124,7 +164,10 @@ const Navigation = () => {
           <Route path="attribute/:id" element={<ComputedAttributePage />} />
           <Route path="attribute" element={<ComputedAttributePage />} />
           <Route path="devices" element={<DevicesPage />} />
-          <Route path="device/:id/connections" element={<DeviceConnectionsPage />} />
+          <Route
+            path="device/:id/connections"
+            element={<DeviceConnectionsPage />}
+          />
           <Route path="device/:id/command" element={<CommandDevicePage />} />
           <Route path="device/:id/share" element={<SharePage />} />
           <Route path="device/:id" element={<DevicePage />} />
@@ -135,7 +178,10 @@ const Navigation = () => {
           <Route path="geofence/:id" element={<GeofencePage />} />
           <Route path="geofence" element={<GeofencePage />} />
           <Route path="groups" element={<GroupsPage />} />
-          <Route path="group/:id/connections" element={<GroupConnectionsPage />} />
+          <Route
+            path="group/:id/connections"
+            element={<GroupConnectionsPage />}
+          />
           <Route path="group/:id/command" element={<CommandGroupPage />} />
           <Route path="group/:id" element={<GroupPage />} />
           <Route path="group" element={<GroupPage />} />
@@ -148,7 +194,10 @@ const Navigation = () => {
           <Route path="preferences" element={<PreferencesPage />} />
           <Route path="server" element={<ServerPage />} />
           <Route path="users" element={<UsersPage />} />
-          <Route path="user/:id/connections" element={<UserConnectionsPage />} />
+          <Route
+            path="user/:id/connections"
+            element={<UserConnectionsPage />}
+          />
           <Route path="user/:id" element={<UserPage />} />
           <Route path="user" element={<UserPage />} />
         </Route>

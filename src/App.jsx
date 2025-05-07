@@ -6,7 +6,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import BottomMenu from './common/components/BottomMenu';
 import SocketController from './SocketController';
 import CachingController from './CachingController';
-import { useCatch, useEffectAsync } from './reactHelper';
+import { useCatch } from './reactHelper';
 import { sessionActions } from './store';
 import UpdateController from './UpdateController';
 import TermsDialog from './common/components/TermsDialog';
@@ -31,7 +31,6 @@ const App = () => {
 
   const desktop = useMediaQuery(theme.breakpoints.up('md'));
 
-  const newServer = useSelector((state) => state.session.server.newServer);
   const termsUrl = useSelector((state) => state.session.server.attributes.termsUrl);
   const user = useSelector((state) => state.session.user);
 
@@ -47,20 +46,6 @@ const App = () => {
       throw Error(await response.text());
     }
   });
-
-  useEffectAsync(async () => {
-    if (!user) {
-      const response = await fetch('/api/session');
-      if (response.ok) {
-        dispatch(sessionActions.updateUser(await response.json()));
-      } else if (newServer) {
-        navigate('/register');
-      } else {
-        navigate('/login');
-      }
-    }
-    return null;
-  }, [user]);
 
   if (user == null) {
     return (<Loader />);

@@ -50,7 +50,6 @@ const MapRoutePath = ({ positions, staticColor }) => {
           14, 2.8,
           18, 3.3,
         ],
-        'line-offset': 3,
       },
     });
 

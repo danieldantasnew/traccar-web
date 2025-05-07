@@ -15,18 +15,16 @@ import { formatTime } from "./common/util/formatter";
 
 const logoutCode = 4000;
 const translations = {
-  ["moving"]: "em movimento",
-  ["stopped"]: "está parado",
-  ["ignition on"]: "está ligado",
-  ["ignition off"]: "está desligado",
+  ["deviceMoving"]: "em movimento",
+  ["deviceStopped"]: "está parado",
+  ["ignitionOn"]: "está ligado",
+  ["ignitionOff"]: "está desligado",
   ["alarm"]: "alarme",
   ["commandResult"]: "resultado do comando",
   ["deviceExpiration"]: "expiração do dispositivo",
-  ["deviceExpirationReminder"]: "lembrete de expiração do dispositivo",
   ["deviceFuelDrop"]: "queda de combustível do dispositivo",
   ["deviceFuelIncrease"]: "aumento de combustível do dispositivo",
   ["deviceInactive"]: "dispositivo inativo",
-  ["deviceMoving"]: "dispositivo em movimento",
   ["deviceOffline"]: "dispositivo offline",
   ["deviceOnline"]: "dispositivo online",
   ["deviceOverspeed"]: "dispositivo em alta velocidade",
@@ -44,23 +42,13 @@ const translations = {
   ["userExpirationReminder"]: "lembrete de expiração do usuário",
 };
 
-const convertMessages = (message) => {
-  if (message) {
-    const regex = /^(.+?)\s+(\w+)\s+at\s+(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})$/;
-    const match = message.trim().match(regex);
-    if (match) {
-      const device = match[1];
-      const action = translations[match[2].toLowerCase()];
-      console.log(action)
-      const date = formatTime(match[3], "seconds");
-      return `${device} ${action} ${date.toLowerCase()}`;
-    } else {
-      return "Mensagem de teste";
-    }
-  }
-  return null;
-};
+const convertMessages = (notification) => {
+  const deviceName = notification.name || "";
+  const action = translations[notification.type] || "";
+  const eventTime = formatTime(notification.timestamp) || "";
 
+  return `${deviceName} ${action} ${eventTime.toLowerCase()}`;
+};
 
 const SocketController = () => {
   const dispatch = useDispatch();
@@ -164,11 +152,17 @@ const SocketController = () => {
 
   useEffect(() => {
     setNotifications(
-      events.map((event) => ({
-        id: event.id,
-        message: event.attributes.message,
-        show: true,
-      }))
+      events.map((event) => {
+        return {
+          id: event.id,
+          message: event.attributes.message,
+          show: true,
+          deviceId: event.deviceId,
+          type: event.type,
+          name: devices[event.deviceId]?.name,
+          timestamp: event.eventTime,
+        };
+      })
     );
   }, [events, devices, t]);
 
@@ -186,8 +180,7 @@ const SocketController = () => {
   return (
     <>
       {notifications.map((notification) => {
-        console.log(notifications)
-        const notificationMessage = convertMessages(notification.message);
+        const notificationMessage = convertMessages(notification);
 
         return (
           <Snackbar

@@ -116,7 +116,6 @@ const MapRoutePoints = ({
         "text-size": 26,
         "text-allow-overlap": true,
         "text-rotate": ["get", "rotation"],
-        "text-offset": [.1, 0] 
       },
     });
 
@@ -152,7 +151,7 @@ const MapRoutePoints = ({
     const processedPositions = createGhostPositions(positions, 50);
     const finalPositions = needFilterPosition
       ? processedPositions.filter((_, index) =>
-          index % (zoomLevel < 13 ? 40 : zoomLevel >= 13 && zoomLevel < 16 ? 24 : 20) === 0
+          index % (zoomLevel < 13 ? 40 : zoomLevel >= 13 && zoomLevel < 16 ? 24 : 8) === 0
         )
       : processedPositions;
 
