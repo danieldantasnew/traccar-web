@@ -47,7 +47,7 @@ const MapRoutePath = ({ positions, staticColor }) => {
           ['linear'],
           ['zoom'],
           4, 2,
-          14, 2.6,
+          14, 2.8,
           18, 3.3,
         ],
       },

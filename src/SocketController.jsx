@@ -18,8 +18,7 @@ const translations = {
   ["moving"]: "em movimento",
   ["stopped"]: "está parado",
   ["ignition on"]: "está ligado",
-  ["ignition off"]: "está ligado",
-  ["ignition off"]: "está ligado",
+  ["ignition off"]: "está desligado",
   ["alarm"]: "alarme",
   ["commandResult"]: "resultado do comando",
   ["deviceExpiration"]: "expiração do dispositivo",
@@ -35,8 +34,6 @@ const translations = {
   ["driverChanged"]: "motorista alterado",
   ["geofenceEnter"]: "entrada na cerca virtual",
   ["geofenceExit"]: "saída da cerca virtual",
-  ["ignitionOff"]: "ignição desligada",
-  ["ignitionOn"]: "ignição ligada",
   ["maintenance"]: "manutenção",
   ["media"]: "mídia",
   ["passwordReset"]: "redefinição de senha",
@@ -188,7 +185,8 @@ const SocketController = () => {
 
   return (
     <>
-      {notifications.map((notification) => {;
+      {notifications.map((notification) => {
+        console.log(notifications)
         const notificationMessage = convertMessages(notification.message);
 
         return (
