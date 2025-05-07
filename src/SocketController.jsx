@@ -12,39 +12,13 @@ import useFeatures from "./common/util/useFeatures";
 import { useAttributePreference } from "./common/util/preferences";
 import BellOn from "./common/components/IconsAnimated/BellOn";
 import { formatTime } from "./common/util/formatter";
+import translationsEvents from "./common/util/translationsEvents";
 
 const logoutCode = 4000;
-const translations = {
-  ["deviceMoving"]: "em movimento",
-  ["deviceStopped"]: "está parado",
-  ["ignitionOn"]: "está ligado",
-  ["ignitionOff"]: "está desligado",
-  ["alarm"]: "alarme",
-  ["commandResult"]: "resultado do comando",
-  ["deviceExpiration"]: "expiração do dispositivo",
-  ["deviceFuelDrop"]: "queda de combustível do dispositivo",
-  ["deviceFuelIncrease"]: "aumento de combustível do dispositivo",
-  ["deviceInactive"]: "dispositivo inativo",
-  ["deviceOffline"]: "dispositivo offline",
-  ["deviceOnline"]: "dispositivo online",
-  ["deviceOverspeed"]: "dispositivo em alta velocidade",
-  ["deviceUnknown"]: "dispositivo desconhecido",
-  ["driverChanged"]: "motorista alterado",
-  ["geofenceEnter"]: "entrada na cerca virtual",
-  ["geofenceExit"]: "saída da cerca virtual",
-  ["maintenance"]: "manutenção",
-  ["media"]: "mídia",
-  ["passwordReset"]: "redefinição de senha",
-  ["queuedCommandSent"]: "comando enfileirado enviado",
-  ["test"]: "teste",
-  ["textMessage"]: "mensagem de texto",
-  ["userExpiration"]: "expiração do usuário",
-  ["userExpirationReminder"]: "lembrete de expiração do usuário",
-};
 
 const convertMessages = (notification) => {
   const deviceName = notification.name || "";
-  const action = translations[notification.type] || "";
+  const action = translationsEvents[notification.type] || "";
   const eventTime = formatTime(notification.timestamp) || "";
 
   return `${deviceName} ${action} ${eventTime.toLowerCase()}`;
