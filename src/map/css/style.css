@@ -76,3 +76,17 @@
 .maplibregl-ctrl-top-right {
     top: 1rem;
 }
+
+.cluster-marker {
+    background: #4CAF50;
+    color: white;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
