@@ -28,14 +28,11 @@ import { useDevices } from "../Context/App.jsx";
 const MainMap = ({
   filteredPositions,
   selectedPosition,
-  onEventsClick,
   setLoading,
 }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const desktop = useMediaQuery(theme.breakpoints.up("md"));
-  const eventsAvailable = useSelector((state) => !!state.events.items.length);
-  const features = useFeatures();
   const devices = useSelector((state) => state.devices.items);
   const [stops, setStops] = useState([]);
   const [positions, setPositions] = useState([]);
@@ -190,9 +187,9 @@ const MainMap = ({
       <MapScale />
       <MapCurrentLocation />
       <MapGeocoder />
-      {!features.disableEvents && (
+      {/* {!features.disableEvents && (
         <MapNotification enabled={eventsAvailable} onClick={onEventsClick} />
-      )}
+      )} */}
       {desktop && (
         <MapPadding
           left={

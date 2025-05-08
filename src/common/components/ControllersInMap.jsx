@@ -1,5 +1,5 @@
 import { Box, Tooltip } from "@mui/material";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { map } from "../../map/core/MapView";
 import { useAttributePreference } from "../util/preferences";
 import dimensions from "../theme/dimensions.js";
@@ -9,12 +9,13 @@ import { faEyeSlash, faMapPin } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ColorsDevice from "./ColorsDevice.js";
 import { useDevices } from "../../Context/App.jsx";
+import BellOn from "./IconsAnimated/BellOn.jsx";
 
 const styleBox = {
   position: "fixed",
   zIndex: 8,
   right: 10,
-  top: "17.5rem",
+  top: "15rem",
   display: "flex",
   flexDirection: "column",
   gap: ".5rem",
@@ -33,16 +34,20 @@ const controls = {
   padding: "4px",
   borderRadius: "4px",
   "&:hover": {
-    backgroundColor: "rgb(245, 245, 245)",
+    backgroundColor: "rgb(255, 255, 255)",
   },
 };
 
-const ControllersInMap = ({  position, }) => {
+const ControllersInMap = ({ position, selectedDeviceId, onClick }) => {
   const selectZoom = useAttributePreference("web.selectZoom", 10);
   const dispatch = useDispatch();
   const devices = useSelector((state) => state.devices.items);
-  const selectedDeviceId = useSelector((state) => state.devices.selectedId);
-  const {setStopCard} = useDevices();
+  const events = useSelector((state) => state.events.items);
+  const [prevLength, setPrevLength] = useState(events.length);
+  const [animKey, setAnimKey] = useState(0);
+  const timeOutRef = useRef();
+
+  const { setStopCard } = useDevices();
 
   const centerDevice = () => {
     map.easeTo({
@@ -57,26 +62,60 @@ const ControllersInMap = ({  position, }) => {
     dispatch(devicesActions.selectId(null));
   };
 
-  if(!devices[selectedDeviceId]) return null;
-  const {bgColor} = ColorsDevice(devices[selectedDeviceId].attributes['web.reportColor']);
+  const { bgColor } =
+    ColorsDevice(devices[selectedDeviceId]?.attributes["web.reportColor"]) ||
+    "#000";
+
+  useEffect(() => {
+    if (events.length > prevLength) {
+      if (timeOutRef.current) {
+        clearTimeout(timeOutRef.current);
+      }
+      timeOutRef.current = setTimeout(
+        () => setAnimKey((prev) => prev + 1),
+        2000
+      );
+    }
+    setPrevLength(events.length);
+
+    return () => {
+      if (timeOutRef.current) {
+        clearTimeout(timeOutRef.current);
+      }
+    };
+  }, [events.length]);
 
   return (
     <Box sx={styleBox}>
-      <Tooltip
-        sx={controls}
-        title="Centralizar dispositivo"
-        placement="left"
-        arrow
-      >
-        <Box onClick={centerDevice}>
-          <FontAwesomeIcon icon={faMapPin} color={`${bgColor}`}/>
+      <Tooltip sx={controls} title="Notificações" placement="left" arrow>
+        <Box onClick={onClick}>
+          <BellOn
+            key={animKey}
+            color={!!events.length ? "red" : "#000"}
+            animated={!!events.length}
+            uniqAnimation={true}
+          />
         </Box>
       </Tooltip>
-      <Tooltip sx={controls} title="Ocultar rotas" placement="left" arrow>
-        <Box onClick={hideRoutes}>
-          <FontAwesomeIcon icon={faEyeSlash} color={`${bgColor}`} />
-        </Box>
-      </Tooltip>
+      {selectedDeviceId && (
+        <>
+          <Tooltip
+            sx={controls}
+            title="Centralizar dispositivo"
+            placement="left"
+            arrow
+          >
+            <Box onClick={centerDevice}>
+              <FontAwesomeIcon icon={faMapPin} color={`${bgColor}`} />
+            </Box>
+          </Tooltip>
+          <Tooltip sx={controls} title="Ocultar rotas" placement="left" arrow>
+            <Box onClick={hideRoutes}>
+              <FontAwesomeIcon icon={faEyeSlash} color={`${bgColor}`} />
+            </Box>
+          </Tooltip>
+        </>
+      )}
     </Box>
   );
 };

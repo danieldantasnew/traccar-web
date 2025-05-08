@@ -255,7 +255,7 @@ const MainPage = () => {
           desktopPadding={theme.dimensions.drawerWidthDesktop}
         />
       )}
-      {selectedDeviceId && <ControllersInMap position={selectedPosition} />}
+      <ControllersInMap position={selectedPosition} selectedDeviceId={selectedDeviceId} onClick={onEventsClick}/>
       {selectedDeviceId && stopCard && <StopCard stop={stopCard} />}
     </div>
   );
