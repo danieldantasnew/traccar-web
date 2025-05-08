@@ -24,7 +24,7 @@ const styleBox = {
 const controls = {
   height: "29px",
   width: "29px",
-  backgroundColor: "#ffff",
+  backgroundColor: "#ffffff",
   color: "black",
   display: "flex",
   justifyContent: "center",
@@ -34,7 +34,7 @@ const controls = {
   padding: "4px",
   borderRadius: "4px",
   "&:hover": {
-    backgroundColor: "rgb(255, 255, 255)",
+    backgroundColor: "rgb(245, 245, 245)",
   },
 };
 
@@ -43,7 +43,6 @@ const ControllersInMap = ({ position, selectedDeviceId, onClick }) => {
   const dispatch = useDispatch();
   const devices = useSelector((state) => state.devices.items);
   const events = useSelector((state) => state.events.items);
-  const [prevLength, setPrevLength] = useState(events.length);
   const [animKey, setAnimKey] = useState(0);
   const timeOutRef = useRef();
 
@@ -67,22 +66,18 @@ const ControllersInMap = ({ position, selectedDeviceId, onClick }) => {
     "#000";
 
   useEffect(() => {
-    if (events.length > prevLength) {
-      if (timeOutRef.current) {
-        clearTimeout(timeOutRef.current);
-      }
-      timeOutRef.current = setTimeout(
+    if (events.length > 0) {
+      clearInterval(timeOutRef.current);
+      timeOutRef.current = setInterval(
         () => setAnimKey((prev) => prev + 1),
-        2000
+        15000
       );
     }
-    setPrevLength(events.length);
+    else {
+      clearInterval(timeOutRef.current);
+    }
 
-    return () => {
-      if (timeOutRef.current) {
-        clearTimeout(timeOutRef.current);
-      }
-    };
+    return () => clearInterval(timeOutRef.current);
   }, [events.length]);
 
   return (

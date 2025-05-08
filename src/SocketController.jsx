@@ -11,7 +11,6 @@ import { eventsActions } from "./store/events";
 import useFeatures from "./common/util/useFeatures";
 import { useAttributePreference } from "./common/util/preferences";
 import BellOn from "./common/components/IconsAnimated/BellOn";
-import { formatTime } from "./common/util/formatter";
 import translationsEvents from "./common/util/translationsEvents";
 
 const logoutCode = 4000;
@@ -19,9 +18,8 @@ const logoutCode = 4000;
 const convertMessages = (notification) => {
   const deviceName = notification.name || "";
   const action = translationsEvents[notification.type] || "";
-  const eventTime = formatTime(notification.timestamp) || "";
 
-  return `${deviceName} ${action} ${eventTime.toLowerCase()}`;
+  return `${deviceName} ${action}`;
 };
 
 const SocketController = () => {
