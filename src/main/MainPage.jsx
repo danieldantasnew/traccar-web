@@ -19,7 +19,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import ControllersInMap from "../common/components/ControllersInMap.jsx";
 import StopCard from "../common/components/StopCard.jsx";
-import useEnsureDeviceColors from "../Hooks/useEnsureDeviceColors.jsx";
+import useEnsureAttributes from "../Hooks/useEnsureAttributes.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -108,7 +108,12 @@ const MainPage = () => {
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
   const positions = useSelector((state) => state.session.positions);
   const [filteredPositions, setFilteredPositions] = useState([]);
-  const createAttribute = useEnsureDeviceColors();
+  const devices = useSelector((state) => state.devices.items);
+  const needCreateDeviceColors = Object.values(devices).some(
+    (device) => !device.attributes?.deviceColors
+  );
+  useEnsureAttributes(needCreateDeviceColors);
+
   const selectedPosition = filteredPositions.find(
     (position) => selectedDeviceId && position.deviceId === selectedDeviceId
   );

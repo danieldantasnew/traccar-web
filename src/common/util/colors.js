@@ -1,3 +1,5 @@
+import { rgbToHex } from "@mui/material";
+
 // Turbo Colormap
 export const turboPolynomials = {
   r: [
@@ -44,7 +46,7 @@ export const getRandomColor = () => {
   const baseColor = `rgb(${baseRed}, ${baseGreen}, ${baseBlue})`;
 
   const luminance = 0.2126 * baseRed + 0.7152 * baseGreen + 0.0722 * baseBlue;
-  const textColor = luminance > 128 ? "black" : "white";
+  const textColor = luminance > 128 ? "rgb(0,0,0)" : "rgb(255,255,255)";
 
   const variation = Math.random() > 0.5 ? 30 : -30;
 
@@ -54,11 +56,15 @@ export const getRandomColor = () => {
 
   const variantColor = `rgb(${variantRed}, ${variantGreen}, ${variantBlue})`;
 
+  const hexBaseColor = rgbToHex(baseColor);
+  const hexTextColor = rgbToHex(textColor);
+  const hexVariantColor = rgbToHex(variantColor);
+
   return {
-    background: baseColor,
-    text: textColor,
-    secondary: variantColor,
-    icon: textColor,
+    background: hexBaseColor,
+    text: hexTextColor,
+    secondary: hexVariantColor,
+    icon: hexTextColor,
   };
 };
 

@@ -30,8 +30,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     backgroundColor: "#ffffff",
     justifyContent: "flex-start",
+    borderRadius: "0rem",
     [theme.breakpoints.down("md")]: {
       width: "100%",
+      borderRadius: ".6rem",
     },
   },
   closeButton: {
@@ -81,7 +83,6 @@ const useStyles = makeStyles((theme) => ({
       top: "50vh",
       width: "100vw",
       maxWidth: "initial",
-      borderRadius: ".6rem",
       overflow: "hidden",
     },
   }),
