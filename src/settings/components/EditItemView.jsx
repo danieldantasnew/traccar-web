@@ -48,8 +48,8 @@ const EditItemView = ({
       attributes: { ...item.attributes, ['web.reportColor']: getRandomColor() }
     } : {
       ...item,
-      attributes: { ...item.attributes, ['web.reportColor']: webColor },
-    };
+      attributes: { ...item.attributes, ['web.reportColor']: webColor, deviceColors: {background: bgColor, text: color, secondary: subColor, icon: color} },
+    }; //Adaptar função para remover o web.reportColor e passar a ser deviceColors
     
     setItem(updatedItem);
 
