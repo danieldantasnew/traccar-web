@@ -23,8 +23,10 @@ const avatarInfo = {
 };
 
 const InfoCar = ({ device }) => {
-  const attributes = device.attributes || {};
+  const attributes = device?.attributes || {};
   const { background, icon } = attributes?.deviceColors || {background: "black", icon: "red", text: "white", secondary: "blue"};
+
+  if(!device) return null;
 
   return (
     <Box style={infoCar}>

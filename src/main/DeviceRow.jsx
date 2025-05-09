@@ -1,4 +1,3 @@
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import makeStyles from "@mui/styles/makeStyles";
 import {
@@ -31,7 +30,6 @@ import {
   faGaugeHigh,
 } from "@fortawesome/free-solid-svg-icons";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons";
-import { getRandomColor } from "../common/util/colors";
 
 dayjs.extend(relativeTime);
 
@@ -69,7 +67,7 @@ const DeviceRow = ({ device, setStatusCardOpen, setDevicesOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const t = useTranslation();
-  const attributes = device.attributes || {};
+  const attributes = device?.attributes || {};
   const { background, icon } = attributes?.deviceColors || {background: "black", icon: "red", text: "white", secondary: "blue"};
   const admin = useAdministrator();
 
@@ -100,9 +98,9 @@ const DeviceRow = ({ device, setStatusCardOpen, setDevicesOpen }) => {
     <ListItemButton
       key={device.id}
       onClick={() => {
+        setDevicesOpen(false);
         dispatch(devicesActions.selectId(device.id));
         setStatusCardOpen(true);
-        setDevicesOpen(false);
       }}
       disabled={!admin && device.disabled}
     >

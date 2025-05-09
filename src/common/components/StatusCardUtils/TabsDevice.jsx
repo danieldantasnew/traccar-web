@@ -20,7 +20,7 @@ const TabsDevice = ({ device, position, t }) => {
     setTabValue(newValue);
   };
 
-  const attributes = device.attributes || {};
+  const attributes = device?.attributes || {};
   const { background, text, secondary } = attributes?.deviceColors || {background: "black", icon: "red", text: "white", secondary: "blue"};
 
   return (

@@ -110,7 +110,7 @@ const MainPage = () => {
   const [filteredPositions, setFilteredPositions] = useState([]);
   const devices = useSelector((state) => state.devices.items);
   const needCreateDeviceColors = Object.values(devices).some(
-    (device) => !device.attributes?.deviceColors
+    (device) => !device?.attributes?.deviceColors
   );
   useEnsureAttributes(needCreateDeviceColors);
 

@@ -158,7 +158,7 @@ const MapRoutePoints = ({
     const maxSpeed = positions.reduce((a, b) => Math.max(a, b.speed), -Infinity);
     const minSpeed = positions.reduce((a, b) => Math.min(a, b.speed), Infinity);
     const device = devices[selectedId]
-    const attributes = device.attributes || {};
+    const attributes = device?.attributes || {};
     const { background } = attributes?.deviceColors || {background: "black", icon: "red", text: "white", secondary: "blue"};
 
     const data = {

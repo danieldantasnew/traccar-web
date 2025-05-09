@@ -227,6 +227,7 @@ const StatusCard = ({ deviceId, position }) => {
       const response = await fetch("/api/devices");
       if (response.ok) {
         dispatch(devicesActions.refresh(await response.json()));
+        dispatch(devicesActions.selectId(null));
       } else {
         throw Error(await response.text());
       }

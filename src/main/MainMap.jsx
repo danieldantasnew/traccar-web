@@ -62,7 +62,7 @@ const MainMap = ({
           (position) => position.id === stop.positionId
         );
         const device = devices[stop.deviceId] || {};
-        const attributes = device.attributes || {};
+        const attributes = device?.attributes || {};
         const { background, text, secondary } = attributes?.deviceColors || {background: "black", icon: "red", text: "white", secondary: "blue"};
         const model = device?.model || "";
         const safeStopPosition = Object.fromEntries(

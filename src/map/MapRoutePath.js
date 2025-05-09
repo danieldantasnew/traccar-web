@@ -10,7 +10,7 @@ const MapRoutePath = ({ positions, staticColor }) => {
   const selectedId = useSelector((state) => state.devices.selectedId);
   const theme = useTheme();
   const device = devices[selectedId] || {}; 
-  const attributes = device.attributes || {};
+  const attributes = device?.attributes || {};
   const { secondary } = attributes?.deviceColors || {background: "black", icon: "red", text: "white", secondary: "blue"};
 
   const reportColor = useSelector((state) => {

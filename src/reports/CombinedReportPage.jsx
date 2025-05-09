@@ -34,11 +34,11 @@ const CombinedReportPage = () => {
   const createMarkers = () => {
     return items.flatMap((item) => {
       const device = devices[item.deviceId] || {}; 
-      const attributes = device.attributes || {};  
-      const reportColor = attributes['web.reportColor'] ? attributes['web.reportColor'].split(';') : ["rgb(189, 12, 18)", "rgb(189, 12, 18)"];
+      const attributes = device?.attributes || {};
+      const { background, text, secondary } = attributes?.deviceColors || {background: "black", icon: "red", text: "white", secondary: "blue"};
       
-      const bgColor = reportColor[0];
-      const color = reportColor[1];
+      const bgColor = background;
+      const color = text;
       return item.events
       .map((event) => item.positions.find((p) => event.positionId === p.id))
       .filter((position) => position != null)
