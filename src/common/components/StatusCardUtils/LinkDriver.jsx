@@ -1,7 +1,6 @@
 import { faUserSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Box, Button, Typography } from "@mui/material";
-import React from "react";
 
 const box = {
   display: "flex",
@@ -29,7 +28,7 @@ const boxInfo2 = {
 
 const icon = { backgroundColor: "#E0E0E0", padding: '8px', borderRadius: '50%', height: '36px', width: '36px', display: 'grid', alignItems: 'center', justifyContent: 'center' }
 
-const LinkDriver = ({ device, bgColor, color, subColor }) => {
+const LinkDriver = ({ device, background, text, secondary }) => {
   return (
     <Box sx={box}>
       <Box sx={boxInfo1}>
@@ -49,12 +48,12 @@ const LinkDriver = ({ device, bgColor, color, subColor }) => {
         size="small"
         sx={{
           padding: "6px 12px",
-          backgroundColor: `${bgColor}`,
-          color: `${color}`,
+          backgroundColor: `${background}`,
+          color: `${text}`,
           fontSize: '.85rem',
           "&:hover": {
-            color: `${color}`,
-            backgroundColor: `${subColor}`,
+            color: `${text}`,
+            backgroundColor: `${secondary}`,
           },
         }}
         variant="contained"

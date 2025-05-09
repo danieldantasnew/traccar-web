@@ -6,8 +6,8 @@ import "./css/style.css";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
 import { Tooltip } from "@mui/material";
 import { createRoot } from "react-dom/client";
-import ColorsDevice from "../common/components/ColorsDevice.js";
 import { formatTime } from "../common/util/formatter.js";
+import { getRandomColor } from "../common/util/colors.js";
 
 const MapPositions = ({
   positions,
@@ -24,7 +24,8 @@ const MapPositions = ({
   const devicesPropsKey = positions
   .map((p) => {
     const d = devices[p.deviceId] || {};
-    return [d.category, d.name, d.model, d.attributes?.["web.reportColor"]].join("-");
+    const colors = d.attributes?.deviceColors || {};
+    return JSON.stringify([d.category, d.name, d.model, colors]);
   })
   .join("|");
 
@@ -80,8 +81,8 @@ const MapPositions = ({
 
       const el = document.createElement("div");
       const device = devices[position.deviceId];
-      const attributes = device.attributes || {};
-      const { bgColor, color } = ColorsDevice(attributes["web.reportColor"]);
+      const deviceColors = device?.attributes?.deviceColors || getRandomColor();
+      const { background, text, icon } = deviceColors;
 
       el.className = "marker";
 
@@ -119,6 +120,7 @@ const MapPositions = ({
             <DynamicIconsComponent
               key={device.name}
               category={device.category}
+              color={icon}
             />
             <div className="marker-text">
               <p>{device.model}</p>
@@ -128,8 +130,8 @@ const MapPositions = ({
         </Tooltip>
       );
 
-      el.style.backgroundColor = bgColor;
-      el.style.color = color;
+      el.style.backgroundColor = background;
+      el.style.color = text;
 
       el.addEventListener("click", (event) => {
         event.stopPropagation();

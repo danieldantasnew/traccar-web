@@ -157,6 +157,9 @@ const MapRoutePoints = ({
 
     const maxSpeed = positions.reduce((a, b) => Math.max(a, b.speed), -Infinity);
     const minSpeed = positions.reduce((a, b) => Math.min(a, b.speed), Infinity);
+    const device = devices[selectedId]
+    const attributes = device.attributes || {};
+    const { background } = attributes?.deviceColors || {background: "black", icon: "red", text: "white", secondary: "blue"};
 
     const data = {
       type: "FeatureCollection",
@@ -172,7 +175,7 @@ const MapRoutePoints = ({
           rotation: position.course,
           color:
             colorStatic && devices[selectedId]
-              ? devices[selectedId].attributes["web.reportColor"].split(";")[0]
+              ? background
               : getSpeedColor(position.speed, minSpeed, maxSpeed),
           isGhost: position.isGhost || false,
         },

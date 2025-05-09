@@ -10,17 +10,20 @@ import useSettingsStyles from '../common/useSettingsStyles';
 import { getRandomColor } from '../../common/util/colors';
 
 const EditItemView = ({
-  children, endpoint, item, setItem, defaultItem, validate, onItemSaved, menu, breadcrumbs, bgColor, color, subColor,
+  children, endpoint, item, setItem, defaultItem, validate, onItemSaved, menu, breadcrumbs, iconColor, backgroundColor, textColor, secondaryColor,
 }) => {
   const navigate = useNavigate();
   const classes = useSettingsStyles();
   const t = useTranslation();
   const { id } = useParams();
-  const [webColor, setWebColor] = React.useState(null);
+  const [deviceColors, setDeviceColors] = React.useState(null);
 
   useEffect(()=> {
-    setWebColor(`${bgColor};${color};${subColor}`);
-  }, [bgColor, color, subColor]);
+    setDeviceColors({
+      background: backgroundColor, text: textColor, icon: iconColor, secondary: secondaryColor
+    });
+    
+  }, [backgroundColor, textColor, iconColor, secondaryColor]);
 
   useEffectAsync(async () => {
     if (!item) {
@@ -45,11 +48,11 @@ const EditItemView = ({
 
     const updatedItem = !id ? { 
       ...item, 
-      attributes: { ...item.attributes, ['web.reportColor']: getRandomColor() }
+      attributes: { ...item.attributes, deviceColors: getRandomColor() }
     } : {
       ...item,
-      attributes: { ...item.attributes, ['web.reportColor']: webColor, deviceColors: {background: bgColor, text: color, secondary: subColor, icon: color} },
-    }; //Adaptar função para remover o web.reportColor e passar a ser deviceColors
+      attributes: { ...item.attributes, deviceColors: {...deviceColors} },
+    };
     
     setItem(updatedItem);
 

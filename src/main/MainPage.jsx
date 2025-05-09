@@ -19,6 +19,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import ControllersInMap from "../common/components/ControllersInMap.jsx";
 import StopCard from "../common/components/StopCard.jsx";
+import useEnsureDeviceColors from "../Hooks/useEnsureDeviceColors.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -107,6 +108,7 @@ const MainPage = () => {
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
   const positions = useSelector((state) => state.session.positions);
   const [filteredPositions, setFilteredPositions] = useState([]);
+  const createAttribute = useEnsureDeviceColors();
   const selectedPosition = filteredPositions.find(
     (position) => selectedDeviceId && position.deviceId === selectedDeviceId
   );
@@ -255,7 +257,11 @@ const MainPage = () => {
           desktopPadding={theme.dimensions.drawerWidthDesktop}
         />
       )}
-      <ControllersInMap position={selectedPosition} selectedDeviceId={selectedDeviceId} onClick={onEventsClick}/>
+      <ControllersInMap
+        position={selectedPosition}
+        selectedDeviceId={selectedDeviceId}
+        onClick={onEventsClick}
+      />
       {selectedDeviceId && stopCard && <StopCard stop={stopCard} />}
     </div>
   );

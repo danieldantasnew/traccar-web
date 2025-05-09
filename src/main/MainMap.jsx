@@ -15,13 +15,10 @@ import MapPositions from "../map/MapPositions.jsx";
 import MapOverlay from "../map/overlay/MapOverlay";
 import MapGeocoder from "../map/geocoder/MapGeocoder";
 import MapScale from "../map/MapScale";
-import MapNotification from "../map/notification/MapNotification";
-import useFeatures from "../common/util/useFeatures";
 import MapMarkersStops from "../map/MapMarkersStops.js";
 import dayjs from "dayjs";
 import { useCatch } from "../reactHelper.js";
 import MapRoutePoints from "../map/MapRoutePoints.js";
-import ColorsDevice from "../common/components/ColorsDevice.js";
 import MapRoutePath from "../map/MapRoutePath.js";
 import { useDevices } from "../Context/App.jsx";
 
@@ -66,9 +63,7 @@ const MainMap = ({
         );
         const device = devices[stop.deviceId] || {};
         const attributes = device.attributes || {};
-        const { bgColor, subColor, color } = ColorsDevice(
-          attributes["web.reportColor"]
-        );
+        const { background, text, secondary } = attributes?.deviceColors || {background: "black", icon: "red", text: "white", secondary: "blue"};
         const model = device?.model || "";
         const safeStopPosition = Object.fromEntries(
           Object.entries(stopPosition || {}).filter(([key]) => key !== "attributes")
@@ -82,9 +77,9 @@ const MainMap = ({
           latitude: stop.latitude,
           longitude: stop.longitude,
           stopped: `${index == 0 ? "INI" : index}`,
-          bgColor,
-          color,
-          subColor,
+          background,
+          text,
+          secondary,
           address: stop.address,
           averageSpeed: stop.averageSpeed,
           deviceId: stop.deviceId,

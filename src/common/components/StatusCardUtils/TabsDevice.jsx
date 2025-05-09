@@ -11,7 +11,6 @@ import {
 import StatusCardDetails from "./StatusCardDetails";
 import { Box, Slide, Tab, Typography } from "@mui/material";
 import LinkDriver from "./LinkDriver";
-import ColorsDevice from "../ColorsDevice";
 
 const TabsDevice = ({ device, position, t }) => {
   if (!device) return null;
@@ -22,11 +21,11 @@ const TabsDevice = ({ device, position, t }) => {
   };
 
   const attributes = device.attributes || {};
-  const {bgColor, subColor, color} = ColorsDevice(attributes["web.reportColor"]);
+  const { background, text, secondary } = attributes?.deviceColors || {background: "black", icon: "red", text: "white", secondary: "blue"};
 
   return (
     <TabContext value={tabValue}>
-      <Box sx={{ maxWidth: "100%", backgroundColor: `${bgColor}` }}>
+      <Box sx={{ maxWidth: "100%", backgroundColor: `${background}` }}>
         <TabList
           onChange={handleChange}
           indicatorColor="primary"
@@ -35,14 +34,14 @@ const TabsDevice = ({ device, position, t }) => {
             "& .MuiTab-root": {
               fontSize: ".75rem",
               textTransform: "none",
-              color: `${subColor}`,
+              color: `${secondary}`,
               minHeight: "initial",
             },
             "& .MuiTab-root.Mui-selected": {
-              color: `${color}`,
+              color: `${text}`,
             },
             "& .MuiTabs-indicator": {
-              backgroundColor: `${color}`,
+              backgroundColor: `${text}`,
             },
             "& button": {
               padding: ".5rem 0",
@@ -83,7 +82,7 @@ const TabsDevice = ({ device, position, t }) => {
                 <AddressComponent position={position} t={t} />
                 <StatusCardDetails position={position} device={device} />
               </Box>
-              <LinkDriver device={device} bgColor={bgColor} subColor={subColor} color={color} />
+              <LinkDriver device={device} background={background} secondary={secondary} text={text} />
             </Box>
           ): <Typography>Nada por aqui...</Typography>}
         </TabPanel>

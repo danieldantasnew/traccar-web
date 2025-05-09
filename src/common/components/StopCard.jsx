@@ -134,13 +134,13 @@ const StopCard = ({ stop, }) => {
           <Card elevation={3} className={classes.card}>
             <Box
               className={classes.flexRow}
-              sx={{ padding: "1.7rem .5rem", backgroundColor: stop.bgColor }}
+              sx={{ padding: "1.7rem .5rem", backgroundColor: stop.background }}
             >
               <Typography
                 variant="h2"
                 fontSize="1.6rem"
                 fontWeight="bold"
-                color={`${stop.color}`}
+                color={`${stop.text}`}
                 sx={{ display: "flex", alignItems: "center", gap: ".4rem" }}
               >
                 <FontAwesomeIcon
@@ -176,11 +176,11 @@ const StopCard = ({ stop, }) => {
                       fontWeight: "600",
                       width: "48px",
                       height: "48px",
-                      boxShadow: `0 0 0 3px ${stop.color}`,
-                      backgroundColor: `${stop.bgColor}`,
-                      color: `${stop.color}`,
+                      boxShadow: `0 0 0 3px ${stop.text}`,
+                      backgroundColor: `${stop.background}`,
+                      color: `${stop.text}`,
                       "&:hover": {
-                        backgroundColor: `${stop.subColor} !important`,
+                        backgroundColor: `${stop.secondary} !important`,
                       },
                     }}
                   >

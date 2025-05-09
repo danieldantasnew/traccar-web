@@ -3,19 +3,21 @@ import { useId, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { map } from './core/MapView';
 import getSpeedColor from '../common/util/colors';
-import ColorsDevice from '../common/components/ColorsDevice';
 
 const MapRoutePath = ({ positions, staticColor }) => {
   const id = useId();
   const devices = useSelector((state) => state.devices.items);
   const selectedId = useSelector((state) => state.devices.selectedId);
   const theme = useTheme();
+  const device = devices[selectedId] || {}; 
+  const attributes = device.attributes || {};
+  const { secondary } = attributes?.deviceColors || {background: "black", icon: "red", text: "white", secondary: "blue"};
 
   const reportColor = useSelector((state) => {
     const position = positions?.[0];
     if (position) {
       const attributes = state.devices.items[position.deviceId]?.attributes;
-      const color = attributes?.['web.reportColor'];
+      const color = attributes?.attributes;
       return color || null;
     }
     return null;
@@ -70,9 +72,6 @@ const MapRoutePath = ({ positions, staticColor }) => {
     const minSpeed = positions.map((p) => p.speed).reduce((a, b) => Math.min(a, b), Infinity);
     const maxSpeed = positions.map((p) => p.speed).reduce((a, b) => Math.max(a, b), -Infinity);
     const features = [];
-    const device = devices[selectedId] || {}; 
-    const attributes = device.attributes || {};  
-    const {subColor} = ColorsDevice(attributes['web.reportColor']);
 
     for (let i = 0; i < positions.length - 1; i += 1) {
       features.push({
@@ -82,7 +81,7 @@ const MapRoutePath = ({ positions, staticColor }) => {
           coordinates: [[positions[i].longitude, positions[i].latitude], [positions[i + 1].longitude, positions[i + 1].latitude]],
         },
         properties: {
-          color: (staticColor  && subColor) || getSpeedColor(
+          color: (staticColor  && secondary) || getSpeedColor(
             positions[i + 1].speed,
             minSpeed,
             maxSpeed,

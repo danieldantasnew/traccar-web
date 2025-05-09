@@ -106,11 +106,11 @@ const MapMarkersStops = ({ markers, setStopCard }) => {
         source: sourceId,
         filter: ["!", ["has", "point_count"]],
         paint: {
-          "circle-color": ["get", "bgColor"],
+          "circle-color": ["get", "background"],
           "circle-radius": 14,
           "circle-opacity": 1,
           "circle-stroke-width": 1.6,
-          "circle-stroke-color": ["get", "color"],
+          "circle-stroke-color": ["get", "text"],
         },
       });
 
@@ -128,7 +128,7 @@ const MapMarkersStops = ({ markers, setStopCard }) => {
         },
         paint: {
           "text-halo-width": 2,
-          "text-color": ["get", "color"],
+          "text-color": ["get", "text"],
         },
       });
 
@@ -152,9 +152,9 @@ const MapMarkersStops = ({ markers, setStopCard }) => {
       latitude,
       longitude,
       stopped,
-      bgColor,
-      color,
-      subColor,
+      background,
+      text,
+      secondary,
       address,
       averageSpeed,
       deviceId,
@@ -178,9 +178,9 @@ const MapMarkersStops = ({ markers, setStopCard }) => {
         latitude,
         longitude,
         stopped,
-        bgColor,
-        color,
-        subColor,
+        background,
+        text,
+        secondary,
         address,
         averageSpeed,
         deviceId,

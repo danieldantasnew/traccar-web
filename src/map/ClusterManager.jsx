@@ -3,7 +3,6 @@ import mapboxgl from "mapbox-gl";
 import { createRoot } from "react-dom/client";
 import { Tooltip } from "@mui/material";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
-import ColorsDevice from "../common/components/ColorsDevice.js";
 import { formatTime } from "../common/util/formatter.js";
 
 const ClusterManager = ({
@@ -75,12 +74,12 @@ const ClusterManager = ({
           if (!position) return;
           const device = devices[feature.properties.deviceId];
           const attributes = device?.attributes || {};
-          const { bgColor, color } = ColorsDevice(attributes["web.reportColor"]);
+          const { background, text } = attributes?.deviceColors || {background: "black", icon: "red", text: "white", secondary: "blue"};
 
           const el = document.createElement("div");
           el.className = "marker";
-          el.style.backgroundColor = bgColor;
-          el.style.color = color;
+          el.style.backgroundColor = background;
+          el.style.color = text;
 
           const root = createRoot(el);
           root.render(

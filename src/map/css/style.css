@@ -48,7 +48,7 @@
 .marker::after {
     content: '';
     position: absolute;
-    bottom: -7px;
+    bottom: -6px;
     left: 50%;
     transform: translateX(-50%) rotate(45deg);
     width: 7px;

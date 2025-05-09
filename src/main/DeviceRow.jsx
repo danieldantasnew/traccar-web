@@ -31,6 +31,7 @@ import {
   faGaugeHigh,
 } from "@fortawesome/free-solid-svg-icons";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons";
+import { getRandomColor } from "../common/util/colors";
 
 dayjs.extend(relativeTime);
 
@@ -68,9 +69,8 @@ const DeviceRow = ({ device, setStatusCardOpen, setDevicesOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const t = useTranslation();
-  const colors = device.attributes["web.reportColor"]
-    ? device.attributes["web.reportColor"].split(";")
-    : ["rgb(189, 12, 18)", "white", "rgb(255, 0, 8)"];
+  const attributes = device.attributes || {};
+  const { background, icon } = attributes?.deviceColors || {background: "black", icon: "red", text: "white", secondary: "blue"};
   const admin = useAdministrator();
 
   const position = useSelector((state) => state.session.positions[device.id]);
@@ -110,11 +110,11 @@ const DeviceRow = ({ device, setStatusCardOpen, setDevicesOpen }) => {
         <Avatar
           style={
             devices && position
-              ? { backgroundColor: colors[0], color: colors[1] }
+              ? { backgroundColor: background }
               : {}
           }
         >
-          <DynamicIconsComponent category={device.category} />
+          <DynamicIconsComponent category={device.category} color={icon} />
         </Avatar>
       </ListItemAvatar>
       <ListItemText

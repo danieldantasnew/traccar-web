@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DeviceList = ({ devices, filteredPositions, style, phraseGroup, setStatusCardOpen, setDevicesOpen }) => {
+const DeviceList = ({ devices, style, phraseGroup, setStatusCardOpen, setDevicesOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const listInnerEl = useRef(null);

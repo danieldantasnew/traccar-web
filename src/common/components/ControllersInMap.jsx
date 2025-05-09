@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { devicesActions } from "../../store";
 import { faEyeSlash, faMapPin } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ColorsDevice from "./ColorsDevice.js";
 import { useDevices } from "../../Context/App.jsx";
 import BellOn from "./IconsAnimated/BellOn.jsx";
 
@@ -61,8 +60,8 @@ const ControllersInMap = ({ position, selectedDeviceId, onClick }) => {
     dispatch(devicesActions.selectId(null));
   };
 
-  const { bgColor } =
-    ColorsDevice(devices[selectedDeviceId]?.attributes["web.reportColor"]) ||
+  const { background } =
+    devices[selectedDeviceId]?.attributes?.deviceColors ||
     "#000";
 
   useEffect(() => {
@@ -101,12 +100,12 @@ const ControllersInMap = ({ position, selectedDeviceId, onClick }) => {
             arrow
           >
             <Box onClick={centerDevice}>
-              <FontAwesomeIcon icon={faMapPin} color={`${bgColor}`} />
+              <FontAwesomeIcon icon={faMapPin} color={`${background}`} />
             </Box>
           </Tooltip>
           <Tooltip sx={controls} title="Ocultar rotas" placement="left" arrow>
             <Box onClick={hideRoutes}>
-              <FontAwesomeIcon icon={faEyeSlash} color={`${bgColor}`} />
+              <FontAwesomeIcon icon={faEyeSlash} color={`${background}`} />
             </Box>
           </Tooltip>
         </>

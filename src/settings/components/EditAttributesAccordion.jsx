@@ -28,7 +28,7 @@ import useFeatures from '../../common/util/useFeatures';
 import useSettingsStyles from '../common/useSettingsStyles';
 import ColorPicker from '../../common/components/ColorPicker.jsx';
 
-const EditAttributesAccordion = ({ attribute, attributes, setAttributes, definitions, focusAttribute, bgColor,color, subColor, setBgColor, setColor, setSubColor }) => {
+const EditAttributesAccordion = ({ attribute, attributes, setAttributes, definitions, focusAttribute, iconColor, backgroundColor, textColor, secondaryColor, setBackgroundColor, setTextColor, setSecondaryColor, setIconColor }) => {
   const classes = useSettingsStyles();
   const t = useTranslation();
 
@@ -113,7 +113,7 @@ const EditAttributesAccordion = ({ attribute, attributes, setAttributes, definit
   const convertToList = (attributes) => {
     const booleanList = [];
     const otherList = [];
-    const excludeAttributes = ['speedUnit', 'distanceUnit', 'volumeUnit', 'timezone', 'web.reportColor'];
+    const excludeAttributes = ['speedUnit', 'distanceUnit', 'volumeUnit', 'timezone', 'deviceColors'];
     Object.keys(attributes || []).filter((key) => !excludeAttributes.includes(key)).forEach((key) => {
       const value = attributes[key];
       const type = getAttributeType(value);
@@ -156,9 +156,10 @@ const EditAttributesAccordion = ({ attribute, attributes, setAttributes, definit
         </Typography>
       </AccordionSummary>
       <AccordionDetails className={classes.details}>
-        <ColorPicker label={'Cor Principal'} value={bgColor} setValue={setBgColor} />
-        <ColorPicker label={'Cor do texto (reflete nos ícones)'} value={color} setValue={setColor} />
-        <ColorPicker label={'Cor Secundária'} value={subColor} setValue={setSubColor} />
+        <ColorPicker label={'Cor Principal'} value={backgroundColor} setValue={setBackgroundColor} />
+        <ColorPicker label={'Cor do texto'} value={textColor} setValue={setTextColor} />
+        <ColorPicker label={'Cor Secundária'} value={secondaryColor} setValue={setSecondaryColor} />
+        <ColorPicker label={'Cor dos ícones'} value={iconColor} setValue={setIconColor} />
         {convertToList(attributes).map(({
           key, value, type, subtype,
         }) => {
