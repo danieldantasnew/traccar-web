@@ -9,35 +9,50 @@ import { faEyeSlash, faMapPin } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDevices } from "../../Context/App.jsx";
 import BellOn from "./IconsAnimated/BellOn.jsx";
+import { makeStyles } from "@mui/styles";
 
-const styleBox = {
-  position: "fixed",
-  zIndex: 8,
-  right: 10,
-  top: "15rem",
-  display: "flex",
-  flexDirection: "column",
-  gap: ".5rem",
-};
-
-const controls = {
-  height: "29px",
-  width: "29px",
-  backgroundColor: "#ffffff",
-  color: "black",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  cursor: "pointer",
-  boxShadow: "0px 0px 1px 1.5px rgba(0, 0, 0, 0.1)",
-  padding: "4px",
-  borderRadius: "4px",
-  "&:hover": {
-    backgroundColor: "rgb(245, 245, 245)",
+const useStyles = makeStyles((theme) => ({
+  styleBox: {
+    position: "fixed",
+    zIndex: 8,
+    right: 10,
+    top: "15rem",
+    display: "flex",
+    flexDirection: "column",
+    gap: ".5rem",
   },
-};
+  controls: {
+    height: "29px",
+    width: "29px",
+    backgroundColor: "#ffffff",
+    color: "black",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    cursor: "pointer",
+    boxShadow: "0px 0px 1px 1.5px rgba(0, 0, 0, 0.1)",
+    padding: "4px",
+    borderRadius: "4px",
+    "&:hover": {
+      backgroundColor: "rgb(245, 245, 245)",
+    },
+  },
+  notifications: {
+      position: "absolute",
+      content: "",
+      backgroundColor: "red",
+      color: "white",
+      width: "5px",
+      height: "5px",
+      top: 5,
+      right: 4,
+      zIndex: 100,
+      borderRadius: "50%",
+  },
+}));
 
 const ControllersInMap = ({ position, selectedDeviceId, onClick }) => {
+  const classes = useStyles();
   const selectZoom = useAttributePreference("web.selectZoom", 10);
   const dispatch = useDispatch();
   const devices = useSelector((state) => state.devices.items);
@@ -61,8 +76,7 @@ const ControllersInMap = ({ position, selectedDeviceId, onClick }) => {
   };
 
   const { background } =
-    devices[selectedDeviceId]?.attributes?.deviceColors ||
-    "#000";
+    devices[selectedDeviceId]?.attributes?.deviceColors || "#000";
 
   useEffect(() => {
     if (events.length > 0) {
@@ -72,16 +86,18 @@ const ControllersInMap = ({ position, selectedDeviceId, onClick }) => {
         15000
       );
     }
-    else {
-      clearInterval(timeOutRef.current);
-    }
 
     return () => clearInterval(timeOutRef.current);
   }, [events.length]);
 
   return (
-    <Box sx={styleBox}>
-      <Tooltip sx={controls} title="Notificações" placement="left" arrow>
+    <Box className={classes.styleBox}>
+      <Tooltip
+        className={classes.controls}
+        title="Notificações"
+        placement="left"
+        arrow
+      >
         <Box onClick={onClick}>
           <BellOn
             key={animKey}
@@ -89,12 +105,14 @@ const ControllersInMap = ({ position, selectedDeviceId, onClick }) => {
             animated={!!events.length}
             uniqAnimation={true}
           />
+          <Box className={`${!!events.length ? classes.notifications : ""}`}></Box>
         </Box>
       </Tooltip>
       {selectedDeviceId && (
         <>
           <Tooltip
-            sx={controls}
+            className={classes.controls}
+            aria-label="Centralizar dispositivo"
             title="Centralizar dispositivo"
             placement="left"
             arrow
@@ -103,7 +121,7 @@ const ControllersInMap = ({ position, selectedDeviceId, onClick }) => {
               <FontAwesomeIcon icon={faMapPin} color={`${background}`} />
             </Box>
           </Tooltip>
-          <Tooltip sx={controls} title="Ocultar rotas" placement="left" arrow>
+          <Tooltip className={classes.controls} aria-label="Ocultar rotas" title="Ocultar rotas" placement="left" arrow>
             <Box onClick={hideRoutes}>
               <FontAwesomeIcon icon={faEyeSlash} color={`${background}`} />
             </Box>

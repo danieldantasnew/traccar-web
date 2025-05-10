@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BellOn = ({ color, animated=true, uniqAnimation=false, }) => {
+const BellOn = ({ color, animated=true, uniqAnimation=false, className='' }) => {
   const styles = useStyles();
 
   return (
@@ -65,7 +65,7 @@ const BellOn = ({ color, animated=true, uniqAnimation=false, }) => {
       viewBox="0 0 333 267"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={styles.main}
+      className={`${styles.main} ${className}`}
     >
       <g className={`${animated ? ( uniqAnimation ? styles.crownStop :  styles.crown) : ''}`}>
         <path

@@ -46,8 +46,10 @@ const createGhostPositions = (positions, spacing = 50) => {
       const numGhosts = Math.floor(d / spacing);
       for (let j = 1; j < numGhosts; j++) {
         const fraction = (j * spacing) / d;
-        const ghostLat = start.latitude + fraction * (end.latitude - start.latitude);
-        const ghostLon = start.longitude + fraction * (end.longitude - start.longitude);
+        const ghostLat =
+          start.latitude + fraction * (end.latitude - start.latitude);
+        const ghostLon =
+          start.longitude + fraction * (end.longitude - start.longitude);
         const ghostCourse = averageAngle(start.course, end.course);
         const ghostSpeed = start.speed + fraction * (end.speed - start.speed);
 
@@ -150,16 +152,35 @@ const MapRoutePoints = ({
 
     const processedPositions = createGhostPositions(positions, 50);
     const finalPositions = needFilterPosition
-      ? processedPositions.filter((_, index) =>
-          index % (zoomLevel < 13 ? 40 : zoomLevel >= 13 && zoomLevel < 16 ? 24 : 8) === 0
-        )
+      ? processedPositions.filter((_, index) => {
+          let step;
+          if (zoomLevel < 11.8) {
+            step = processedPositions.length;
+          } else if (zoomLevel < 13) {
+            step = Math.max(10, Math.floor(processedPositions.length / 45));
+          } else if (zoomLevel < 15) {
+            step = 16
+          } else {
+            step = 8;
+          }
+
+          return index % step === 0;
+        })
       : processedPositions;
 
-    const maxSpeed = positions.reduce((a, b) => Math.max(a, b.speed), -Infinity);
+    const maxSpeed = positions.reduce(
+      (a, b) => Math.max(a, b.speed),
+      -Infinity
+    );
     const minSpeed = positions.reduce((a, b) => Math.min(a, b.speed), Infinity);
-    const device = devices[selectedId]
+    const device = devices[selectedId];
     const attributes = device?.attributes || {};
-    const { background } = attributes?.deviceColors || {background: "black", icon: "red", text: "white", secondary: "blue"};
+    const { background } = attributes?.deviceColors || {
+      background: "black",
+      icon: "red",
+      text: "white",
+      secondary: "blue",
+    };
 
     const data = {
       type: "FeatureCollection",
@@ -195,10 +216,19 @@ const MapRoutePoints = ({
   ]);
 
   useEffect(() => {
-    const maxSpeed = positions.reduce((a, b) => Math.max(a, b.speed), -Infinity);
+    const maxSpeed = positions.reduce(
+      (a, b) => Math.max(a, b.speed),
+      -Infinity
+    );
     const minSpeed = positions.reduce((a, b) => Math.min(a, b.speed), Infinity);
 
-    const control = new SpeedLegendControl(positions, speedUnit, t, maxSpeed, minSpeed);
+    const control = new SpeedLegendControl(
+      positions,
+      speedUnit,
+      t,
+      maxSpeed,
+      minSpeed
+    );
     map.addControl(control, "bottom-left");
 
     return () => map.removeControl(control);
