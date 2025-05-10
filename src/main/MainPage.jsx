@@ -20,6 +20,8 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import ControllersInMap from "../common/components/ControllersInMap.jsx";
 import StopCard from "../common/components/StopCard.jsx";
 import useEnsureAttributes from "../Hooks/useEnsureAttributes.jsx";
+import needCreateAttribute from "../common/util/needCreateAttribute.js"
+import useCreateDriver from "../Hooks/useCreateDriver.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -109,10 +111,10 @@ const MainPage = () => {
   const positions = useSelector((state) => state.session.positions);
   const [filteredPositions, setFilteredPositions] = useState([]);
   const devices = useSelector((state) => state.devices.items);
-  const needCreateDeviceColors = Object.values(devices).some(
-    (device) => !device?.attributes?.deviceColors
-  );
+  const needCreateDeviceColors = needCreateAttribute(devices, "deviceColors");
+  const needCreateDriver = needCreateAttribute(devices, "driver");
   useEnsureAttributes(needCreateDeviceColors);
+  useCreateDriver(needCreateDriver)
 
   const selectedPosition = filteredPositions.find(
     (position) => selectedDeviceId && position.deviceId === selectedDeviceId
