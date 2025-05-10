@@ -15,3 +15,5 @@ export default function needCreateAttribute(devices, attribute = "default") {
     return !Object.hasOwn(device?.attributes || {}, attribute);
   });
 }
+
+//Melhorar a função para retornar um array com os id's que precisam da criação do atributo e no hook fazer um looping apenas criando os atributos desses id's. Pois atualmente faz um looping por todo o objeto 2x, aqui nessa função e também no hook.

@@ -35,7 +35,7 @@ const useEnsureAttributes = (needCreateDeviceColors) => {
 
   async function updateDevicesSequentially(devicesArray) {
     for (const [id, device] of devicesArray) {
-      if (!device.attributes?.deviceColors) {
+      if (!Object.hasOwn(device?.attributes || {}, "deviceColors")) {
         try {
           await createDeviceColorsAttribute(device);
         } catch (error) {

@@ -8,7 +8,6 @@ import { useTranslation } from '../../common/components/LocalizationProvider';
 import PageLayout from '../../common/components/PageLayout';
 import useSettingsStyles from '../common/useSettingsStyles';
 import { getRandomColor } from '../../common/util/colors';
-import needCreateAttribute from '../../common/util/needCreateAttribute';
 
 const EditItemView = ({
   children, endpoint, item, setItem, defaultItem, validate, onItemSaved, menu, breadcrumbs, iconColor, backgroundColor, textColor, secondaryColor,
@@ -49,10 +48,10 @@ const EditItemView = ({
 
     const updatedItem = !id ? { 
       ...item, 
-      attributes: { ...item.attributes, deviceColors: getRandomColor(), driver: '', }
+      attributes: { ...item.attributes, deviceColors: getRandomColor(), driver: {}, }
     } : {
       ...item,
-      attributes: { ...item.attributes, deviceColors: {...deviceColors}, },
+      attributes: { ...item.attributes, deviceColors: {...deviceColors},},
     };
     
     setItem(updatedItem);

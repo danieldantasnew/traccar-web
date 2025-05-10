@@ -13,7 +13,7 @@ const useCreateDriver = (needCreateAttribute) => {
       ...device,
       attributes: {
         ...(device.attributes || {}),
-        driver: "",
+        driver: {},
       },
     };
 
@@ -36,7 +36,7 @@ const useCreateDriver = (needCreateAttribute) => {
 
   async function updateDevice(devicesArray) {
     for (const [id, device] of devicesArray) {
-      if (!device?.attributes?.driver) {
+      if (!Object.hasOwn(device?.attributes || {}, "driver")) {
         try {
           await createDriver(device);
         } catch (error) {
