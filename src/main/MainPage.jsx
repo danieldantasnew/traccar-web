@@ -19,9 +19,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import ControllersInMap from "../common/components/ControllersInMap.jsx";
 import StopCard from "../common/components/StopCard.jsx";
-import useEnsureAttributes from "../Hooks/useEnsureAttributes.jsx";
-import needCreateAttribute from "../common/util/needCreateAttribute.js"
-import useCreateDriver from "../Hooks/useCreateDriver.jsx";
+import getDevicesMissingAttribute from "../common/util/getDevicesMissingAttribute.js"
+import { getRandomColor } from "../common/util/colors.js";
+import useCreateAttribute from "../Hooks/useCreateAttribute.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -111,10 +111,10 @@ const MainPage = () => {
   const positions = useSelector((state) => state.session.positions);
   const [filteredPositions, setFilteredPositions] = useState([]);
   const devices = useSelector((state) => state.devices.items);
-  const needCreateDeviceColors = needCreateAttribute(devices, "deviceColors");
-  const needCreateDriver = needCreateAttribute(devices, "driver");
-  useEnsureAttributes(needCreateDeviceColors);
-  useCreateDriver(needCreateDriver)
+  const missingAttributeDeviceColorsInDevices = getDevicesMissingAttribute(devices, "deviceColors");
+  const missingAttributeDriverInDevices = getDevicesMissingAttribute(devices, "driver");
+  useCreateAttribute(missingAttributeDeviceColorsInDevices, "deviceColors", getRandomColor);
+  useCreateAttribute(missingAttributeDriverInDevices, "driver", {});
 
   const selectedPosition = filteredPositions.find(
     (position) => selectedDeviceId && position.deviceId === selectedDeviceId
