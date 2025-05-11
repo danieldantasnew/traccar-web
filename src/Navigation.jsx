@@ -99,6 +99,7 @@ const Navigation = () => {
       const response = await fetch(`/api/devices?uniqueId=${deviceId}`);
       if (response.ok) {
         const items = await response.json();
+        dispatch(devicesActions.loading(false));
         if (items.length > 0) {
           dispatch(devicesActions.selectId(items[0].id));
         }

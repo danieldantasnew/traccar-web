@@ -19,9 +19,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import ControllersInMap from "../common/components/ControllersInMap.jsx";
 import StopCard from "../common/components/StopCard.jsx";
-import getDevicesMissingAttribute from "../common/util/getDevicesMissingAttribute.js"
+import getDevicesMissingAttribute from "../common/util/getDevicesMissingAttribute.js";
 import { getRandomColor } from "../common/util/colors.js";
 import useCreateAttribute from "../Hooks/useCreateAttribute.jsx";
+import UpdatingItems from "./UpdatingItems.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -110,11 +111,7 @@ const MainPage = () => {
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
   const positions = useSelector((state) => state.session.positions);
   const [filteredPositions, setFilteredPositions] = useState([]);
-  const devices = useSelector((state) => state.devices.items);
-  const missingAttributeDeviceColorsInDevices = getDevicesMissingAttribute(devices, "deviceColors");
-  const missingAttributeDriverInDevices = getDevicesMissingAttribute(devices, "driver");
-  useCreateAttribute(missingAttributeDeviceColorsInDevices, "deviceColors", getRandomColor);
-  useCreateAttribute(missingAttributeDriverInDevices, "driver", {});
+  const [updatingItems, setUpdatingItems] = useState(true);
 
   const selectedPosition = filteredPositions.find(
     (position) => selectedDeviceId && position.deviceId === selectedDeviceId
@@ -147,11 +144,14 @@ const MainPage = () => {
     if (!desktop && mapOnSelect && selectedDeviceId) {
       setDevicesOpen(false);
     }
+  }, [desktop, mapOnSelect, selectedDeviceId]);
+
+  useEffect(() => {
     if (selectedDeviceId) {
       setFirstLoadDevice(true);
       setStaticRoutes(true);
     }
-  }, [desktop, mapOnSelect, selectedDeviceId]);
+  }, [selectedDeviceId]);
 
   useEffect(() => {
     if (!loading) {
@@ -169,7 +169,9 @@ const MainPage = () => {
     setFilteredPositions
   );
 
-  return (
+  return updatingItems ? (
+    <UpdatingItems setUpdatingItems={setUpdatingItems} />
+  ) : (
     <div className={classes.root}>
       <MainMap
         filteredPositions={filteredPositions}

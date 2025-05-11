@@ -59,6 +59,7 @@ const SocketController = () => {
           const devicesResponse = await fetch("/api/devices");
           if (devicesResponse.ok) {
             dispatch(devicesActions.update(await devicesResponse.json()));
+            dispatch(devicesActions.loading(false));
           }
           const positionsResponse = await fetch("/api/positions");
           if (positionsResponse.ok) {
@@ -108,6 +109,7 @@ const SocketController = () => {
       const response = await fetch("/api/devices");
       if (response.ok) {
         dispatch(devicesActions.refresh(await response.json()));
+        dispatch(devicesActions.loading(false));
       } else {
         throw Error(await response.text());
       }
