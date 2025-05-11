@@ -186,7 +186,7 @@ const IgnitionState = ({ position, classes }) => {
     return (
       <Card
         className={`${classes.ignitionState} ${classes.green}`}
-        style={{ color: "white" }}
+        style={{ color: "white", backgroundColor: "green" }}
       >
         <FontAwesomeIcon icon={faPowerOff} size="xs" color="currentColor" />
         <Typography>Ligado</Typography>
@@ -196,7 +196,7 @@ const IgnitionState = ({ position, classes }) => {
   return (
     <Card
       className={`${classes.ignitionState} ${classes.red}`}
-      style={{ color: "white" }}
+      style={{ color: "white", backgroundColor: "red" }}
     >
       <FontAwesomeIcon icon={faPowerOff} size="xs" />
       <Typography>Desligado</Typography>

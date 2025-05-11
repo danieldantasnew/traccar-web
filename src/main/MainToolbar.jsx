@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     gap: '1rem',
-    padding: "0 16px",
+    padding: "0 16px !important",
   },
   filterPanel: {
     display: "flex",
@@ -37,9 +37,9 @@ const useStyles = makeStyles((theme) => ({
     width: theme.dimensions.drawerWidthTablet,
   },
   buttonStyle: {
-    border: "1px solid white",
+    border: "1px solid white !important",
     ["&:hover"]: {
-      backgroundColor: 'rgba(255, 255, 255, 0.58)'
+      backgroundColor: 'rgba(255, 255, 255, 0.58) !important'
     }
   },
 }));

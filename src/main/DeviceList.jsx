@@ -19,14 +19,14 @@ const useStyles = makeStyles((theme) => ({
     margin: "0 !important",
   },
   summary: {
-    backgroundColor: "#f3f3f3f3",
-    padding: "0 8px",
+    backgroundColor: "#f3f3f3f3 !important",
+    padding: "0 8px !important",
     minHeight: "1rem !important",
     maxHeight: "3.4rem",
   },
   accordionDetails: {
     width: "100%",
-    padding: "8px 0",
+    padding: "8px 0 !important",
   },
   groupTitle: {
     fontSize: ".8rem",

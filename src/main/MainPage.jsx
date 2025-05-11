@@ -19,9 +19,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import ControllersInMap from "../common/components/ControllersInMap.jsx";
 import StopCard from "../common/components/StopCard.jsx";
-import getDevicesMissingAttribute from "../common/util/getDevicesMissingAttribute.js";
-import { getRandomColor } from "../common/util/colors.js";
-import useCreateAttribute from "../Hooks/useCreateAttribute.jsx";
 import UpdatingItems from "./UpdatingItems.jsx";
 
 const useStyles = makeStyles((theme) => ({
@@ -193,7 +190,7 @@ const MainPage = () => {
             component={"div"}
             sx={{
               backgroundColor: theme.palette.primary.main,
-              padding: "1rem 0 1rem 0",
+              padding: "1rem 0 1rem 0 ",
               color: "white",
               display: "flex",
               justifyContent: "space-between",
