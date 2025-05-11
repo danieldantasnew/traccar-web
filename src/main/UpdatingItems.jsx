@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import getDevicesMissingAttribute from "../common/util/getDevicesMissingAttribute";
 import useCreateAttribute from "../Hooks/useCreateAttribute";
 import { getRandomColor } from "../common/util/colors";
+import Loader from "../common/components/Loader";
 
 const UpdatingItems = ({ setUpdatingItems }) => {
   const devices = useSelector((state) => state.devices.items);
@@ -38,7 +39,7 @@ const UpdatingItems = ({ setUpdatingItems }) => {
     missingAttributeDeviceColorsInDevices,
     missingAttributeDriverInDevices,
   ]);
-  return <div>Atualizando dados...</div>;
+  return <Loader/>;
 };
 
 export default UpdatingItems;
