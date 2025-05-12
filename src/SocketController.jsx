@@ -6,8 +6,6 @@ import {
   AlertTitle,
   Slide,
   Snackbar,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
 import { devicesActions, sessionActions } from "./store";
 import { useEffectAsync } from "./reactHelper";
@@ -33,8 +31,6 @@ const SocketController = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const t = useTranslation();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const authenticated = useSelector((state) => !!state.session.user);
   const devices = useSelector((state) => state.devices.items);
@@ -49,9 +45,6 @@ const SocketController = () => {
   const soundAlarms = useAttributePreference("soundAlarms", "sos");
 
   const features = useFeatures();
-  const SlideTransition = (props) => {
-    return <Slide {...props} direction={isMobile ? "down" : "up"} />;
-  };
 
   const connectSocket = () => {
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
@@ -174,9 +167,9 @@ const SocketController = () => {
             open={notification.show}
             message={notificationMessage}
             autoHideDuration={snackBarDurationLongMs}
-            TransitionComponent={SlideTransition}
+            TransitionComponent={Slide}
             anchorOrigin={{
-              vertical: isMobile ? "top" : "bottom",
+              vertical: "top",
               horizontal: "center",
             }}
             onClose={() =>

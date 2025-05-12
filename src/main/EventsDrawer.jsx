@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -52,8 +52,9 @@ const EventsDrawer = ({ open, onClose }) => {
   const dispatch = useDispatch();
   const t = useTranslation();
 
+  const reads = useSelector((state) => state.events.reads);
+  const unreads = useSelector((state) => state.events.unreads);
   const devices = useSelector((state) => state.devices.items);
-
   const events = useSelector((state) => state.events.items);
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -61,6 +62,7 @@ const EventsDrawer = ({ open, onClose }) => {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -73,6 +75,17 @@ const EventsDrawer = ({ open, onClose }) => {
       },
     });
 
+  const readNotification = (notification) => {
+    dispatch(eventsActions.addReads(notification));
+    dispatch(eventsActions.removeUnread(notification));
+  };
+
+  useEffect(() => {
+    if (events.length > 0) {
+      dispatch(eventsActions.mergeUnreads(events));
+    }
+  }, [events]);
+
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
       <Toolbar className={classes.toolbar} disableGutters>
@@ -83,15 +96,17 @@ const EventsDrawer = ({ open, onClose }) => {
           <FontAwesomeIcon icon={faEllipsis} color={colorIcon} />
         </IconButton>
         <Menu
-          id="basic-menu"
           anchorEl={anchorEl}
           open={openMenuEvents}
           onClose={handleClose}
-          MenuListProps={{
-            "aria-labelledby": "basic-button",
-          }}
         >
-          <MenuItem onClick={handleClose} className={classes.flexRow}>
+          <MenuItem
+            onClick={(e) => {
+              handleClose(e);
+              dispatch(eventsActions.markAllAsRead());
+            }}
+            className={classes.flexRow}
+          >
             <Box sx={{ padding: "2px" }}>
               <DynamicIconsComponent
                 category={"doubleCheck"}
@@ -100,7 +115,10 @@ const EventsDrawer = ({ open, onClose }) => {
             </Box>
             <Typography>Marcar todas como lida</Typography>
           </MenuItem>
-          <MenuItem onClick={handleClose} className={classes.flexRow}>
+          <MenuItem
+            onClick={() => navigate("/settings/notifications")}
+            className={classes.flexRow}
+          >
             <Box sx={{ padding: "2px" }}>
               <DynamicIconsComponent
                 category={"gearRegular"}
@@ -123,11 +141,14 @@ const EventsDrawer = ({ open, onClose }) => {
           </MenuItem>
         </Menu>
       </Toolbar>
-      {/* <List className={classes.drawer} dense>
+      <List className={classes.drawer} dense>
         {events.map((event) => (
           <ListItemButton
             key={event.id}
-            onClick={() => navigate(`/event/${event.id}`)}
+            onClick={() => {
+              navigate(`/event/${event.id}`);
+              readNotification(event);
+            }}
             disabled={!event.id}
           >
             <ListItemText
@@ -138,13 +159,62 @@ const EventsDrawer = ({ open, onClose }) => {
             />
             <IconButton
               size="small"
-              onClick={() => dispatch(eventsActions.delete(event))}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClick(e);
+                dispatch(eventsActions.delete(event));
+              }}
             >
-              <DeleteIcon fontSize="small" className={classes.delete} />
+              <FontAwesomeIcon icon={faEllipsis} color={colorIcon} />
             </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={openMenuEvents}
+              onClose={handleClose}
+            >
+              <MenuItem
+                onClick={(e) => {
+                  handleClose(e);
+                  dispatch(eventsActions.markAllAsRead());
+                }}
+                className={classes.flexRow}
+              >
+                <Box sx={{ padding: "2px" }}>
+                  <DynamicIconsComponent
+                    category={"doubleCheck"}
+                    color={colorIcon}
+                  />
+                </Box>
+                <Typography>Marcar todas como lida</Typography>
+              </MenuItem>
+              <MenuItem
+                onClick={() => navigate("/settings/notifications")}
+                className={classes.flexRow}
+              >
+                <Box sx={{ padding: "2px" }}>
+                  <DynamicIconsComponent
+                    category={"gearRegular"}
+                    color={colorIcon}
+                  />
+                </Box>
+                <Typography>Configurações de notificação</Typography>
+              </MenuItem>
+              <MenuItem
+                onClick={(e) => {
+                  dispatch(eventsActions.deleteAll());
+                  handleClose(e);
+                }}
+                className={classes.flexRow}
+              >
+                <Box sx={{ padding: "2px 7.5px 2px 6px" }}>
+                  <FontAwesomeIcon icon={faTrashCan} color={colorIcon} />
+                </Box>
+                <Typography>Excluir todas as notificações</Typography>
+              </MenuItem>
+            </Menu>
           </ListItemButton>
         ))}
-      </List> */}
+      </List>
     </Drawer>
   );
 };
