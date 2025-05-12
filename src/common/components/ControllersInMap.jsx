@@ -56,7 +56,7 @@ const ControllersInMap = ({ position, selectedDeviceId, onClick }) => {
   const selectZoom = useAttributePreference("web.selectZoom", 10);
   const dispatch = useDispatch();
   const devices = useSelector((state) => state.devices.items);
-  const events = useSelector((state) => state.events.items);
+  const unreads = useSelector((state) => state.events.unreads);
   const [animKey, setAnimKey] = useState(0);
   const timeOutRef = useRef();
 
@@ -79,7 +79,7 @@ const ControllersInMap = ({ position, selectedDeviceId, onClick }) => {
     devices[selectedDeviceId]?.attributes?.deviceColors || "#000";
 
   useEffect(() => {
-    if (events.length > 0) {
+    if (unreads.length > 0) {
       clearInterval(timeOutRef.current);
       timeOutRef.current = setInterval(
         () => setAnimKey((prev) => prev + 1),
@@ -88,7 +88,7 @@ const ControllersInMap = ({ position, selectedDeviceId, onClick }) => {
     }
 
     return () => clearInterval(timeOutRef.current);
-  }, [events.length]);
+  }, [unreads.length]);
 
   return (
     <Box className={classes.styleBox}>
@@ -101,11 +101,11 @@ const ControllersInMap = ({ position, selectedDeviceId, onClick }) => {
         <Box onClick={onClick}>
           <BellOn
             key={animKey}
-            color={!!events.length ? "red" : "#000"}
-            animated={!!events.length}
+            color={!!unreads.length ? "red" : "#000"}
+            animated={!!unreads.length}
             uniqAnimation={true}
           />
-          <Box className={`${!!events.length ? classes.notifications : ""}`}></Box>
+          <Box className={`${!!unreads.length ? classes.notifications : ""}`}></Box>
         </Box>
       </Tooltip>
       {selectedDeviceId && (
