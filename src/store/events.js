@@ -9,7 +9,10 @@ const { reducer, actions } = createSlice({
   },
   reducers: {
     add(state, action) {
-      state.items.unshift(...action.payload);
+      const newItems = action.payload.filter(
+        (item) => !state.items.some((existing) => existing.id === item.id)
+      );
+      state.items.unshift(...newItems);
       state.items.splice(50);
     },
 
@@ -30,16 +33,26 @@ const { reducer, actions } = createSlice({
       if (!exists) {
         state.reads.push(newRead);
       }
+
+      state.reads = state.reads.sort(
+        (a, b) => new Date(b.eventTime) - new Date(a.eventTime)
+      );
+    },
+
+    removeRead(state, action) {
+      state.reads = state.reads.filter((item) => item.id !== action.payload.id);
     },
 
     markAllAsRead(state) {
-      state.reads = [...state.items];
+      state.reads = [...state.items].sort(
+        (a, b) => new Date(b.eventTime) - new Date(a.eventTime)
+      );
       state.unreads = [];
     },
 
     addUnreads(state, action) {
       state.unreads = [...action.payload].sort(
-        (a, b) => new Date(a.eventTime) - new Date(b.eventTime)
+        (a, b) => new Date(b.eventTime) - new Date(a.eventTime)
       );
     },
 
@@ -48,7 +61,14 @@ const { reducer, actions } = createSlice({
         (item) => item.id !== action.payload.id
       );
     },
-    
+
+    markAllAsUnread(state) {
+      state.unreads = [...state.items].sort(
+        (a, b) => new Date(b.eventTime) - new Date(a.eventTime)
+      );
+      state.reads = [];
+    },
+
     mergeUnreads(state, action) {
       const newUnreads = action.payload.filter(
         (novo) =>
@@ -56,10 +76,12 @@ const { reducer, actions } = createSlice({
           !state.reads.some((r) => r.id === novo.id)
       );
 
-      const combined = [...state.unreads, ...newUnreads];
+      for (const item of newUnreads) {
+        state.unreads.push(item);
+      }
 
-      state.unreads = combined.sort(
-        (a, b) => new Date(a.eventTime) - new Date(b.eventTime)
+      state.unreads.sort(
+        (a, b) => new Date(b.eventTime) - new Date(a.eventTime)
       );
     },
   },

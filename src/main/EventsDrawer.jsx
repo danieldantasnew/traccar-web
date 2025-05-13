@@ -2,22 +2,23 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
-  Avatar,
   Box,
   Drawer,
   IconButton,
   Menu,
   MenuItem,
+  Tab,
   Toolbar,
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { formatNotificationTitle, formatTime } from "../common/util/formatter";
 import { useTranslation } from "../common/components/LocalizationProvider";
 import { eventsActions } from "../store";
 import { faEllipsis, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import Events from "./Events";
 
 const useStyles = makeStyles((theme) => ({
   flexColumn: {
@@ -64,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
     overflow: "hidden",
     textOverflow: "ellipsis",
     maxWidth: "140px",
+    fontWeight: "500 !important",
   },
 
   circle: {
@@ -84,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
 
   unreadEvent: {
     backgroundColor: "rgb(248, 248, 248)",
-  }
+  },
 }));
 
 const EventsDrawer = ({ open, onClose }) => {
@@ -93,17 +95,20 @@ const EventsDrawer = ({ open, onClose }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const t = useTranslation();
+  const [valueTabs, setValueTabs] = useState("t1");
+  const [allAsRead, setAllAsRead] = useState(false);
 
-  const reads = useSelector((state) => state.events.reads);
-  const unreads = useSelector((state) => state.events.unreads);
-  const devices = useSelector((state) => state.devices.items);
   const events = useSelector((state) => state.events.items);
+  const unreads = useSelector((state) => state.events.unreads);
+  const reads = useSelector((state) => state.events.reads);
 
   const [anchorElMenu, setAnchorElMenu] = useState(null);
-  const [anchorElPerItem, setAnchorElPerItem] = useState({});
 
   const openMenuEvents = Boolean(anchorElMenu);
-  const openMenuItemEvents = (eventId) => Boolean(anchorElPerItem[eventId]);
+
+  const handleChange = (event, newValue) => {
+    setValueTabs(newValue);
+  };
 
   const handleClick = (event) => {
     setAnchorElMenu(event.currentTarget);
@@ -113,28 +118,6 @@ const EventsDrawer = ({ open, onClose }) => {
     setAnchorElMenu(null);
   };
 
-  const handleOpenItemMenu = (event, eventId) => {
-    event.stopPropagation();
-    setAnchorElPerItem((prev) => ({ ...prev, [eventId]: event.currentTarget }));
-  };
-
-  const handleCloseItemMenu = (eventId) => {
-    setAnchorElPerItem((prev) => ({ ...prev, [eventId]: null }));
-  };
-
-  const formatType = (event) =>
-    formatNotificationTitle(t, {
-      type: event.type,
-      attributes: {
-        alarms: event.attributes.alarm,
-      },
-    });
-
-  const readNotification = (notification) => {
-    dispatch(eventsActions.addReads(notification));
-    dispatch(eventsActions.removeUnread(notification));
-  };
-
   useEffect(() => {
     if (events.length > 0) {
       dispatch(eventsActions.mergeUnreads(events));
@@ -142,7 +125,12 @@ const EventsDrawer = ({ open, onClose }) => {
   }, [events]);
 
   return (
-    <Drawer anchor="right" open={open} onClose={onClose} className={classes.content}>
+    <Drawer
+      anchor="right"
+      open={open}
+      onClose={onClose}
+      className={classes.content}
+    >
       <Toolbar className={classes.toolbar} disableGutters>
         <Typography
           variant="h5"
@@ -164,7 +152,8 @@ const EventsDrawer = ({ open, onClose }) => {
           <MenuItem
             onClick={(e) => {
               handleClose(e);
-              dispatch(eventsActions.markAllAsRead());
+              allAsRead ? dispatch(eventsActions.markAllAsUnread()) : dispatch(eventsActions.markAllAsRead());
+              setAllAsRead((prev)=> !prev);
             }}
             className={classes.flexRow}
           >
@@ -174,7 +163,7 @@ const EventsDrawer = ({ open, onClose }) => {
                 color={colorIcon}
               />
             </Box>
-            <Typography>Marcar todas como lida</Typography>
+            <Typography>{allAsRead ? 'Marcar todas como não lida' : 'Marcar todas como lida'}</Typography>
           </MenuItem>
           <MenuItem
             onClick={() => navigate("/settings/notifications")}
@@ -202,112 +191,48 @@ const EventsDrawer = ({ open, onClose }) => {
           </MenuItem>
         </Menu>
       </Toolbar>
-      {Array.isArray(events) && events.length > 0 ? (
-        <Box
-          component={"section"}
-          className={`${classes.drawer} ${classes.flexColumn}`}
-        >
-          {events.map((event) => {
-            const { background, icon } = devices[event.deviceId]?.attributes
-              ?.deviceColors || { background: "#f1f1f1", icon: "#000" };
-            const isUnread = unreads.some((unread)=> unread.id === event.id);
-
-            return (
-              <Box
-                key={event.id}
-                onClick={() => {
-                  navigate(`/event/${event.id}`);
-                  readNotification(event);
-                }}
-                className={`${classes.flexRow} ${classes.device} ${isUnread ? classes.unreadEvent : ''}`}
-              >
-                <Box className={classes.flexRow}>
-                  <Box>
-                    <Avatar
-                      style={{ backgroundColor: background, color: icon }}
-                    >
-                      <DynamicIconsComponent
-                        category={devices[event.deviceId]?.category}
-                      />
-                    </Avatar>
-                  </Box>
-                  <Box className={classes.flexColumn}>
-                    <Box className={classes.flexRow}>
-                      <Typography
-                        title={devices[event.deviceId]?.name}
-                        className={classes.deviceName}
-                      >
-                        {devices[event.deviceId]?.name}
-                      </Typography>
-                      <Typography className={classes.circle}></Typography>
-                      <Typography
-                        title={formatType(event)}
-                        className={classes.eventType}
-                      >
-                        {formatType(event)}
-                      </Typography>
-                    </Box>
-                    <Typography>
-                      {formatTime(event.eventTime, "seconds")}
-                    </Typography>
-                  </Box>
-                </Box>
-                <IconButton
-                  size="small"
-                  onClick={(e) => handleOpenItemMenu(e, event.id)}
-                >
-                  <FontAwesomeIcon icon={faEllipsis} color={colorIcon} />
-                </IconButton>
-                <Menu
-                  anchorEl={anchorElPerItem[event.id] || null}
-                  open={openMenuItemEvents(event.id)}
-                  onClose={(e) => {
-                    e.stopPropagation();
-                    handleCloseItemMenu(event.id)
-                  }}
-                >
-                  <MenuItem
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCloseItemMenu(event.id);
-                      dispatch(eventsActions.addReads(event));
-                      dispatch(eventsActions.removeUnread(event));
-                    }}
-                    className={classes.flexRow}
-                  >
-                    <Box sx={{ padding: "2px" }}>
-                      <DynamicIconsComponent
-                        category={"doubleCheck"}
-                        color={colorIcon}
-                      />
-                    </Box>
-                    <Typography>Marcar como lida</Typography>
-                  </MenuItem>
-                  <MenuItem
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCloseItemMenu(event.id);
-                      dispatch(eventsActions.delete(event));
-                    }}
-                    className={classes.flexRow}
-                  >
-                    <Box sx={{ padding: "2px 7.5px 2px 6px" }}>
-                      <FontAwesomeIcon icon={faTrashCan} color={colorIcon} />
-                    </Box>
-                    <Typography>Excluir notificação</Typography>
-                  </MenuItem>
-                </Menu>
-              </Box>
-            );
-          })}
+      <TabContext value={valueTabs}>
+        <Box>
+          <TabList
+            onChange={handleChange}
+            variant="fullWidth"
+            TabIndicatorProps={{
+              style: {
+                backgroundColor: "#2C76AC",
+                height: "3px",
+              },
+            }}
+          >
+            <Tab label="Todas" value="t1" />
+            <Tab label="Não lidas" value="t2" />
+            <Tab label="Lidas" value="t3" />
+          </TabList>
         </Box>
-      ) : (
-        <Typography
-          sx={{ textAlign: "center", marginTop: "1rem", fontSize: "1.1rem" }}
-        >
-          Sem notificações
-        </Typography>
-      )}
+        <TabPanel value="t1" sx={{ padding: 0 }}>
+          <Events
+            classes={classes}
+            colorIcon={colorIcon}
+            events={events}
+            t={t}
+          />
+        </TabPanel>
+        <TabPanel value="t2" sx={{ padding: 0 }}>
+          <Events
+            classes={classes}
+            colorIcon={colorIcon}
+            events={unreads}
+            t={t}
+          />
+        </TabPanel>
+        <TabPanel value="t3" sx={{ padding: 0 }}>
+          <Events
+            classes={classes}
+            colorIcon={colorIcon}
+            events={reads}
+            t={t}
+          />
+        </TabPanel>
+      </TabContext>
     </Drawer>
   );
 };
