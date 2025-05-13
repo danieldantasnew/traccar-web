@@ -31,11 +31,11 @@ const InfoCar = ({ device }) => {
   return (
     <Box style={infoCar}>
       <Box style={avatarInfo}>
-        <ListItemAvatar style={{ minWidth: "initial" }}>
+        <Box style={{ minWidth: "initial" }}>
           <Avatar style={{ backgroundColor: background, color: icon }}>
             <DynamicIconsComponent category={device.category}/>
           </Avatar>
-        </ListItemAvatar>
+        </Box>
         <Box>
           <Typography variant="h2" style={{fontSize: '.8rem', fontWeight: 500}}>{device.name}</Typography>
           <Typography style={{fontSize: '.8rem', fontWeight: 400}}>{device.model}</Typography>

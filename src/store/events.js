@@ -24,11 +24,11 @@ const { reducer, actions } = createSlice({
     },
 
     addReads(state, action) {
-      const novo = action.payload;
-      const jaExiste = state.reads.some((r) => r.id === novo.id);
+      const newRead = action.payload;
+      const exists = state.reads.some((r) => r.id === newRead.id);
 
-      if (!jaExiste) {
-        state.reads.push(novo);
+      if (!exists) {
+        state.reads.push(newRead);
       }
     },
 

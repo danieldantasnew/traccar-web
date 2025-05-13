@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
+  Avatar,
   Box,
   Drawer,
   IconButton,
-  List,
-  ListItemButton,
-  ListItemText,
   Menu,
   MenuItem,
   Toolbar,
@@ -22,27 +20,71 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons";
 
 const useStyles = makeStyles((theme) => ({
+  flexColumn: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+  },
+
   flexRow: {
     display: "flex",
     alignItems: "center",
     gap: ".35rem",
   },
+
   drawer: {
-    width: theme.dimensions.eventsDrawerWidth,
+    width: "100%",
   },
+
   toolbar: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
     display: "flex",
     justifyContent: "space-between",
-    minWidth: "16rem",
-    [theme.breakpoints.down("md")]: {
-      width: "50%",
-    },
-    title: {
-      flexGrow: 1,
+    minWidth: "24rem",
+  },
+
+  device: {
+    justifyContent: "space-between",
+    padding: `.5rem ${theme.spacing(2)}`,
+    borderBottom: "1px solid rgba(0,0,0,.12)",
+    width: "100%",
+    "&:hover": {
+      backgroundColor: "rgb(231, 231, 231)",
+      cursor: "pointer",
+      transition: ".2s",
     },
   },
+
+  deviceName: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    maxWidth: "140px",
+  },
+
+  circle: {
+    content: "''",
+    height: "4px",
+    width: "4px",
+    display: "inline-block",
+    borderRadius: "50%",
+    backgroundColor: "#85898E",
+  },
+
+  eventType: {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    maxWidth: "120px",
+  },
+
+  unreadEvent: {
+    backgroundColor: "rgb(248, 248, 248)",
+  }
 }));
 
 const EventsDrawer = ({ open, onClose }) => {
@@ -57,8 +99,8 @@ const EventsDrawer = ({ open, onClose }) => {
   const devices = useSelector((state) => state.devices.items);
   const events = useSelector((state) => state.events.items);
 
-  const [anchorElMenu, setAnchorElMenu] = useState(null); // Menu geral
-  const [anchorElPerItem, setAnchorElPerItem] = useState({}); // Menu individual por evento
+  const [anchorElMenu, setAnchorElMenu] = useState(null);
+  const [anchorElPerItem, setAnchorElPerItem] = useState({});
 
   const openMenuEvents = Boolean(anchorElMenu);
   const openMenuItemEvents = (eventId) => Boolean(anchorElPerItem[eventId]);
@@ -100,9 +142,15 @@ const EventsDrawer = ({ open, onClose }) => {
   }, [events]);
 
   return (
-    <Drawer anchor="right" open={open} onClose={onClose}>
+    <Drawer anchor="right" open={open} onClose={onClose} className={classes.content}>
       <Toolbar className={classes.toolbar} disableGutters>
-        <Typography variant="h6" className={classes.title}>
+        <Typography
+          variant="h5"
+          sx={{
+            fontSize: "1.5rem",
+            fontWeight: "400",
+          }}
+        >
           Notificações
         </Typography>
         <IconButton size="small" color="inherit" onClick={handleClick}>
@@ -154,67 +202,112 @@ const EventsDrawer = ({ open, onClose }) => {
           </MenuItem>
         </Menu>
       </Toolbar>
-      <List className={classes.drawer} dense>
-        {events.map((event) => (
-          <ListItemButton
-            key={event.id}
-            onClick={() => {
-              navigate(`/event/${event.id}`);
-              readNotification(event);
-            }}
-            disabled={!event.id}
-          >
-            <ListItemText
-              primary={`${devices[event.deviceId]?.name} • ${formatType(
-                event
-              )}`}
-              secondary={formatTime(event.eventTime, "seconds")}
-            />
-            <IconButton
-              size="small"
-              onClick={(e) => handleOpenItemMenu(e, event.id)}
-            >
-              <FontAwesomeIcon icon={faEllipsis} color={colorIcon} />
-            </IconButton>
-            <Menu
-              anchorEl={anchorElPerItem[event.id] || null}
-              open={openMenuItemEvents(event.id)}
-              onClose={() => handleCloseItemMenu(event.id)}
-            >
-              <MenuItem
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleCloseItemMenu(event.id);
-                  dispatch(eventsActions.addReads(event));
-                  dispatch(eventsActions.removeUnread(event));
+      {Array.isArray(events) && events.length > 0 ? (
+        <Box
+          component={"section"}
+          className={`${classes.drawer} ${classes.flexColumn}`}
+        >
+          {events.map((event) => {
+            const { background, icon } = devices[event.deviceId]?.attributes
+              ?.deviceColors || { background: "#f1f1f1", icon: "#000" };
+            const isUnread = unreads.some((unread)=> unread.id === event.id);
+
+            return (
+              <Box
+                key={event.id}
+                onClick={() => {
+                  navigate(`/event/${event.id}`);
+                  readNotification(event);
                 }}
-                className={classes.flexRow}
+                className={`${classes.flexRow} ${classes.device} ${isUnread ? classes.unreadEvent : ''}`}
               >
-                <Box sx={{ padding: "2px" }}>
-                  <DynamicIconsComponent
-                    category={"doubleCheck"}
-                    color={colorIcon}
-                  />
+                <Box className={classes.flexRow}>
+                  <Box>
+                    <Avatar
+                      style={{ backgroundColor: background, color: icon }}
+                    >
+                      <DynamicIconsComponent
+                        category={devices[event.deviceId]?.category}
+                      />
+                    </Avatar>
+                  </Box>
+                  <Box className={classes.flexColumn}>
+                    <Box className={classes.flexRow}>
+                      <Typography
+                        title={devices[event.deviceId]?.name}
+                        className={classes.deviceName}
+                      >
+                        {devices[event.deviceId]?.name}
+                      </Typography>
+                      <Typography className={classes.circle}></Typography>
+                      <Typography
+                        title={formatType(event)}
+                        className={classes.eventType}
+                      >
+                        {formatType(event)}
+                      </Typography>
+                    </Box>
+                    <Typography>
+                      {formatTime(event.eventTime, "seconds")}
+                    </Typography>
+                  </Box>
                 </Box>
-                <Typography>Marcar como lida</Typography>
-              </MenuItem>
-              <MenuItem
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleCloseItemMenu(event.id);
-                  dispatch(eventsActions.delete(event));
-                }}
-                className={classes.flexRow}
-              >
-                <Box sx={{ padding: "2px 7.5px 2px 6px" }}>
-                  <FontAwesomeIcon icon={faTrashCan} color={colorIcon} />
-                </Box>
-                <Typography>Excluir notificação</Typography>
-              </MenuItem>
-            </Menu>
-          </ListItemButton>
-        ))}
-      </List>
+                <IconButton
+                  size="small"
+                  onClick={(e) => handleOpenItemMenu(e, event.id)}
+                >
+                  <FontAwesomeIcon icon={faEllipsis} color={colorIcon} />
+                </IconButton>
+                <Menu
+                  anchorEl={anchorElPerItem[event.id] || null}
+                  open={openMenuItemEvents(event.id)}
+                  onClose={(e) => {
+                    e.stopPropagation();
+                    handleCloseItemMenu(event.id)
+                  }}
+                >
+                  <MenuItem
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCloseItemMenu(event.id);
+                      dispatch(eventsActions.addReads(event));
+                      dispatch(eventsActions.removeUnread(event));
+                    }}
+                    className={classes.flexRow}
+                  >
+                    <Box sx={{ padding: "2px" }}>
+                      <DynamicIconsComponent
+                        category={"doubleCheck"}
+                        color={colorIcon}
+                      />
+                    </Box>
+                    <Typography>Marcar como lida</Typography>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCloseItemMenu(event.id);
+                      dispatch(eventsActions.delete(event));
+                    }}
+                    className={classes.flexRow}
+                  >
+                    <Box sx={{ padding: "2px 7.5px 2px 6px" }}>
+                      <FontAwesomeIcon icon={faTrashCan} color={colorIcon} />
+                    </Box>
+                    <Typography>Excluir notificação</Typography>
+                  </MenuItem>
+                </Menu>
+              </Box>
+            );
+          })}
+        </Box>
+      ) : (
+        <Typography
+          sx={{ textAlign: "center", marginTop: "1rem", fontSize: "1.1rem" }}
+        >
+          Sem notificações
+        </Typography>
+      )}
     </Drawer>
   );
 };
