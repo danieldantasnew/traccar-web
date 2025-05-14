@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
+  Badge,
   Box,
   Drawer,
   IconButton,
@@ -152,8 +153,10 @@ const EventsDrawer = ({ open, onClose }) => {
           <MenuItem
             onClick={(e) => {
               handleClose(e);
-              allAsRead ? dispatch(eventsActions.markAllAsUnread()) : dispatch(eventsActions.markAllAsRead());
-              setAllAsRead((prev)=> !prev);
+              allAsRead
+                ? dispatch(eventsActions.markAllAsUnread())
+                : dispatch(eventsActions.markAllAsRead());
+              setAllAsRead((prev) => !prev);
             }}
             className={classes.flexRow}
           >
@@ -163,7 +166,11 @@ const EventsDrawer = ({ open, onClose }) => {
                 color={colorIcon}
               />
             </Box>
-            <Typography>{allAsRead ? 'Marcar todas como não lida' : 'Marcar todas como lida'}</Typography>
+            <Typography>
+              {allAsRead && reads.length > 0
+                ? "Marcar todas como não lida"
+                : "Marcar todas como lida"}
+            </Typography>
           </MenuItem>
           <MenuItem
             onClick={() => navigate("/settings/notifications")}
@@ -203,9 +210,105 @@ const EventsDrawer = ({ open, onClose }) => {
               },
             }}
           >
-            <Tab label="Todas" value="t1" />
-            <Tab label="Não lidas" value="t2" />
-            <Tab label="Lidas" value="t3" />
+            <Tab
+              label={
+                <Badge
+                  badgeContent={events.length}
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      right: -12,
+                      top: "50%",
+                      fontSize: 9,
+                      backgroundColor: `${
+                        valueTabs === "t1" ? "#2C76AC" : "#E3E3E3"
+                      }`,
+                      color: "#ffffff",
+                      minWidth: 0,
+                      width: "18px",
+                      height: "18px",
+                      borderRadius: "50%",
+                    },
+                  }}
+                >
+                  Todas
+                </Badge>
+              }
+              value="t1"
+              sx={{
+                color: "#E3E3E3",
+                textTransform: "none",
+                fontSize: "1rem",
+                "&.Mui-selected": {
+                  color: "#1A1A1A",
+                },
+              }}
+            />
+            <Tab
+              label={
+                <Badge
+                  badgeContent={unreads.length}
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      right: -12,
+                      top: "50%",
+                      fontSize: 9,
+                      backgroundColor: `${
+                        valueTabs === "t2" ? "#2C76AC" : "#E3E3E3"
+                      }`,
+                      color: "#ffffff",
+                      minWidth: 0,
+                      width: "18px",
+                      height: "18px",
+                      borderRadius: "50%",
+                    },
+                  }}
+                >
+                  Não lidas
+                </Badge>
+              }
+              value="t2"
+              sx={{
+                color: "#E3E3E3",
+                fontSize: "1rem",
+                textTransform: "none",
+                "&.Mui-selected": {
+                  color: "#1A1A1A",
+                },
+              }}
+            />
+            <Tab
+              label={
+                <Badge
+                  badgeContent={reads.length}
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      right: -12,
+                      top: "50%",
+                      fontSize: 9,
+                      backgroundColor: `${
+                        valueTabs === "t3" ? "#2C76AC" : "#E3E3E3"
+                      }`,
+                      color: "#ffffff",
+                      minWidth: 0,
+                      width: "18px",
+                      height: "18px",
+                      borderRadius: "50%",
+                    },
+                  }}
+                >
+                  Lidas
+                </Badge>
+              }
+              value="t3"
+              sx={{
+                color: "#E3E3E3",
+                textTransform: "none",
+                fontSize: "1rem",
+                "&.Mui-selected": {
+                  color: "#1A1A1A",
+                },
+              }}
+            />
           </TabList>
         </Box>
         <TabPanel value="t1" sx={{ padding: 0 }}>

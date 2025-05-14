@@ -50,8 +50,8 @@ const DeviceEvent = ({ classes, event, t, colorIcon, reads, unreads }) => {
   };
 
   const unReadNotification = (notification) => {
-    dispatch(eventsActions.mergeUnreads([notification]));
     dispatch(eventsActions.removeRead(notification));
+    dispatch(eventsActions.mergeUnreads([notification]));
   };
 
   const eventTitle = useMemo(() => formatType(event), [event]);
