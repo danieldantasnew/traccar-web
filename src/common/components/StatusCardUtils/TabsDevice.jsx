@@ -22,13 +22,12 @@ const TabsDevice = ({ device, position, t }) => {
 
   const attributes = device?.attributes || {};
   const { background, text, secondary } = attributes?.deviceColors || {background: "black", icon: "red", text: "white", secondary: "blue"};
-
+  
   return (
     <TabContext value={tabValue}>
       <Box sx={{ maxWidth: "100%", backgroundColor: `${background}` }}>
         <TabList
           onChange={handleChange}
-          indicatorColor="primary"
           variant="fullWidth"
           sx={{
             "& .MuiTab-root": {

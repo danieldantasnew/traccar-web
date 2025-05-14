@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import getDevicesMissingAttribute from "../common/util/getDevicesMissingAttribute";
-import useCreateAttribute from "../Hooks/useCreateAttribute";
+import useCreateAttribute from "../hooks/useCreateAttribute";
 import { getRandomColor } from "../common/util/colors";
 import Loader from "../common/components/Loader";
 

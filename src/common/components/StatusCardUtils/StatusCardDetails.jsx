@@ -87,6 +87,12 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "500",
   },
 
+  stopIconStyle: {
+    "& g path": {
+      fill: "white"
+    }
+  },
+
   box: {
     display: "flex",
     alignItems: "center",
@@ -297,8 +303,8 @@ const StatusCardDetails = ({ position }) => {
         {!!totalStops && (
           <fieldset className={`${classes.fieldset} ${classes.red}`}>
             <legend className={`${classes.legend}`}>Total de Paradas</legend>
-            <div className={classes.box}>
-              <DynamicIconsComponent category={"stop"} />
+            <div className={`${classes.box}`}>
+              <DynamicIconsComponent category={"stop"} className={classes.stopIconStyle} />
               <Typography className={`${classes.value}`}>{totalStops}</Typography>
             </div>
           </fieldset>

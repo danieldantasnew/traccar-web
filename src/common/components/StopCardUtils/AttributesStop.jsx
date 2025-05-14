@@ -8,7 +8,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Box, Typography } from "@mui/material";
-import React from "react";
 import durationOfStop from "../../util/durationOfStop";
 import { formatTime } from "../../util/formatter";
 import accuracy from "../../util/accuracy";
