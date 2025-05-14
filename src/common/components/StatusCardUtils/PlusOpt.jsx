@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useRef} from "react";
 import { Menu, MenuItem, Box, Typography } from "@mui/material";
 import {
   faClockRotateLeft,
@@ -21,8 +21,9 @@ const styleRow = { display: "flex", gap: ".5rem" };
 
 const PlusOpt = ({ device, position, t, setRemoving,}) => {
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const {setStaticRoutes, staticRoutes } = useDevices();
+  const optsRef = useRef(null);
   const open = Boolean(anchorEl);
   const colorForAll = "#878787";
   const shareDisabled = useSelector(
@@ -36,6 +37,7 @@ const PlusOpt = ({ device, position, t, setRemoving,}) => {
 
   const handleClose = () => {
     setAnchorEl(null);
+    optsRef.current?.focus();
   };
 
   const handleGeofence = useCatchCallback(async () => {
@@ -89,6 +91,8 @@ const PlusOpt = ({ device, position, t, setRemoving,}) => {
         }}
         onClick={handleEventIcon}
         open={open}
+        ref={optsRef}
+        tabIndex={0}
       >
         <FontAwesomeIcon
           icon={faEllipsis}
