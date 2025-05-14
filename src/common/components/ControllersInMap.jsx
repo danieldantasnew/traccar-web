@@ -38,20 +38,25 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   notifications: {
-      position: "absolute",
-      content: "",
-      backgroundColor: "red",
-      color: "white",
-      width: "5px",
-      height: "5px",
-      top: 5,
-      right: 4,
-      zIndex: 100,
-      borderRadius: "50%",
+    position: "absolute",
+    content: "",
+    backgroundColor: "red",
+    color: "white",
+    width: "5px",
+    height: "5px",
+    top: 5,
+    right: 4,
+    zIndex: 100,
+    borderRadius: "50%",
   },
 }));
 
-const ControllersInMap = ({ position, selectedDeviceId, onClick }) => {
+const ControllersInMap = ({
+  position,
+  selectedDeviceId,
+  onClick,
+  notificationsButtonRef,
+}) => {
   const classes = useStyles();
   const selectZoom = useAttributePreference("web.selectZoom", 10);
   const dispatch = useDispatch();
@@ -98,14 +103,16 @@ const ControllersInMap = ({ position, selectedDeviceId, onClick }) => {
         placement="left"
         arrow
       >
-        <Box onClick={onClick}>
+        <Box onClick={onClick} tabIndex={0} ref={notificationsButtonRef}>
           <BellOn
             key={animKey}
             color={!!unreads.length ? "red" : "#000"}
             animated={!!unreads.length}
             uniqAnimation={true}
           />
-          <Box className={`${!!unreads.length ? classes.notifications : ""}`}></Box>
+          <Box
+            className={`${!!unreads.length ? classes.notifications : ""}`}
+          ></Box>
         </Box>
       </Tooltip>
       {selectedDeviceId && (
@@ -121,7 +128,13 @@ const ControllersInMap = ({ position, selectedDeviceId, onClick }) => {
               <FontAwesomeIcon icon={faMapPin} color={`${background}`} />
             </Box>
           </Tooltip>
-          <Tooltip className={classes.controls} aria-label="Ocultar rotas" title="Ocultar rotas" placement="left" arrow>
+          <Tooltip
+            className={classes.controls}
+            aria-label="Ocultar rotas"
+            title="Ocultar rotas"
+            placement="left"
+            arrow
+          >
             <Box onClick={hideRoutes}>
               <FontAwesomeIcon icon={faEyeSlash} color={`${background}`} />
             </Box>

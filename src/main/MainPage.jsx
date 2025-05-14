@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { Box, IconButton, Paper, Slide, Tooltip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -108,6 +108,7 @@ const MainPage = () => {
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
   const positions = useSelector((state) => state.session.positions);
   const [filteredPositions, setFilteredPositions] = useState([]);
+  const notificationsButtonRef = useRef(null);
   const [updatingItems, setUpdatingItems] = useState(true);
 
   const selectedPosition = filteredPositions.find(
@@ -255,7 +256,13 @@ const MainPage = () => {
           </Box>
         </Paper>
       )}
-      <EventsDrawer open={eventsOpen} onClose={() => setEventsOpen(false)} />
+      <EventsDrawer
+        open={eventsOpen}
+        onClose={() => {
+          setEventsOpen(false);
+          notificationsButtonRef.current?.focus();
+        }}
+      />
       {selectedDeviceId && statusCardOpen && (
         <StatusCard
           deviceId={selectedDeviceId}
@@ -267,6 +274,7 @@ const MainPage = () => {
         position={selectedPosition}
         selectedDeviceId={selectedDeviceId}
         onClick={onEventsClick}
+        notificationsButtonRef={notificationsButtonRef}
       />
       {selectedDeviceId && stopCard && <StopCard stop={stopCard} />}
     </div>
