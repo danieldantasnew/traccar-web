@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import { useDevices } from "../../Context/App";
 
-const SaveButton = ({ children, onClick, ...props }) => {
+const SaveButton = ({ children, onClick, className, ...props }) => {
   const { setAlert } = useDevices();
   return (
     <Button
@@ -9,6 +9,8 @@ const SaveButton = ({ children, onClick, ...props }) => {
         onClick(e);
         setAlert(true);
       }}
+      sx={className}
+      className={className}
       {...props}
     >
       {children}

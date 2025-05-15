@@ -12,11 +12,14 @@ import {
   FormControl,
   IconButton,
   InputLabel,
+  MenuItem,
   Modal,
   NativeSelect,
+  Select,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import SaveButton from "../SaveButton";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const box = {
@@ -56,8 +59,12 @@ const icon = {
 
 const LinkDriver = ({ device, background, text, secondary }) => {
   const [modalSelectDriver, setModalSelectDriver] = useState(false);
+  const [driverSelect, setDriverSelect] = useState("");
   const drivers = useSelector((state) => state.drivers.items);
-  // https://demo.traccar.org/api/permissions
+
+  const handleChange = (e, key) => {
+    setDriverSelect(key);
+  };
 
   return (
     <Box sx={box}>
@@ -124,7 +131,7 @@ const LinkDriver = ({ device, background, text, secondary }) => {
                 justifyContent: "flex-start",
                 gap: ".5rem",
                 color: "white",
-                flex: 1
+                flex: 1,
               }}
             >
               <FontAwesomeIcon icon={faUser} size="lg" />
@@ -132,24 +139,56 @@ const LinkDriver = ({ device, background, text, secondary }) => {
                 Vincular Motorista
               </Box>
             </Box>
-            <IconButton aria-label="Fechar janela de vincular motorista" sx={{width: "1rem", height: "1rem", padding: "1rem"}}>
-              <FontAwesomeIcon icon={faClose} color="white"/>
+            <IconButton
+              onClick={() => setModalSelectDriver(false)}
+              aria-label="Fechar janela de vincular motorista"
+              sx={{ width: "1rem", height: "1rem", padding: "1rem" }}
+            >
+              <FontAwesomeIcon icon={faClose} color="white" />
             </IconButton>
           </Box>
           <CardContent>
-            <FormControl fullWidth>
-              <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                Motorista
-              </InputLabel>
-              <NativeSelect
-                defaultValue={30}
-                inputProps={{
-                  name: 'driver',
-                  id: 'uncontrolled-native',
+            <FormControl fullWidth variant="standard">
+              <InputLabel id="select-driver-label">Motorista</InputLabel>
+              <Select
+                labelId="select-driver-label"
+                value={driverSelect}
+                onChange={(e) => handleChange(e, e.target.value)}
+                sx={{
+                  borderRadius: "4px",
+                  paddingY: "6px",
+                  paddingX: "6px",
+                  fontSize: "1rem",
+                  fontWeight: 400,
+                  color: "black",
+                  "& .MuiSelect-select": {
+                    padding: "10px 12px",
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: `${background}`,
+                  },
                 }}
               >
-                <option value={10}>Ten</option>
-              </NativeSelect>
+                <MenuItem value="">Selecionar motorista</MenuItem>
+                {Object.entries(drivers).map(([key, driver]) => (
+                  <MenuItem key={driver.id} value={key}>
+                    {driver.name}
+                  </MenuItem>
+                ))}
+              </Select>
+
+              <SaveButton
+                className={{
+                  marginTop: "2rem",
+                  backgroundColor: background,
+                  color: text,
+                  "&:hover": {
+                    backgroundColor: secondary,
+                  },
+                }}
+              >
+                Vincular
+              </SaveButton>
             </FormControl>
           </CardContent>
         </Card>
