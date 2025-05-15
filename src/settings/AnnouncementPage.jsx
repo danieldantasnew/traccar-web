@@ -18,6 +18,7 @@ import SelectField from '../common/components/SelectField';
 import { prefixString } from '../common/util/stringUtils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import SaveButton from '../common/components/SaveButton';
 
 const AnnouncementPage = () => {
   const navigate = useNavigate();
@@ -89,7 +90,7 @@ const AnnouncementPage = () => {
           >
             {t('sharedCancel')}
           </Button>
-          <Button
+          <SaveButton
             type="button"
             color="primary"
             variant="contained"
@@ -97,7 +98,7 @@ const AnnouncementPage = () => {
             disabled={!notificator || !message.subject || !message.body}
           >
             {t('commandSend')}
-          </Button>
+          </SaveButton>
         </div>
       </Container>
     </PageLayout>

@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     borderBottom: "1px solid rgba(0,0,0,.12)",
     width: "100%",
     "&:hover": {
-      backgroundColor: "rgb(231, 231, 231)",
+      backgroundColor: "rgb(218, 218, 218)",
       cursor: "pointer",
       transition: ".2s",
     },
@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   unreadEvent: {
-    backgroundColor: "rgb(248, 248, 248)",
+    backgroundColor: "rgb(235, 235, 235)",
   },
 }));
 

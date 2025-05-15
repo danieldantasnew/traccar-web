@@ -33,6 +33,7 @@ import useServerAttributes from '../common/attributes/useServerAttributes';
 import useMapStyles from '../map/core/useMapStyles';
 import { map } from '../map/core/MapView';
 import useSettingsStyles from './common/useSettingsStyles';
+import SaveButton from '../common/components/SaveButton';
 
 const ServerPage = () => {
   const classes = useSettingsStyles();
@@ -301,9 +302,9 @@ const ServerPage = () => {
           <Button type="button" color="primary" variant="outlined" onClick={() => navigate(-1)}>
             {t('sharedCancel')}
           </Button>
-          <Button type="button" color="primary" variant="contained" onClick={handleSave}>
+          <SaveButton type="button" color="primary" variant="contained" onClick={handleSave}>
             {t('sharedSave')}
-          </Button>
+          </SaveButton>
         </div>
       </Container>
     </PageLayout>

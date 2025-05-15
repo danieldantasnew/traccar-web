@@ -12,6 +12,8 @@ export const DevicesProvider = ({ children }) => {
   const [totalStops, setTotalStops] = useState(null);
   const [staticRoutes, setStaticRoutes] = useState(true);
 
+  const [alert, setAlert] = useState(false);
+
 
   return (
     <DevicesContext.Provider
@@ -23,6 +25,8 @@ export const DevicesProvider = ({ children }) => {
         stopCard,
         totalStops,
         staticRoutes,
+        alert,
+        setAlert,
         setStatusCardOpen,
         setFirstLoadDevice,
         setStopCard,

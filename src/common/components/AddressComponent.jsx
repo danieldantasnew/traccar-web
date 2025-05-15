@@ -39,8 +39,9 @@ const AddressComponent = ({ position, t, labelAdress="Endereço atual" }) => {
         sx={{ mr: 4 }}
       >
         <Alert
-          color="success"
-          style={{ backgroundColor: "#4bbf50", color: "white" }}
+          variant="filled"
+          severity="success"
+          style={{ backgroundColor: "#0288d1", color: "white" }}
           size="md"
           onClose={() => setAlertCopied(false)}
         >

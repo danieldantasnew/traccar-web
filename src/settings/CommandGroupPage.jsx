@@ -24,6 +24,7 @@ import { useCatch } from '../reactHelper';
 import useSettingsStyles from './common/useSettingsStyles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import SaveButton from '../common/components/SaveButton';
 
 const CommandDevicePage = () => {
   const navigate = useNavigate();
@@ -89,7 +90,7 @@ const CommandDevicePage = () => {
           >
             {t('sharedCancel')}
           </Button>
-          <Button
+          <SaveButton
             type="button"
             color="primary"
             variant="contained"
@@ -97,7 +98,7 @@ const CommandDevicePage = () => {
             disabled={!item.attributes.data}
           >
             {t('commandSend')}
-          </Button>
+          </SaveButton>
         </div>
       </Container>
     </PageLayout>

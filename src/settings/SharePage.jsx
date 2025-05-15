@@ -17,6 +17,7 @@ import PageLayout from '../common/components/PageLayout';
 import SettingsMenu from './components/SettingsMenu';
 import { useCatchCallback } from '../reactHelper';
 import useSettingsStyles from './common/useSettingsStyles';
+import SaveButton from '../common/components/SaveButton';
 
 const SharePage = () => {
   const navigate = useNavigate();
@@ -91,7 +92,7 @@ const SharePage = () => {
           >
             {t('sharedCancel')}
           </Button>
-          <Button
+          <SaveButton
             type="button"
             color="primary"
             variant="contained"
@@ -99,7 +100,7 @@ const SharePage = () => {
             disabled={!link}
           >
             {t('sharedCopy')}
-          </Button>
+          </SaveButton>
         </div>
       </Container>
     </PageLayout>

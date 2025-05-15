@@ -19,6 +19,7 @@ import { useAdministrator, useRestriction } from '../common/util/permissions';
 import useSettingsStyles from './common/useSettingsStyles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faCopy, faRotate } from '@fortawesome/free-solid-svg-icons';
+import SaveButton from '../common/components/SaveButton';
 
 const deviceFields = [
   { id: 'name', name: 'sharedName' },
@@ -377,14 +378,14 @@ const PreferencesPage = () => {
               >
                 {t('sharedCancel')}
               </Button>
-              <Button
+              <SaveButton
                 type="button"
                 color="primary"
                 variant="contained"
                 onClick={handleSave}
               >
                 {t('sharedSave')}
-              </Button>
+              </SaveButton>
             </div>
           </>
         )}

@@ -19,6 +19,7 @@ import { distanceFromMeters, distanceToMeters, distanceUnitString } from '../com
 import useSettingsStyles from './common/useSettingsStyles';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import SaveButton from '../common/components/SaveButton';
 
 const AccumulatorsPage = () => {
   const navigate = useNavigate();
@@ -90,14 +91,14 @@ const AccumulatorsPage = () => {
             >
               {t('sharedCancel')}
             </Button>
-            <Button
+            <SaveButton
               type="button"
               color="primary"
               variant="contained"
               onClick={handleSave}
             >
               {t('sharedSave')}
-            </Button>
+            </SaveButton>
           </div>
         </Container>
       )}

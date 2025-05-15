@@ -1,16 +1,36 @@
-import React, { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
-  Container, Button, Accordion, AccordionDetails, AccordionSummary, Skeleton, Typography, TextField,
-} from '@mui/material';
-import { useCatch, useEffectAsync } from '../../reactHelper';
-import { useTranslation } from '../../common/components/LocalizationProvider';
-import PageLayout from '../../common/components/PageLayout';
-import useSettingsStyles from '../common/useSettingsStyles';
-import { getRandomColor } from '../../common/util/colors';
+  Container,
+  Button,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Skeleton,
+  Typography,
+  TextField,
+} from "@mui/material";
+import { useCatch, useEffectAsync } from "../../reactHelper";
+import { useTranslation } from "../../common/components/LocalizationProvider";
+import PageLayout from "../../common/components/PageLayout";
+import useSettingsStyles from "../common/useSettingsStyles";
+import { getRandomColor } from "../../common/util/colors";
+import SaveButton from "../../common/components/SaveButton";
 
 const EditItemView = ({
-  children, endpoint, item, setItem, defaultItem, validate, onItemSaved, menu, breadcrumbs, iconColor, backgroundColor, textColor, secondaryColor,
+  children,
+  endpoint,
+  item,
+  setItem,
+  defaultItem,
+  validate,
+  onItemSaved,
+  menu,
+  breadcrumbs,
+  iconColor,
+  backgroundColor,
+  textColor,
+  secondaryColor,
 }) => {
   const navigate = useNavigate();
   const classes = useSettingsStyles();
@@ -18,11 +38,13 @@ const EditItemView = ({
   const { id } = useParams();
   const [deviceColors, setDeviceColors] = React.useState(null);
 
-  useEffect(()=> {
+  useEffect(() => {
     setDeviceColors({
-      background: backgroundColor, text: textColor, icon: iconColor, secondary: secondaryColor
+      background: backgroundColor,
+      text: textColor,
+      icon: iconColor,
+      secondary: secondaryColor,
     });
-    
   }, [backgroundColor, textColor, iconColor, secondaryColor]);
 
   useEffectAsync(async () => {
@@ -46,19 +68,25 @@ const EditItemView = ({
       url += `/${id}`;
     }
 
-    const updatedItem = !id ? { 
-      ...item, 
-      attributes: { ...item.attributes, deviceColors: getRandomColor(), driver: {}, }
-    } : {
-      ...item,
-      attributes: { ...item.attributes, deviceColors: {...deviceColors},},
-    };
-    
+    const updatedItem = !id
+      ? {
+          ...item,
+          attributes: {
+            ...item.attributes,
+            deviceColors: getRandomColor(),
+            driver: {},
+          },
+        }
+      : {
+          ...item,
+          attributes: { ...item.attributes, deviceColors: { ...deviceColors } },
+        };
+
     setItem(updatedItem);
 
     const response = await fetch(url, {
-      method: !id ? 'POST' : 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      method: !id ? "POST" : "PUT",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedItem),
     });
 
@@ -75,7 +103,9 @@ const EditItemView = ({
   return (
     <PageLayout menu={menu} breadcrumbs={breadcrumbs}>
       <Container maxWidth="xs" className={classes.container}>
-        {item ? children : (
+        {item ? (
+          children
+        ) : (
           <Accordion defaultExpanded>
             <AccordionSummary>
               <Typography variant="subtitle1">
@@ -99,17 +129,17 @@ const EditItemView = ({
             onClick={() => navigate(-1)}
             disabled={!item}
           >
-            {t('sharedCancel')}
+            {t("sharedCancel")}
           </Button>
-          <Button
+          <SaveButton
             type="button"
             color="primary"
             variant="contained"
             onClick={handleSave}
             disabled={!item || !validate()}
           >
-            {t('sharedSave')}
-          </Button>
+            {t("sharedSave")}
+          </SaveButton>
         </div>
       </Container>
     </PageLayout>
