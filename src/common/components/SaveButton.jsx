@@ -10,7 +10,6 @@ const SaveButton = ({ children, onClick, className, ...props }) => {
         setAlert(true);
       }}
       sx={className}
-      className={className}
       {...props}
     >
       {children}

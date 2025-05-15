@@ -14,13 +14,13 @@ import {
   InputLabel,
   MenuItem,
   Modal,
-  NativeSelect,
   Select,
   Typography,
 } from "@mui/material";
 import SaveButton from "../SaveButton";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useCatch } from "../../../reactHelper";
 
 const box = {
   display: "flex",
@@ -65,6 +65,32 @@ const LinkDriver = ({ device, background, text, secondary }) => {
   const handleChange = (e, key) => {
     setDriverSelect(key);
   };
+
+  const handleLink = useCatch(async () => {
+    try {
+      if (drivers[driverSelect] && device) {
+        const response = await fetch("/api/permissions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            deviceId: device.id,
+            driverId: drivers[driverSelect].id,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || `Erro: ${response.status}`);
+        }
+
+      }
+    } catch (error) {
+      console.error("Erro ao associar:", error);
+      throw error;
+    }
+  });
 
   return (
     <Box sx={box}>
@@ -178,6 +204,7 @@ const LinkDriver = ({ device, background, text, secondary }) => {
               </Select>
 
               <SaveButton
+                onClick={handleLink}
                 className={{
                   marginTop: "2rem",
                   backgroundColor: background,
