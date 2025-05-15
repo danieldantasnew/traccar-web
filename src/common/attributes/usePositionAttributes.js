@@ -331,7 +331,7 @@ export default (t) => useMemo(() => ({
     type: 'boolean',
   },
   lock: {
-    name: t('alarmLock'),
+    name: 'Travado',
     type: 'boolean',
   },
   dtcs: {
