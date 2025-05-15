@@ -67,27 +67,53 @@ const LinkDriver = ({ device, background, text, secondary }) => {
   };
 
   const handleLink = useCatch(async () => {
+    setModalSelectDriver(false);
     try {
-      if (drivers[driverSelect] && device) {
-        const response = await fetch("/api/permissions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+      const selectedDriver = drivers[driverSelect];
+      if (!selectedDriver || !device) return;
+
+      // 1. Cria permissão
+      const responsePermission = await fetch("/api/permissions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          deviceId: device.id,
+          driverId: selectedDriver.id,
+        }),
+      });
+
+      if (!responsePermission.ok) {
+        const errorText = await responsePermission.text();
+        throw new Error(
+          errorText || `Erro na permissão: ${responsePermission.status}`
+        );
+      }
+
+      // 2. Atualiza o device usando os dados já recebidos
+      const responseUpdate = await fetch(`/api/devices/${device.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...device,
+          attributes: {
+            ...(device.attributes || {}),
+            driverUniqueId: selectedDriver.uniqueId,
           },
-          body: JSON.stringify({
-            deviceId: device.id,
-            driverId: drivers[driverSelect].id,
-          }),
-        });
+        }),
+      });
 
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(errorText || `Erro: ${response.status}`);
-        }
-
+      if (!responseUpdate.ok) {
+        const errorText = await responseUpdate.text();
+        throw new Error(
+          errorText || `Erro ao atualizar device: ${responseUpdate.status}`
+        );
       }
     } catch (error) {
-      console.error("Erro ao associar:", error);
+      console.error("Erro ao associar motorista:", error);
       throw error;
     }
   });
@@ -103,7 +129,7 @@ const LinkDriver = ({ device, background, text, secondary }) => {
             Motorista
           </Typography>
           <Typography component={"span"} color="#989898">
-            Não informado
+            {drivers[device?.attributes?.driverUniqueId] ? `${drivers[device?.attributes?.driverUniqueId].name}` : 'Não informado'}
           </Typography>
         </Box>
       </Box>
