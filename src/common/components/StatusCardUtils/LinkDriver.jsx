@@ -1,6 +1,23 @@
-import { faUserSlash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faClose,
+  faUser,
+  faUserSlash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Box, Button, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  FormControl,
+  IconButton,
+  InputLabel,
+  Modal,
+  NativeSelect,
+  Typography,
+} from "@mui/material";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const box = {
   display: "flex",
@@ -10,47 +27,61 @@ const box = {
 
 const boxInfo1 = {
   display: "flex",
-  gap: '.5rem',
+  gap: ".5rem",
   alignItems: "center",
-}
+};
 
 const boxInfo2 = {
   display: "flex",
-  flexDirection: 'column',
+  flexDirection: "column",
   alignItems: "flex-start",
-  justifyContent: 'space-between',
-  '& span': {
-    fontSize: '.8rem',
-    fontWeight: '500',
-    lineHeight: '1rem'
-  }
-}
+  justifyContent: "space-between",
+  "& span": {
+    fontSize: ".8rem",
+    fontWeight: "500",
+    lineHeight: "1rem",
+  },
+};
 
-const icon = { backgroundColor: "#E0E0E0", padding: '8px', borderRadius: '50%', height: '36px', width: '36px', display: 'grid', alignItems: 'center', justifyContent: 'center' }
+const icon = {
+  backgroundColor: "#E0E0E0",
+  padding: "8px",
+  borderRadius: "50%",
+  height: "36px",
+  width: "36px",
+  display: "grid",
+  alignItems: "center",
+  justifyContent: "center",
+};
 
 const LinkDriver = ({ device, background, text, secondary }) => {
+  const [modalSelectDriver, setModalSelectDriver] = useState(false);
+  const drivers = useSelector((state) => state.drivers.items);
+  // https://demo.traccar.org/api/permissions
+
   return (
     <Box sx={box}>
       <Box sx={boxInfo1}>
         <Box style={icon}>
-          <FontAwesomeIcon icon={faUserSlash}  color="#676767"/>
+          <FontAwesomeIcon icon={faUserSlash} color="#676767" />
         </Box>
         <Box sx={boxInfo2}>
-            <Typography component={"span"} color="#676767">
-                Motorista
-            </Typography>
-            <Typography component={"span"} color="#989898">
-                Não informado
-            </Typography>
+          <Typography component={"span"} color="#676767">
+            Motorista
+          </Typography>
+          <Typography component={"span"} color="#989898">
+            Não informado
+          </Typography>
         </Box>
       </Box>
       <Button
         size="small"
+        onClick={() => setModalSelectDriver(true)}
         sx={{
           padding: "6px 12px",
           backgroundColor: `${background}`,
           color: `${text}`,
-          fontSize: '.85rem',
+          fontSize: ".85rem",
           "&:hover": {
             color: `${text}`,
             backgroundColor: `${secondary}`,
@@ -60,6 +91,69 @@ const LinkDriver = ({ device, background, text, secondary }) => {
       >
         Vincular Motorista
       </Button>
+      <Modal
+        open={modalSelectDriver}
+        onClose={() => setModalSelectDriver(false)}
+        aria-describedby="Selecionar motorista"
+      >
+        <Card
+          sx={{
+            maxWidth: "400px",
+            width: "100%",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: ".5rem",
+              padding: "1rem",
+              backgroundColor: `${background}`,
+              color: `${text}`,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                gap: ".5rem",
+                color: "white",
+                flex: 1
+              }}
+            >
+              <FontAwesomeIcon icon={faUser} size="lg" />
+              <Box component={"h3"} sx={{ margin: 0 }}>
+                Vincular Motorista
+              </Box>
+            </Box>
+            <IconButton aria-label="Fechar janela de vincular motorista" sx={{width: "1rem", height: "1rem", padding: "1rem"}}>
+              <FontAwesomeIcon icon={faClose} color="white"/>
+            </IconButton>
+          </Box>
+          <CardContent>
+            <FormControl fullWidth>
+              <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                Motorista
+              </InputLabel>
+              <NativeSelect
+                defaultValue={30}
+                inputProps={{
+                  name: 'driver',
+                  id: 'uncontrolled-native',
+                }}
+              >
+                <option value={10}>Ten</option>
+              </NativeSelect>
+            </FormControl>
+          </CardContent>
+        </Card>
+      </Modal>
     </Box>
   );
 };

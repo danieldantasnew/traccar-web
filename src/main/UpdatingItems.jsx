@@ -12,24 +12,17 @@ const UpdatingItems = ({ setUpdatingItems }) => {
     devices,
     "deviceColors"
   );
-  const missingAttributeDriverInDevices = getDevicesMissingAttribute(
-    devices,
-    "driver"
-  );
   useCreateAttribute(
     missingAttributeDeviceColorsInDevices,
     "deviceColors",
     getRandomColor
   );
-  useCreateAttribute(missingAttributeDriverInDevices, "driver", {});
 
   useEffect(() => {
     if (!loading) {
       if (
         (!Array.isArray(missingAttributeDeviceColorsInDevices) ||
-          missingAttributeDeviceColorsInDevices.length === 0) &&
-        (!Array.isArray(missingAttributeDriverInDevices) ||
-          missingAttributeDriverInDevices.length === 0)
+          missingAttributeDeviceColorsInDevices.length === 0)
       ) {
           setUpdatingItems(false);
       }
@@ -37,7 +30,6 @@ const UpdatingItems = ({ setUpdatingItems }) => {
   }, [
     loading,
     missingAttributeDeviceColorsInDevices,
-    missingAttributeDriverInDevices,
   ]);
   return <Loader/>;
 };
