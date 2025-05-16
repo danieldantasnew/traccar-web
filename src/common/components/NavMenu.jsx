@@ -97,8 +97,8 @@ const NavMenu = ({ setDevicesOpen }) => {
       <Tooltip title={t("reportTitle")} placement="right" arrow>
         <IconButton
           size="medium"
-          onClick={() => navigate("/reports/combined")}
-          onTouchStart={() => navigate("/reports/combined")}
+          onClick={() => navigate("/reports/route")}
+          onTouchStart={() => navigate("/reports/route")}
         >
           <FontAwesomeIcon size="sm" icon={faFileLines} />
         </IconButton>

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -70,7 +70,8 @@ const MainToolbar = ({
     <Toolbar className={classes.toolbar}>
       <OutlinedInput
         sx={{
-          "&:focus-within": { outline: "1px solid white" },
+          "&:hover": {boxShadow: "0px 0px 0px 2px white"},
+          "&:focus-within": { outline: "1px solid white", backgroundColor: "white", boxShadow: "0px 0px 0px 2px white" },
         }}
         ref={inputRef}
         placeholder={t("sharedSearchDevices")}
@@ -173,14 +174,14 @@ const MainToolbar = ({
           </FormGroup>
         </div>
       </Popover>
-      <Button
+      {/* <Button
         className={classes.buttonStyle}
         onClick={() => navigate("/settings/device")}
         variant="contained"
         endIcon={<FontAwesomeIcon size="xs" icon={faPlus} />}
       >
         Adicionar Veículo
-      </Button>
+      </Button> */}
     </Toolbar>
   );
 };

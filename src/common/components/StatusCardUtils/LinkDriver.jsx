@@ -111,7 +111,7 @@ const LinkDriver = ({ device, background, text, secondary }) => {
           ...device,
           attributes: {
             ...(device.attributes || {}),
-            driverUniqueId: selectedDriver.uniqueId,
+            driverUniqueId: Number(selectedDriver.uniqueId),
           },
         }),
       });

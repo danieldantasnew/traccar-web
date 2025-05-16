@@ -213,7 +213,7 @@ const EventsDrawer = ({ open, onClose }) => {
             <Tab
               label={
                 <Badge
-                  badgeContent={events.length}
+                  badgeContent={events.length || "0"}
                   sx={{
                     "& .MuiBadge-badge": {
                       right: -12,
@@ -246,7 +246,7 @@ const EventsDrawer = ({ open, onClose }) => {
             <Tab
               label={
                 <Badge
-                  badgeContent={unreads.length}
+                  badgeContent={unreads.length || "0"}
                   sx={{
                     "& .MuiBadge-badge": {
                       right: -12,
@@ -279,7 +279,7 @@ const EventsDrawer = ({ open, onClose }) => {
             <Tab
               label={
                 <Badge
-                  badgeContent={reads.length}
+                  badgeContent={reads.length || "0"}
                   sx={{
                     "& .MuiBadge-badge": {
                       right: -12,

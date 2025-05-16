@@ -1,25 +1,22 @@
 import { useState, useCallback, useEffect, useRef } from "react";
-import { Box, IconButton, Paper, Slide, Tooltip } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSelector } from "react-redux";
-import DeviceList from "./DeviceList";
+
+import { useAttributePreference } from "../common/util/preferences";
 import StatusCard from "../common/components/StatusCard.jsx";
 import usePersistedState from "../common/util/usePersistedState";
 import EventsDrawer from "./EventsDrawer";
 import useFilter from "./useFilter";
-import MainToolbar from "./MainToolbar";
 import MainMap from "./MainMap";
-import { useAttributePreference } from "../common/util/preferences";
-import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
 import NavMenu from "../common/components/NavMenu.jsx";
 import { useDevices } from "../Context/App.jsx";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import ControllersInMap from "../common/components/ControllersInMap.jsx";
 import StopCard from "../common/components/StopCard.jsx";
 import UpdatingItems from "./UpdatingItems.jsx";
+import MyDevices from "./MyDevices.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -114,7 +111,7 @@ const MainPage = () => {
   const selectedPosition = filteredPositions.find(
     (position) => selectedDeviceId && position.deviceId === selectedDeviceId
   );
-  const phraseGroup = "OUTROS";
+
   const [filteredDevices, setFilteredDevices] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [filter, setFilter] = usePersistedState("filter", {
@@ -125,12 +122,9 @@ const MainPage = () => {
   const [filterMap, setFilterMap] = usePersistedState("filterMap", false);
 
   const {
-    devicesOpen,
-    heightMenuNavMobile,
     statusCardOpen,
     stopCard,
     setDevicesOpen,
-    setStatusCardOpen,
     setFirstLoadDevice,
     setStaticRoutes,
   } = useDevices();
@@ -177,78 +171,18 @@ const MainPage = () => {
         onEventsClick={onEventsClick}
         setLoading={setLoading}
       />
-      <Slide direction="right" in={devicesOpen} timeout={200}>
-        <Paper
-          square
-          className={classes.allDevices}
-          style={
-            !desktop
-              ? { height: `calc(100% - ${heightMenuNavMobile}px)` }
-              : { height: "100%" }
-          }
-        >
-          <Box
-            component={"div"}
-            sx={{
-              backgroundColor: theme.palette.primary.main,
-              padding: "1rem 0 1rem 0 ",
-              color: "white",
-              display: "flex",
-              justifyContent: "space-between",
-              flexDirection: "column",
-              gap: "1rem",
-            }}
-          >
-            <Box
-              component={"div"}
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Box component={"h3"}>
-                <DynamicIconsComponent category={"carGroup"} />
-                Meus Veículos
-              </Box>
-              <Tooltip title="Fechar" arrow placement="right">
-                <IconButton
-                  size="medium"
-                  onClick={() => setDevicesOpen(!devicesOpen)}
-                  onTouchStart={() => setDevicesOpen(!devicesOpen)}
-                >
-                  <FontAwesomeIcon
-                    icon={faXmark}
-                    className={classes.mediaButton}
-                  />
-                </IconButton>
-              </Tooltip>
-            </Box>
-            <MainToolbar
-              filteredDevices={filteredDevices}
-              keyword={keyword}
-              setKeyword={setKeyword}
-              filter={filter}
-              setFilter={setFilter}
-              filterSort={filterSort}
-              setFilterSort={setFilterSort}
-              filterMap={filterMap}
-              setFilterMap={setFilterMap}
-              phraseGroup={phraseGroup}
-            />
-          </Box>
-          <div className={classes.devices}>
-            <Paper square className={classes.contentList}>
-              <DeviceList
-                devices={filteredDevices}
-                setStatusCardOpen={setStatusCardOpen}
-                setDevicesOpen={setDevicesOpen}
-                phraseGroup={phraseGroup}
-              />
-            </Paper>
-          </div>
-        </Paper>
-      </Slide>
+      <MyDevices
+        filteredDevices={filteredDevices}
+        setKeyword={setKeyword}
+        keyword={keyword}
+        filter={filter}
+        setFilter={setFilter}
+        setFilterSort={setFilterSort}
+        filterSort={filterSort}
+        setFilterMap={setFilterMap}
+        filterMap={filterMap}
+        desktop={desktop}
+      />
       {desktop && (
         <Paper square elevation={4} className={classes.sidebar}>
           <Box component="div" className={classes.sidebarLayout}>

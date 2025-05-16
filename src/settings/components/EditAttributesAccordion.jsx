@@ -113,7 +113,7 @@ const EditAttributesAccordion = ({ attribute, attributes, setAttributes, definit
   const convertToList = (attributes) => {
     const booleanList = [];
     const otherList = [];
-    const excludeAttributes = ['speedUnit', 'distanceUnit', 'volumeUnit', 'timezone', 'deviceColors', 'driver'];
+    const excludeAttributes = ['speedUnit', 'distanceUnit', 'volumeUnit', 'timezone', 'deviceColors', 'driverUniqueId'];
     Object.keys(attributes || []).filter((key) => !excludeAttributes.includes(key)).forEach((key) => {
       const value = attributes[key];
       const type = getAttributeType(value);
