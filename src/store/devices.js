@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const { reducer, actions } = createSlice({
-  name: 'devices',
+  name: "devices",
   initialState: {
     items: {},
     selectedId: null,
@@ -10,14 +10,18 @@ const { reducer, actions } = createSlice({
   },
   reducers: {
     loading(state, action) {
-      state.loading = action.payload
+      state.loading = action.payload;
     },
     refresh(state, action) {
       state.items = {};
-      action.payload.forEach((item) => state.items[item.id] = item);
+      action.payload.forEach((item) => (state.items[item.id] = item));
     },
     update(state, action) {
-      action.payload.forEach((item) => state.items[item.id] = item);
+      action.payload.forEach((item) => (state.items[item.id] = item));
+    },
+    updateUniqueItem(state, action) {
+      const updatedDevice = action.payload;
+      state.items[updatedDevice.id] = updatedDevice;
     },
     selectId(state, action) {
       state.selectTime = Date.now();

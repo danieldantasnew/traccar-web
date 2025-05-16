@@ -18,9 +18,10 @@ import {
   Typography,
 } from "@mui/material";
 import SaveButton from "../SaveButton";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useCatch } from "../../../reactHelper";
+import { devicesActions } from "../../../store";
 
 const box = {
   display: "flex",
@@ -58,12 +59,23 @@ const icon = {
 };
 
 const LinkDriver = ({ device, background, text, secondary }) => {
+  const dispatch = useDispatch();
   const [modalSelectDriver, setModalSelectDriver] = useState(false);
   const [driverSelect, setDriverSelect] = useState("");
   const drivers = useSelector((state) => state.drivers.items);
+  const [currentDriver, setCurrentDriver] = useState(null);
 
-  const handleChange = (e, key) => {
-    setDriverSelect(key);
+  const handleChange = (e) => {
+    setDriverSelect(e.target.value);
+  };
+
+  const handleUpdateDevice = async () => {
+    const response = await fetch(`/api/devices/${device.id}`);
+    if (response.ok) {
+      dispatch(devicesActions.updateUniqueItem(await response.json()));
+    } else {
+      throw Error(await response.text());
+    }
   };
 
   const handleLink = useCatch(async () => {
@@ -72,7 +84,6 @@ const LinkDriver = ({ device, background, text, secondary }) => {
       const selectedDriver = drivers[driverSelect];
       if (!selectedDriver || !device) return;
 
-      // 1. Cria permissão
       const responsePermission = await fetch("/api/permissions", {
         method: "POST",
         headers: {
@@ -91,7 +102,6 @@ const LinkDriver = ({ device, background, text, secondary }) => {
         );
       }
 
-      // 2. Atualiza o device usando os dados já recebidos
       const responseUpdate = await fetch(`/api/devices/${device.id}`, {
         method: "PUT",
         headers: {
@@ -112,24 +122,77 @@ const LinkDriver = ({ device, background, text, secondary }) => {
           errorText || `Erro ao atualizar device: ${responseUpdate.status}`
         );
       }
+      handleUpdateDevice();
     } catch (error) {
       console.error("Erro ao associar motorista:", error);
       throw error;
     }
   });
 
+  const handleRemove = useCatch(async () => {
+    setModalSelectDriver(false);
+    try {
+      if (!device) return;
+
+      const responseUpdate = await fetch(`/api/devices/${device.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...device,
+          attributes: {
+            ...(device.attributes || {}),
+            driverUniqueId: null,
+          },
+        }),
+      });
+
+      if (!responseUpdate.ok) {
+        const errorText = await responseUpdate.text();
+        throw new Error(
+          errorText || `Erro ao atualizar device: ${responseUpdate.status}`
+        );
+      }
+      handleUpdateDevice();
+    } catch (error) {
+      console.error("Erro ao desassociar motorista:", error);
+      throw error;
+    }
+  });
+
+  useEffect(() => {
+    const uniqueId = device?.attributes?.driverUniqueId;
+    const driver = uniqueId ? drivers?.[uniqueId] : null;
+
+    if (driver) {
+      setCurrentDriver(driver);
+      setDriverSelect(driver.uniqueId);
+    } else {
+      setCurrentDriver(null);
+      setDriverSelect("");
+    }
+  }, [drivers, device]);
+
+  useEffect(() => {
+    if (currentDriver) setDriverSelect(currentDriver.uniqueId);
+  }, [currentDriver]);
+
   return (
     <Box sx={box}>
       <Box sx={boxInfo1}>
         <Box style={icon}>
-          <FontAwesomeIcon icon={faUserSlash} color="#676767" />
+          <FontAwesomeIcon
+            icon={currentDriver ? faUser : faUserSlash}
+            color="#676767"
+          />
         </Box>
         <Box sx={boxInfo2}>
           <Typography component={"span"} color="#676767">
             Motorista
           </Typography>
           <Typography component={"span"} color="#989898">
-            {drivers[device?.attributes?.driverUniqueId] ? `${drivers[device?.attributes?.driverUniqueId].name}` : 'Não informado'}
+            {currentDriver ? `${currentDriver.name}` : "Não informado"}
           </Typography>
         </Box>
       </Box>
@@ -148,7 +211,7 @@ const LinkDriver = ({ device, background, text, secondary }) => {
         }}
         variant="contained"
       >
-        Vincular Motorista
+        {currentDriver ? `Desvincular motorista` : "Vincular Motorista"}
       </Button>
       <Modal
         open={modalSelectDriver}
@@ -205,7 +268,7 @@ const LinkDriver = ({ device, background, text, secondary }) => {
               <Select
                 labelId="select-driver-label"
                 value={driverSelect}
-                onChange={(e) => handleChange(e, e.target.value)}
+                onChange={(e) => handleChange(e)}
                 sx={{
                   borderRadius: "4px",
                   paddingY: "6px",
@@ -230,7 +293,7 @@ const LinkDriver = ({ device, background, text, secondary }) => {
               </Select>
 
               <SaveButton
-                onClick={handleLink}
+                onClick={currentDriver ? handleRemove : handleLink}
                 className={{
                   marginTop: "2rem",
                   backgroundColor: background,
@@ -240,7 +303,7 @@ const LinkDriver = ({ device, background, text, secondary }) => {
                   },
                 }}
               >
-                Vincular
+                {currentDriver ? `Desvincular` : "Vincular"}
               </SaveButton>
             </FormControl>
           </CardContent>

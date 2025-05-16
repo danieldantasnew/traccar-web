@@ -118,13 +118,13 @@ const MapPositions = ({
             }}
           >
             <DynamicIconsComponent
-              key={device.name}
-              category={device.category}
+              key={device?.name}
+              category={device?.category}
               color={icon}
             />
             <div className="marker-text">
-              <p>{device.model}</p>
-              <p>{device.name}</p>
+              <p>{device?.model}</p>
+              <p>{device?.name}</p>
             </div>
           </div>
         </Tooltip>
