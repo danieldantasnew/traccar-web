@@ -11,6 +11,8 @@ import {
   formatTime,
 } from "../common/util/formatter.js";
 import { getRandomColor } from "../common/util/colors.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
 
 const MapPositions = ({
   positions,
@@ -119,6 +121,7 @@ const MapPositions = ({
               sx: {
                 maxWidth: 500,
                 whiteSpace: "pre-line",
+                fontSize: ".75rem",
               },
             },
           }}
@@ -142,6 +145,7 @@ const MapPositions = ({
               <p>{device?.model}</p>
               <p>{device?.name}</p>
             </div>
+          {ignition ? <span className="ignitionIcon"><FontAwesomeIcon icon={faPowerOff}/></span> : ''}
           </div>
         </Tooltip>
       );
