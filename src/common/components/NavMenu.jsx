@@ -139,6 +139,12 @@ const NavMenu = ({ setDevicesOpen }) => {
             </ListItemIcon>
             Editar Conta
           </MenuItem>
+          <MenuItem onClick={()=> navigate('/settings/devices')}>
+            <ListItemIcon>
+              <DynamicIconsComponent category={"cars"}/>
+            </ListItemIcon>
+            Painel de Veículos
+          </MenuItem>
           <MenuItem onClick={handleLogout}>
             <ListItemIcon>
               <FontAwesomeIcon

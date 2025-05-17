@@ -6,7 +6,10 @@ import "./css/style.css";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
 import { Tooltip } from "@mui/material";
 import { createRoot } from "react-dom/client";
-import { formatTime } from "../common/util/formatter.js";
+import {
+  formatSpeedNoTranslation,
+  formatTime,
+} from "../common/util/formatter.js";
 import { getRandomColor } from "../common/util/colors.js";
 
 const MapPositions = ({
@@ -22,12 +25,12 @@ const MapPositions = ({
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
 
   const devicesPropsKey = positions
-  .map((p) => {
-    const d = devices[p.deviceId] || {};
-    const colors = d.attributes?.deviceColors || {};
-    return JSON.stringify([d.category, d.name, d.model, colors]);
-  })
-  .join("|");
+    .map((p) => {
+      const d = devices[p.deviceId] || {};
+      const colors = d.attributes?.deviceColors || {};
+      return JSON.stringify([d.category, d.name, d.model, colors]);
+    })
+    .join("|");
 
   useEffect(() => {
     if (!map || !positions.length) return;
@@ -81,6 +84,9 @@ const MapPositions = ({
 
       const el = document.createElement("div");
       const device = devices[position.deviceId];
+      const ignition =
+        position?.attributes?.ignition || position?.attributes?.motion;
+      const speed = position?.speed;
       const deviceColors = device?.attributes?.deviceColors || getRandomColor();
       const { background, text, icon } = deviceColors;
 
@@ -90,7 +96,11 @@ const MapPositions = ({
       root.render(
         <Tooltip
           title={
-            device ? `Última atualização: ${formatTime(device.lastUpdate)}` : ""
+            device
+              ? `${device.name} - ${formatTime(device.lastUpdate)} - ${
+                  ignition ? "Ligado" : "Desligado"
+                } ${speed ? `(${formatSpeedNoTranslation(speed, "kmh")})` : ""}`
+              : ""
           }
           followCursor
           arrow
@@ -98,12 +108,18 @@ const MapPositions = ({
             popper: {
               modifiers: [
                 {
-                  name: 'offset',
+                  name: "offset",
                   options: {
                     offset: [0, 24],
                   },
                 },
               ],
+            },
+            tooltip: {
+              sx: {
+                maxWidth: 500,
+                whiteSpace: "pre-line",
+              },
             },
           }}
         >
@@ -114,7 +130,7 @@ const MapPositions = ({
               alignItems: "center",
               justifyContent: "space-between",
               padding: "1px",
-              maxWidth: '100%',
+              maxWidth: "100%",
             }}
           >
             <DynamicIconsComponent
@@ -148,7 +164,7 @@ const MapPositions = ({
   }, [map, positions, devices]);
 
   useEffect(() => {
-    if(MainMap) {
+    if (MainMap) {
       setPositions([]);
       setStops([]);
     }

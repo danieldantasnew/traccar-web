@@ -140,6 +140,9 @@ export const formatAltitude = (value, unit, t) =>
 export const formatSpeed = (value, unit, t) =>
   `${speedFromKnots(value, unit).toFixed(2)} ${speedUnitString(unit, t)}`;
 
+export const formatSpeedNoTranslation = (value, unit) =>
+  `${Math.round(speedFromKnots(value, unit))} km/h`;
+
 export const formatVolume = (value, unit, t) =>
   `${volumeFromLiters(value, unit).toFixed(2)} ${volumeUnitString(unit, t)}`;
 

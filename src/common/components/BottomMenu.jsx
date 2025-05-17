@@ -204,6 +204,12 @@ const BottomMenu = () => {
           </ListItemIcon>
           <Typography color="textPrimary">Editar Conta</Typography>
         </MenuItem>
+        <MenuItem onClick={() => navigate("/settings/devices")}>
+          <ListItemIcon>
+            <DynamicIconsComponent category={"cars"} />
+          </ListItemIcon>
+          Painel de Veículos
+        </MenuItem>
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <FontAwesomeIcon
