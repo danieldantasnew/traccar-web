@@ -34,6 +34,15 @@ const useStyles = makeStyles((theme) => ({
     gap: "1.5rem",
     ["& svg"]: {
       width: "",
+      "&:hover": {
+        color: "#2C76AC",
+        transition: ".3s",
+      },
+    },
+  },
+  iconButton: {
+    "&:hover": {
+      color: "#2C76AC",
     },
   },
 }));
@@ -90,6 +99,7 @@ const NavMenu = ({ setDevicesOpen }) => {
           size="medium"
           onClick={() => setDevicesOpen((devicesOpen) => !devicesOpen)}
           onTouchStart={() => setDevicesOpen((devicesOpen) => !devicesOpen)}
+          className={classes.iconButton}
         >
           <DynamicIconsComponent category={"carGroup"} />
         </IconButton>
@@ -99,6 +109,7 @@ const NavMenu = ({ setDevicesOpen }) => {
           size="medium"
           onClick={() => navigate("/reports/route")}
           onTouchStart={() => navigate("/reports/route")}
+          className={classes.iconButton}
         >
           <FontAwesomeIcon size="sm" icon={faFileLines} />
         </IconButton>
@@ -109,6 +120,7 @@ const NavMenu = ({ setDevicesOpen }) => {
           size="medium"
           onClick={() => navigate("/settings/preferences")}
           onTouchStart={() => navigate("/settings/preferences")}
+          className={classes.iconButton}
         >
           <FontAwesomeIcon icon={faGear} size="sm" />
         </IconButton>
@@ -118,6 +130,7 @@ const NavMenu = ({ setDevicesOpen }) => {
         <IconButton
           size="medium"
           onClick={(event) => setAccountPopOver(event.currentTarget)}
+          className={classes.iconButton}
         >
           <FontAwesomeIcon size="sm" icon={faCircleUser} />
         </IconButton>
@@ -133,15 +146,15 @@ const NavMenu = ({ setDevicesOpen }) => {
         }}
       >
         <MenuList>
-          <MenuItem onClick={handleAccount}>
+          <MenuItem onClick={handleAccount} sx={{"&:hover": {"& svg": { color: "#2C76AC"}, color: "#2C76AC", transition: ".3s" },}}>
             <ListItemIcon>
               <FontAwesomeIcon icon={faUserPen} />
             </ListItemIcon>
             Editar Conta
           </MenuItem>
-          <MenuItem onClick={()=> navigate('/settings/devices')}>
+          <MenuItem onClick={() => navigate("/settings/devices")} sx={{"&:hover": {"& svg": { color: "#2C76AC"}, color: "#2C76AC", transition: ".3s" },}}>
             <ListItemIcon>
-              <DynamicIconsComponent category={"cars"}/>
+              <DynamicIconsComponent category={"cars"} />
             </ListItemIcon>
             Painel de Veículos
           </MenuItem>

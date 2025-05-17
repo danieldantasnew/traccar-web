@@ -136,7 +136,15 @@ const BottomMenu = () => {
         showLabels
       >
         <BottomNavigationAction
-          sx={{ minWidth: "initial", maxWidth: "160px", padding: "0px 4px" }}
+          sx={{
+            minWidth: "initial",
+            maxWidth: "160px",
+            padding: "0px 4px",
+            "&.Mui-selected": {
+              color: "#2C76AC",
+            },
+            "&:hover": { color: "#2C76AC" },
+          }}
           onClick={() => setDevicesOpen(false)}
           label={t("mapTitle")}
           icon={
@@ -152,7 +160,15 @@ const BottomMenu = () => {
           value="map"
         />
         <BottomNavigationAction
-          sx={{ minWidth: "initial", maxWidth: "160px", padding: "0px 4px" }}
+          sx={{
+            minWidth: "initial",
+            maxWidth: "160px",
+            padding: "0px 4px",
+            "&.Mui-selected": {
+              color: "#2C76AC",
+            },
+            "&:hover": { color: "#2C76AC" },
+          }}
           onClick={() => setDevicesOpen((state) => !state)}
           label={"Veículos"}
           icon={<DynamicIconsComponent category={"carGroup"} />}
@@ -161,7 +177,15 @@ const BottomMenu = () => {
 
         {!disableReports && (
           <BottomNavigationAction
-            sx={{ minWidth: "initial", maxWidth: "160px", padding: "0px 4px" }}
+            sx={{
+              minWidth: "initial",
+              maxWidth: "160px",
+              padding: "0px 4px",
+              "&.Mui-selected": {
+                color: "#2C76AC",
+              },
+              "&:hover": { color: "#2C76AC" },
+            }}
             onClick={() => setDevicesOpen(false)}
             label={t("reportTitle")}
             icon={<FontAwesomeIcon icon={faFileLines} size="xl" />}
@@ -169,7 +193,15 @@ const BottomMenu = () => {
           />
         )}
         <BottomNavigationAction
-          sx={{ minWidth: "initial", maxWidth: "160px", padding: "0px 4px" }}
+          sx={{
+            minWidth: "initial",
+            maxWidth: "160px",
+            padding: "0px 4px",
+            "&.Mui-selected": {
+              color: "#2C76AC",
+            },
+            "&:hover": { color: "#2C76AC" },
+          }}
           onClick={() => setDevicesOpen(false)}
           label={t("settingsTitle")}
           icon={<FontAwesomeIcon icon={faGear} size="xl" />}
@@ -177,7 +209,15 @@ const BottomMenu = () => {
         />
         {readonly ? (
           <BottomNavigationAction
-            sx={{ minWidth: "initial", maxWidth: "160px", padding: "0px 4px" }}
+            sx={{
+              minWidth: "initial",
+              maxWidth: "160px",
+              padding: "0px 4px",
+              "&.Mui-selected": {
+                color: "#2C76AC",
+              },
+              "&:hover": { color: "#2C76AC" },
+            }}
             onClick={() => setDevicesOpen(false)}
             label={t("loginLogout")}
             icon={<FontAwesomeIcon icon={faArrowRightFromBracket} size="xl" />}
@@ -185,7 +225,15 @@ const BottomMenu = () => {
           />
         ) : (
           <BottomNavigationAction
-            sx={{ minWidth: "initial", maxWidth: "160px", padding: "0px 4px" }}
+            sx={{
+              minWidth: "initial",
+              maxWidth: "160px",
+              padding: "0px 4px",
+              "&.Mui-selected": {
+                color: "#2C76AC",
+              },
+              "&:hover": { color: "#2C76AC" },
+            }}
             onClick={() => setDevicesOpen(false)}
             label={t("settingsUser")}
             icon={<FontAwesomeIcon icon={faCircleUser} size="xl" />}
@@ -198,13 +246,13 @@ const BottomMenu = () => {
         open={Boolean(anchorEl)}
         onClose={() => setAnchorEl(null)}
       >
-        <MenuItem onClick={handleAccount}>
+        <MenuItem onClick={handleAccount} sx={{"&:hover": {"& svg": { color: "#2C76AC"}, color: "#2C76AC", transition: ".3s" },}}>
           <ListItemIcon>
             <FontAwesomeIcon icon={faUserPen} />
           </ListItemIcon>
-          <Typography color="textPrimary">Editar Conta</Typography>
+          <Typography>Editar Conta</Typography>
         </MenuItem>
-        <MenuItem onClick={() => navigate("/settings/devices")}>
+        <MenuItem onClick={() => navigate("/settings/devices")} sx={{"&:hover": {"& svg": { color: "#2C76AC"}, color: "#2C76AC", transition: ".3s" },}}>
           <ListItemIcon>
             <DynamicIconsComponent category={"cars"} />
           </ListItemIcon>

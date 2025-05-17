@@ -1,27 +1,25 @@
-import React from 'react';
-import { useMediaQuery, Paper } from '@mui/material';
+import { Paper } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { useTheme } from '@mui/material/styles';
 import LogoImage from './LogoImage';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: 'grid',
+    gridTemplateColumns: '1fr 3fr',
     height: '100%',
+    [theme.breakpoints.down('lg')]: {
+      gridTemplateColumns: '1fr',
+      gridTemplateRows: '1fr 2fr',
+    }
   },
   sidebar: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    background: theme.palette.primary.main,
+    background: '#2C76AC',
     paddingBottom: theme.spacing(5),
-    width: theme.dimensions.sidebarWidth,
-    [theme.breakpoints.down('lg')]: {
-      width: theme.dimensions.sidebarWidthTablet,
-    },
-    [theme.breakpoints.down('sm')]: {
-      width: '0px',
-    },
+    width: '100%',
   },
   paper: {
     display: 'flex',
@@ -29,9 +27,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
+    paddingBottom: theme.spacing(5),
     boxShadow: '-2px 0px 16px rgba(0, 0, 0, 0.25)',
-    [theme.breakpoints.up('lg')]: {
-      padding: theme.spacing(0, 25, 0, 0),
+    [theme.breakpoints.down('lg')]: {
+      justifyContent: 'flex-start',
     },
   },
   form: {
@@ -48,7 +47,7 @@ const LoginLayout = ({ children }) => {
   return (
     <main className={classes.root}>
       <div className={classes.sidebar}>
-        {!useMediaQuery(theme.breakpoints.down('lg')) && <LogoImage color={theme.palette.secondary.contrastText} />}
+        <LogoImage color={theme.palette.secondary.contrastText} />
       </div>
       <Paper className={classes.paper}>
         <form className={classes.form}>

@@ -129,23 +129,9 @@ const Navigation = () => {
           </ProtectedRoute>
         }
       />
-
-      <Route
-        path="/register"
-        element={
-          <ProtectedRoute loading={loading}>
-            <RegisterPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/reset-password"
-        element={
-          <ProtectedRoute loading={loading}>
-            <ResetPasswordPage />
-          </ProtectedRoute>
-        }
-      />
+      //transformar rotas de registro, reset em subrotas de login login/reset-password, login/register
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/change-server" element={<ChangeServerPage />} />
       <Route path="/" element={<App />}>
         <Route index element={<MainPage />} />
@@ -221,7 +207,7 @@ const Navigation = () => {
         </Route>
       </Route>
 
-      <Route path='*' element={<NotFound/>}/>
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
