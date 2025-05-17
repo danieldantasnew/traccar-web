@@ -2,7 +2,7 @@ import React from 'react';
 import { useTheme, useMediaQuery } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@mui/styles';
-import Logo from '../../public/logo-main.svg';
+import Logo from '/logo-main.svg';
 
 const useStyles = makeStyles((theme) => ({
   image: {
@@ -21,7 +21,7 @@ const LogoImage = ({ color }) => {
 
   const expanded = !useMediaQuery(theme.breakpoints.down('lg'));
 
-  const logo = './public/logo-main.svg'
+  const logo = '/logo-main.svg'
   const logoInverted = useSelector((state) => state.session.server.attributes?.logoInverted);
 
   if (logo) {
