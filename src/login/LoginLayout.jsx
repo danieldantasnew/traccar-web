@@ -19,6 +19,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     background: '#ffffff',
     width: '100%',
+    maxHeight: '100%',
+    overflow: "hidden",
     padding: "1rem",
   },
   paper: {
@@ -28,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     flex: 1,
     paddingBottom: theme.spacing(8),
-    boxShadow: 'none',
+    boxShadow: 'none !important',
     background: '#ffffff',
     [theme.breakpoints.down('lg')]: {
       justifyContent: 'flex-start',

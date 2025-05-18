@@ -11,6 +11,7 @@ import {
   IconButton,
   Tooltip,
   Box,
+  Typography,
 } from "@mui/material";
 import ReactCountryFlag from "react-country-flag";
 import makeStyles from "@mui/styles/makeStyles";
@@ -223,7 +224,7 @@ const LoginPage = () => {
         )}
       </div>
       <div className={classes.container}>
-        <DynamicIconsComponent category={"logo"} color={"#2C76AC"} style={{ width: "160px", height: "auto", alignSelf: "center", paddingBottom: "1rem"}}/>
+        <Typography component={"h1"} color={"#2C76AC"} sx={{fontSize: "4.2rem", fontWeight: 600, paddingBottom: '1.5rem'}}>Login</Typography>
         <TextField
           required
           error={failed}
