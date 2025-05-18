@@ -5,8 +5,9 @@ import SideImage from './SideImage';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'grid',
-    gridTemplateColumns: '1fr 1.2fr',
+    gridTemplateColumns: '1fr 1fr',
     height: '100%',
+    maxHeight: '100%',
     [theme.breakpoints.down('lg')]: {
       gridTemplateColumns: '1fr',
       gridTemplateRows: '1fr 2fr',
@@ -16,9 +17,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    background: '#2C76AC',
+    background: '#ffffff',
     width: '100%',
-    overflow: "hidden",
+    padding: "1rem",
   },
   paper: {
     display: 'flex',
@@ -26,8 +27,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-    paddingBottom: theme.spacing(5),
-    boxShadow: '-2px 0px 16px rgba(0, 0, 0, 0.25)',
+    paddingBottom: theme.spacing(8),
+    boxShadow: 'none',
+    background: '#ffffff',
     [theme.breakpoints.down('lg')]: {
       justifyContent: 'flex-start',
     },
