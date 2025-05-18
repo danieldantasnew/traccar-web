@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import {
-  useMediaQuery,
   Select,
   MenuItem,
   FormControl,
@@ -12,7 +11,6 @@ import {
   IconButton,
   Tooltip,
   Box,
-  Typography,
 } from "@mui/material";
 import ReactCountryFlag from "react-country-flag";
 import makeStyles from "@mui/styles/makeStyles";
@@ -33,9 +31,9 @@ import {
   nativeEnvironment,
   nativePostMessage,
 } from "../common/components/NativeInterface";
-import LogoImage from "./LogoImage";
 import { useCatch } from "../reactHelper";
 import Loader from "../common/components/Loader";
+import { DynamicIconsComponent } from "../common/components/DynamicIcons";
 
 const useStyles = makeStyles((theme) => ({
   options: {
@@ -50,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     gap: theme.spacing(2),
+    padding: "1.5rem 1rem .5rem 1rem",
+    borderRadius: ".5rem",
+    boxShadow: "0px 0px 4px 1px rgba(0, 0, 0, 0.14)",
   },
   extraContainer: {
     display: "flex",
@@ -222,17 +223,7 @@ const LoginPage = () => {
         )}
       </div>
       <div className={classes.container}>
-        <Typography
-          component={"h1"}
-          sx={{
-            fontSize: "3.6rem",
-            fontWeight: 500,
-            color: "#2C76AC",
-            paddingBottom: "1rem",
-          }}
-        >
-          Login
-        </Typography>
+        <DynamicIconsComponent category={"logo"} color={"#2C76AC"} style={{ width: "160px", height: "auto", alignSelf: "center", paddingBottom: "1rem"}}/>
         <TextField
           required
           error={failed}

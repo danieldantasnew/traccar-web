@@ -1,12 +1,11 @@
 import { Paper } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
-import { useTheme } from '@mui/material/styles';
-import LogoImage from './LogoImage';
+import SideImage from './SideImage';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'grid',
-    gridTemplateColumns: '1fr 3fr',
+    gridTemplateColumns: '1fr 1.2fr',
     height: '100%',
     [theme.breakpoints.down('lg')]: {
       gridTemplateColumns: '1fr',
@@ -18,8 +17,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     background: '#2C76AC',
-    paddingBottom: theme.spacing(5),
     width: '100%',
+    overflow: "hidden",
   },
   paper: {
     display: 'flex',
@@ -34,20 +33,19 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   form: {
-    maxWidth: theme.spacing(52),
     padding: theme.spacing(5),
     width: '100%',
+    maxWidth: "500px !important",
   },
 }));
 
 const LoginLayout = ({ children }) => {
   const classes = useStyles();
-  const theme = useTheme();
 
   return (
     <main className={classes.root}>
       <div className={classes.sidebar}>
-        <LogoImage color={theme.palette.secondary.contrastText} />
+        <SideImage />
       </div>
       <Paper className={classes.paper}>
         <form className={classes.form}>
