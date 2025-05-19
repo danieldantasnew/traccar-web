@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useDispatch, useSelector } from "react-redux";
@@ -182,9 +182,6 @@ const MainMap = ({
       <MapScale />
       <MapCurrentLocation />
       <MapGeocoder />
-      {/* {!features.disableEvents && (
-        <MapNotification enabled={eventsAvailable} onClick={onEventsClick} />
-      )} */}
       {desktop && (
         <MapPadding
           left={

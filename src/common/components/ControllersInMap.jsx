@@ -1,5 +1,5 @@
 import { Box, Tooltip } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { map } from "../../map/core/MapView";
 import { useAttributePreference } from "../util/preferences";
 import dimensions from "../theme/dimensions.js";
@@ -16,14 +16,14 @@ const useStyles = makeStyles((theme) => ({
     position: "fixed",
     zIndex: 8,
     right: 10,
-    top: "15rem",
+    top: "12.8rem",
     display: "flex",
     flexDirection: "column",
     gap: ".5rem",
   },
   controls: {
-    height: "29px",
-    width: "29px",
+    height: "32px",
+    width: "32px",
     backgroundColor: "#ffffff",
     color: "black",
     display: "flex",
@@ -106,7 +106,7 @@ const ControllersInMap = ({
         <Box onClick={onClick} tabIndex={0} ref={notificationsButtonRef}>
           <BellOn
             key={animKey}
-            color={!!unreads.length ? "red" : "#000"}
+            color={!!unreads.length ? "red" : "#616161"}
             animated={!!unreads.length}
             uniqAnimation={true}
           />

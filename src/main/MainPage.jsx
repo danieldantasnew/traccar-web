@@ -4,7 +4,6 @@ import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSelector } from "react-redux";
-
 import { useAttributePreference } from "../common/util/preferences";
 import StatusCard from "../common/components/StatusCard.jsx";
 import usePersistedState from "../common/util/usePersistedState";
@@ -36,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "44px",
     transform: "translateY(-50%)",
     margin: 0,
-    zIndex: 5,
+    zIndex: 3,
     padding: "8px",
   },
   sidebarLayout: {

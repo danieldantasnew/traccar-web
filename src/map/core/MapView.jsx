@@ -2,8 +2,9 @@
 import mapboxglRtlTextUrl from '@mapbox/mapbox-gl-rtl-text/mapbox-gl-rtl-text.min?url';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import maplibregl from 'maplibre-gl';
+import '../css/mapView.css';
 import { googleProtocol } from 'maplibre-google-maps';
-import React, {
+import {
   useRef, useLayoutEffect, useEffect, useState,
 } from 'react';
 import { SwitcherControl } from '../switcher/switcher';
@@ -53,8 +54,6 @@ const initMap = async () => {
   updateReadyValue(true);
 };
 
-map.addControl(new maplibregl.NavigationControl());
-
 const switcher = new SwitcherControl(
   () => updateReadyValue(false),
   (styleId) => savePersistedState('selectedMapStyle', styleId),
@@ -72,11 +71,8 @@ const switcher = new SwitcherControl(
   },
 );
 
-map.addControl(switcher);
-
 const MapView = ({ children }) => {
   const containerEl = useRef(null);
-
   const [mapReady, setMapReady] = useState(false);
 
   const mapStyles = useMapStyles();
@@ -109,14 +105,29 @@ const MapView = ({ children }) => {
     };
   }, []);
 
-  useLayoutEffect(() => {
-    const currentEl = containerEl.current;
-    currentEl.appendChild(element);
-    map.resize();
-    return () => {
-      currentEl.removeChild(element);
-    };
-  }, [containerEl]);
+useLayoutEffect(() => {
+  const currentEl = containerEl.current;
+  currentEl.appendChild(element);
+  map.resize();
+
+  const navigationControl = new maplibregl.NavigationControl({ showZoom: true, showCompass: true });
+  map.addControl(navigationControl, 'top-right');
+  map.addControl(switcher);
+
+  setTimeout(() => {
+    const zoomInBtn = document.querySelector('.maplibregl-ctrl-zoom-in');
+    const zoomOutBtn = document.querySelector('.maplibregl-ctrl-zoom-out');
+
+    if (zoomInBtn) zoomInBtn.innerHTML = '+';
+    if (zoomOutBtn) zoomOutBtn.innerHTML = '−';
+  }, 100);
+
+  return () => {
+    map.removeControl(navigationControl);
+    currentEl.removeChild(element);
+  };
+}, [containerEl]);
+
 
   return (
     <div style={{ width: '100%', height: '100%' }} ref={containerEl}>

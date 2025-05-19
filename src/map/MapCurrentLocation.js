@@ -15,6 +15,8 @@ const MapCurrentLocation = () => {
     return () => map.removeControl(control);
   }, []);
 
+  
+
   return null;
 };
 

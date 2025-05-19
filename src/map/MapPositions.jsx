@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { map } from "./core/MapView.jsx";
 import mapboxgl from "mapbox-gl";
-import "./css/style.css";
+import "./css/mapPositions.css";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
 import { Tooltip } from "@mui/material";
 import { createRoot } from "react-dom/client";

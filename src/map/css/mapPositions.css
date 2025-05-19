@@ -74,7 +74,7 @@
 }
 
 .maplibregl-ctrl-top-right {
-    top: 1rem;
+    top: .3rem;
 }
 
 .cluster-marker {
@@ -107,3 +107,4 @@
   .ignitionIcon svg {
     background-color: transparent;
   }
+  
