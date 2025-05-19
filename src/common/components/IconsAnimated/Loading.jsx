@@ -328,6 +328,23 @@ export default Loading;
 //     },
 //   },
 
+//     circleDevice: {
+//     backgroundColor: "white",
+//     height: "40px",
+//     width: "40px",
+//     borderRadius: "50%",
+//     transform: " rotate(-90deg)",
+//     position: "absolute",
+//     left: "370px",
+//     top: ".3rem",
+//     zIndex: 5,
+//     animation: "$device 3s infinite ease-in-out",
+//     display: "flex",
+//     alignItems: "center",
+//     justifyContent: "center",
+//     boxShadow: "0px 0px 0px 1px rgba(0,0,0,.5)",
+//   },
+
 //   circleInside: {
 //     content: "''",
 //     display: "block",
@@ -346,7 +363,7 @@ export default Loading;
 
 //   road: {
 //     width: "420px",
-//     height: "90px",
+//     height: "70px",
 //     borderRadius: "4px",
 //     backgroundColor: "#000",
 //     position: "relative",
@@ -361,8 +378,8 @@ export default Loading;
 //     backgroundPosition: "0 center",
 //     animation: "$moveDashes 0.2s linear infinite",
 //     "& svg": {
-//       width: "26px",
-//       height: "26px",
+//       width: "24px",
+//       height: "24px",
 //     },
 //     [theme.breakpoints.down("md")]: {
 //       width: "260px",
@@ -373,21 +390,6 @@ export default Loading;
 //         left: "370px",
 //       },
 //     },
-//   },
-//   circleDevice: {
-//     backgroundColor: "white",
-//     height: "40px",
-//     width: "40px",
-//     borderRadius: "50%",
-//     transform: " rotate(-90deg)",
-//     position: "absolute",
-//     left: "370px",
-//     top: ".3rem",
-//     zIndex: 5,
-//     animation: "$device 3s infinite ease-in-out",
-//     display: "flex",
-//     alignItems: "center",
-//     justifyContent: "center",
 //   },
 // }));
 

@@ -7,7 +7,7 @@
 }
 
 .maplibregl-ctrl-geocoder {
-  font-size: 14px;
+  font-size: 16px;
   line-height: 24px;
   font-family: "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   position: relative;
@@ -46,6 +46,10 @@
   box-shadow: 0px 0px 0px 2px #2c76ac, 0px 0px 0px 4.5px #36abff;
   border-radius: 6px;
   transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.maplibregl-ctrl-geocoder--input::placeholder {
+  font-size: 12px;
 }
 
 .maplibregl-ctrl-geocoder:has(.maplibregl-ctrl-geocoder--input:hover)

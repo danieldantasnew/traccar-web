@@ -59,6 +59,7 @@ import Loader from "./common/components/Loader";
 import { sessionActions } from "./store";
 import ProtectedRoute from "./Navigation/ProtectedRoute";
 import NotFound from "./Navigation/NotFound";
+import PanelDevices from "./settings/PanelDevices";
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -162,6 +163,7 @@ const Navigation = () => {
           <Route path="device/:id/command" element={<CommandDevicePage />} />
           <Route path="device/:id/share" element={<SharePage />} />
           <Route path="device/:id" element={<DevicePage />} />
+          <Route path="devices/panel" element={<PanelDevices/>} />
           <Route path="device" element={<DevicePage />} />
           <Route path="drivers" element={<DriversPage />} />
           <Route path="driver/:id" element={<DriverPage />} />

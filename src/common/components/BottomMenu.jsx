@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
@@ -252,7 +252,7 @@ const BottomMenu = () => {
           </ListItemIcon>
           <Typography>Editar Conta</Typography>
         </MenuItem>
-        <MenuItem onClick={() => navigate("/settings/devices")} sx={{"&:hover": {"& svg": { color: "#2C76AC"}, color: "#2C76AC", transition: ".3s" },}}>
+        <MenuItem onClick={() => navigate("/settings/devices/panel")} sx={{"&:hover": {"& svg": { color: "#2C76AC"}, color: "#2C76AC", transition: ".3s" },}}>
           <ListItemIcon>
             <DynamicIconsComponent category={"cars"} />
           </ListItemIcon>
