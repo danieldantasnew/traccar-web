@@ -112,7 +112,7 @@ useLayoutEffect(() => {
 
   const navigationControl = new maplibregl.NavigationControl({ showZoom: true, showCompass: true });
   map.addControl(navigationControl, 'top-right');
-  map.addControl(switcher); //Corrgir bug que fica adicionando vários switchers
+  map.addControl(switcher);
 
   setTimeout(() => {
     const zoomInBtn = document.querySelector('.maplibregl-ctrl-zoom-in');
