@@ -34,7 +34,6 @@ import {
 } from "../common/components/NativeInterface";
 import { useCatch } from "../reactHelper";
 import Loader from "../common/components/Loader";
-import { DynamicIconsComponent } from "../common/components/DynamicIcons";
 
 const useStyles = makeStyles((theme) => ({
   options: {
@@ -224,7 +223,20 @@ const LoginPage = () => {
         )}
       </div>
       <div className={classes.container}>
-        <Typography component={"h1"} color={"#2C76AC"} sx={{fontSize: "4.2rem", fontWeight: 600, paddingBottom: '1.5rem'}}>Login</Typography>
+        <Typography
+          component={"h1"}
+          color={"#2C76AC"}
+          sx={{
+            fontSize: "4.2rem",
+            fontWeight: 600,
+            paddingBottom: "1.5rem",
+            [theme.breakpoints.down("lg")]: {
+              fontSize: "3rem",
+            },
+          }}
+        >
+          Login
+        </Typography>
         <TextField
           required
           error={failed}

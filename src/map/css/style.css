@@ -92,16 +92,16 @@
   
   .ignitionIcon {
     background-color: #4CAF50;
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     padding: 2px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
-    top: -7px;
-    left: -9px;
+    top: -6px;
+    left: -7px;
   }
 
   .ignitionIcon svg {

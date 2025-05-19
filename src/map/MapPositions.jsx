@@ -145,7 +145,7 @@ const MapPositions = ({
               <p>{device?.model}</p>
               <p>{device?.name}</p>
             </div>
-          {ignition ? <span className="ignitionIcon"><FontAwesomeIcon icon={faPowerOff}/></span> : ''}
+          {ignition ? <span className="ignitionIcon"><FontAwesomeIcon icon={faPowerOff} size="lg"/></span> : ''}
           </div>
         </Tooltip>
       );
