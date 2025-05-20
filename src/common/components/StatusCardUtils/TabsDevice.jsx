@@ -8,9 +8,9 @@ import {
   faRoute,
   faTerminal,
 } from "@fortawesome/free-solid-svg-icons";
-import StatusCardDetails from "./StatusCardDetails";
 import { Box, Slide, Tab, Typography } from "@mui/material";
-import LinkDriver from "./LinkDriver";
+import LinkDriver from "../LinkDriver";
+import AttributesOfDevice from "../AttributesOfDevice";
 
 const TabsDevice = ({ device, position, t }) => {
   if (!device) return null;
@@ -78,10 +78,10 @@ const TabsDevice = ({ device, position, t }) => {
           {position ?(
             <Box sx={{display: 'flex', flexDirection: 'column', gap: '.8rem', justifyContent: 'space-between',  height: '100%'}}>
               <Box sx={{maxHeight: "264px", overflow: 'auto'}}>
-                <AddressComponent position={position} t={t} />
-                <StatusCardDetails position={position} device={device} />
+                <AddressComponent position={position} />
+                <AttributesOfDevice position={position} device={device} />
               </Box>
-              <LinkDriver device={device} background={background} secondary={secondary} text={text} />
+              <LinkDriver device={device} />
             </Box>
           ): <Typography>Nada por aqui...</Typography>}
         </TabPanel>

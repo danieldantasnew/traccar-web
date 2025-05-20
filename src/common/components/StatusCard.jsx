@@ -14,7 +14,7 @@ import makeStyles from "@mui/styles/makeStyles";
 import { useTranslation } from "./LocalizationProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPowerOff, faXmark } from "@fortawesome/free-solid-svg-icons";
-import InfoCar from "./StatusCardUtils/InfoCar";
+import InfoCar from "./InfoCar";
 import TabsDevice from "./StatusCardUtils/TabsDevice";
 import PlusOpt from "./StatusCardUtils/PlusOpt";
 import { useCatch } from "../../reactHelper";

@@ -1,10 +1,9 @@
-import React from "react";
 import makeStyles from "@mui/styles/makeStyles";
-import usePositionAttributes from "../../attributes/usePositionAttributes";
-import { useAttributePreference } from "../../util/preferences";
-import PositionValue from "../PositionValue";
+import usePositionAttributes from "../attributes/usePositionAttributes";
+import { useAttributePreference } from "../util/preferences";
+import PositionValue from "./PositionValue";
 import { Box, Typography } from "@mui/material";
-import { useTranslation } from "../LocalizationProvider";
+import { useTranslation } from "./LocalizationProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBatteryFull,
@@ -20,8 +19,8 @@ import {
   faSatellite,
   faSignsPost,
 } from "@fortawesome/free-solid-svg-icons";
-import { DynamicIconsComponent } from "../DynamicIcons";
-import { useDevices } from "../../../Context/App";
+import { DynamicIconsComponent } from "./DynamicIcons";
+import { useDevices } from "../../Context/App";
 
 const useStyles = makeStyles((theme) => ({
   success: {
@@ -271,7 +270,7 @@ const StatusRow = ({ position, keys, positionAttributes }) => {
   );
 };
 
-const StatusCardDetails = ({ position }) => {
+const AttributesOfDevice = ({ position }) => {
   const t = useTranslation();
   const positionAttributes = usePositionAttributes(t);
   const positionItems = useAttributePreference(
@@ -314,4 +313,4 @@ const StatusCardDetails = ({ position }) => {
   );
 };
 
-export default StatusCardDetails;
+export default AttributesOfDevice;

@@ -15,8 +15,7 @@ import {
   Zoom,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import React, { useEffect, useState } from "react";
-import { useTranslation } from "./LocalizationProvider";
+import { useEffect, useState } from "react";
 import AddressComponent from "./AddressComponent";
 import AttributesStop from "./StopCardUtils/AttributesStop";
 import { useDevices } from "../../Context/App";
@@ -108,7 +107,6 @@ const StopCard = ({ stop, }) => {
   const classes = useStyles();
   const [zoom, setZoom] = useState(true);
   const theme = useTheme();
-  const t = useTranslation();
   const desktop = useMediaQuery(theme.breakpoints.down("md"));
   const [axisY, setAxisY] = useState(0);
   const {setStopCard, setStatusCardOpen} = useDevices();
@@ -247,7 +245,6 @@ const StopCard = ({ stop, }) => {
                   longitude: stop.longitude,
                   address: stop.address,
                 }}
-                t={t}
                 labelAdress="Local"
               />
             </Box>

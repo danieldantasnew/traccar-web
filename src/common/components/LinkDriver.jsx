@@ -17,11 +17,11 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-import SaveButton from "../SaveButton";
+import SaveButton from "./SaveButton";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useCatch } from "../../../reactHelper";
-import { devicesActions } from "../../../store";
+import { useCatch } from "../../reactHelper";
+import { devicesActions } from "../../store";
 
 const box = {
   display: "flex",
@@ -58,12 +58,19 @@ const icon = {
   justifyContent: "center",
 };
 
-const LinkDriver = ({ device, background, text, secondary }) => {
+const LinkDriver = ({ device }) => {
   const dispatch = useDispatch();
   const [modalSelectDriver, setModalSelectDriver] = useState(false);
   const [driverSelect, setDriverSelect] = useState("");
   const drivers = useSelector((state) => state.drivers.items);
   const [currentDriver, setCurrentDriver] = useState(null);
+  const attributes = device?.attributes || {};
+  const { background, text, secondary } = attributes?.deviceColors || {
+    background: "black",
+    icon: "red",
+    text: "white",
+    secondary: "blue",
+  };
 
   const handleChange = (e) => {
     setDriverSelect(e.target.value);

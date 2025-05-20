@@ -8,6 +8,7 @@ import useFilter from "../main/useFilter";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import usePersistedState from "../common/util/usePersistedState";
+import DevicesInPanel from "./components/DevicesInPanel";
 
 const styles = makeStyles((theme) => ({
   flexRow: {
@@ -20,7 +21,7 @@ const styles = makeStyles((theme) => ({
   },
   header: {
     justifyContent: "space-between",
-    padding: "1rem",
+    padding: "1rem 0",
   },
   powers: {
     gap: "1rem",
@@ -31,6 +32,8 @@ const styles = makeStyles((theme) => ({
       justifyContent: "center",
       gap: ".3rem",
       padding: ".2rem .5rem",
+      height: "40px",
+      width: "80px",
       borderRadius: "4px",
       backgroundColor: "#f3f3f3",
       "& p": {
@@ -43,7 +46,6 @@ const styles = makeStyles((theme) => ({
 
 const PanelDevices = () => {
   const classes = styles();
-  const devices = useSelector((state) => state.devices.items);
   const positions = useSelector((state) => state.session.positions);
   const [filteredPositions, setFilteredPositions] = useState([]);
   const [filteredDevices, setFilteredDevices] = useState([]);
@@ -105,6 +107,7 @@ const PanelDevices = () => {
           </Box>
           <Box>Filters</Box>
         </Box>
+        <DevicesInPanel filteredDevices={filteredDevices} filteredPositions={filteredPositions} />
       </Box>
     </PageLayout>
   );

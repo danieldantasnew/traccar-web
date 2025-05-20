@@ -25,13 +25,13 @@ const handleCopyAddress = (copiedAddress, setAlertCopied, timeOutAlert) => {
   }
 };
 
-const AddressComponent = ({ position, t, labelAdress="Endereço atual" }) => {
+const AddressComponent = ({ position, labelAdress="Endereço atual", style }) => {
   const timeOutAlert = useRef();
   const [copiedAddress, setAddress] = useState(null);
   const [alertCopied, setAlertCopied] = useState(false);
 
   return (
-    <Box style={{ margin: ".8rem 0" }}>
+    <Box style={style ? style : { margin: ".8rem 0" }}>
       <Snackbar
         open={alertCopied}
         autoHideDuration={3000}
@@ -101,7 +101,7 @@ const AddressComponent = ({ position, t, labelAdress="Endereço atual" }) => {
                 />
               </IconButton>
             </Tooltip>
-            <Tooltip title={t("linkStreetView")} arrow>
+            <Tooltip title={"Ver no Street View"} arrow>
               <IconButton
                 component="a"
                 target="_blank"
