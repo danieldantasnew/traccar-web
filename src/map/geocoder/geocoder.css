@@ -31,12 +31,13 @@
   border: 0;
   background-color: white;
   margin: 0;
-  height: 32px;
+  height: 2.2rem;
   color: #404040;
   padding: 6px 6px 6px 30px;
   text-overflow: ellipsis;
   white-space: nowrap;
   border-radius: 6px;
+  transition: .3s;
 }
 
 .maplibregl-ctrl-geocoder--input:hover,
@@ -49,7 +50,7 @@
 }
 
 .maplibregl-ctrl-geocoder--input::placeholder {
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .maplibregl-ctrl-geocoder:has(.maplibregl-ctrl-geocoder--input:hover)
@@ -177,7 +178,7 @@
   display: inline-block;
   vertical-align: middle;
   fill: #616161;
-  margin-top: 2px;
+  margin-top: 3.5px;
 }
 
 .maplibregl-ctrl-geocoder--icon-search {

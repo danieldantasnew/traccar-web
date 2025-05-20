@@ -8,7 +8,6 @@ import {
   MenuList,
   Popover,
   Tooltip,
-  Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "./LocalizationProvider";
@@ -146,27 +145,55 @@ const NavMenu = ({ setDevicesOpen }) => {
         }}
       >
         <MenuList>
-          <MenuItem onClick={handleAccount} sx={{"&:hover": {"& svg": { color: "#2C76AC"}, color: "#2C76AC", transition: ".3s" },}}>
+          <MenuItem
+            onClick={handleAccount}
+            sx={{
+              "&:hover": {
+                "& svg": { color: "#2C76AC" },
+                color: "#2C76AC",
+              },
+            }}
+          >
             <ListItemIcon>
               <FontAwesomeIcon icon={faUserPen} />
             </ListItemIcon>
             Editar Conta
           </MenuItem>
-          <MenuItem onClick={() => navigate("/settings/devices/panel")} sx={{"&:hover": {"& svg": { color: "#2C76AC"}, color: "#2C76AC", transition: ".3s" },}}>
+          <MenuItem
+            onClick={() => navigate("/settings/devices/panel")}
+            sx={{
+              "&:hover": {
+                "& svg": { color: "#2C76AC" },
+                color: "#2C76AC",
+              },
+            }}
+          >
             <ListItemIcon>
               <DynamicIconsComponent category={"cars"} />
             </ListItemIcon>
             Painel de Veículos
           </MenuItem>
-          <MenuItem onClick={handleLogout}>
+          <MenuItem
+            onClick={handleLogout}
+            sx={{
+              "&:hover": {
+                backgroundColor: "#ffe6e6",
+                color: "red",
+                "& svg": {
+                  color: "red",
+                },
+              },
+              "&:active": {
+                backgroundColor: "#fffffc",
+              },
+            }}
+          >
             <ListItemIcon>
               <FontAwesomeIcon
                 icon={faArrowRightFromBracket}
-                style={{ color: "red" }}
-                color="red"
               />
             </ListItemIcon>
-            <Typography>Sair</Typography>
+            Sair
           </MenuItem>
         </MenuList>
       </Popover>

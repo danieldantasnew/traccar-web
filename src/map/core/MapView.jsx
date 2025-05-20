@@ -124,6 +124,7 @@ useLayoutEffect(() => {
 
   return () => {
     map.removeControl(navigationControl);
+    map.removeControl(switcher);
     currentEl.removeChild(element);
   };
 }, [containerEl]);
