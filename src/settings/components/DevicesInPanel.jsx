@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 import InfoCar from "../../common/components/InfoCar";
 import AddressComponent from "../../common/components/AddressComponent";
 import LinkDriver from "../../common/components/LinkDriver";
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   powers: {
-    position: 'absolute',
+    position: "absolute",
     top: -12,
     right: -6,
     height: "2rem",
@@ -57,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    cursor: "pointer",
   },
 }));
 
@@ -73,49 +74,71 @@ const DevicesInPanel = ({ filteredDevices, filteredPositions }) => {
 
   return (
     <Box className={classes.allDevices}>
-      {filteredDevices.map((device) => (
-        <Box key={device.id} className={classes.device}>
-          <InfoCar
-            device={device}
-            className={classes.infoCar}
-            avatarCSS={classes.avatarCSS}
-          />
-          <Box className={classes.infoInDevice}>
-            <Box>
-              {filteredPositions.map((position) => {
-                if (device.id === position.deviceId) {
-                  return (
-                    <Box key={`${device.id + position.deviceId}`}>
-                      {position?.attributes?.ignition ? (
-                        <Box
-                          className={classes.powers}
-                          sx={{ backgroundColor: "#4CAF50" }}
-                        >
-                          <FontAwesomeIcon icon={faPowerOff} color="white" />
-                        </Box>
-                      ) : (
-                        <Box
-                          className={classes.powers}
-                          sx={{ backgroundColor: "#FF0000" }}
-                        >
-                          <FontAwesomeIcon icon={faPowerOff} color="white" />
-                        </Box>
-                      )}
-                      <AddressComponent
-                        position={position}
-                        style={{ margin: 0 }}
-                      />
-                      <AttributesOfDevice position={position} />
-                    </Box>
-                  );
-                }
-                return null;
-              })}
+      {filteredDevices.map((device) => {
+        if(device.status === "offline") return null;
+        return (
+          <Box key={device.id} className={classes.device}>
+            <InfoCar
+              device={device}
+              className={classes.infoCar}
+              avatarCSS={classes.avatarCSS}
+            />
+            <Box className={classes.infoInDevice}>
+              <Box>
+                {filteredPositions.map((position) => {
+                  if (device.id === position.deviceId) {
+                    return (
+                      <Box key={`${device.id + position.deviceId}`}>
+                        {position?.attributes?.ignition ||
+                        position?.attributes?.motion ? (
+                          <Tooltip
+                            title="Dispositivo está ligado"
+                            arrow
+                            placement="top"
+                          >
+                            <Box
+                              className={classes.powers}
+                              sx={{ backgroundColor: "#4CAF50" }}
+                            >
+                              <FontAwesomeIcon
+                                icon={faPowerOff}
+                                color="white"
+                              />
+                            </Box>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip
+                            title="Dispositivo está desligado"
+                            arrow
+                            placement="top"
+                          >
+                            <Box
+                              className={classes.powers}
+                              sx={{ backgroundColor: "#FF0000" }}
+                            >
+                              <FontAwesomeIcon
+                                icon={faPowerOff}
+                                color="white"
+                              />
+                            </Box>
+                          </Tooltip>
+                        )}
+                        <AddressComponent
+                          position={position}
+                          style={{ margin: 0 }}
+                        />
+                        <AttributesOfDevice position={position} />
+                      </Box>
+                    );
+                  }
+                  return null;
+                })}
+              </Box>
+              <LinkDriver device={device} />
             </Box>
-            <LinkDriver device={device} />
           </Box>
-        </Box>
-      ))}
+        );
+      })}
     </Box>
   );
 };
