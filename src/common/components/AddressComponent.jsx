@@ -26,7 +26,7 @@ const handleCopyAddress = (copiedAddress, setAlertCopied, timeOutAlert) => {
   }
 };
 
-const AddressComponent = ({ position, labelAdress="Endereço atual", style }) => {
+const AddressComponent = ({ position, labelAdress="Endereço atual", style, extraTooltips=<></> }) => {
   const timeOutAlert = useRef();
   const theme = useTheme();
   const [copiedAddress, setAddress] = useState(null);
@@ -116,6 +116,7 @@ const AddressComponent = ({ position, labelAdress="Endereço atual", style }) =>
                 <FontAwesomeIcon icon={faStreetView} color="orange" />
               </IconButton>
             </Tooltip>
+            {extraTooltips}
           </Box>
         </Box>
       )}

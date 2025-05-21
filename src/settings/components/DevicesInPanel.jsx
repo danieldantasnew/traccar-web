@@ -1,11 +1,17 @@
-import { Box, Tooltip } from "@mui/material";
+import { Box, IconButton, Tooltip } from "@mui/material";
 import InfoCar from "../../common/components/InfoCar";
 import AddressComponent from "../../common/components/AddressComponent";
 import LinkDriver from "../../common/components/LinkDriver";
 import AttributesOfDevice from "../../common/components/AttributesOfDevice";
 import { makeStyles } from "@mui/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMapLocationDot,
+  faPowerOff,
+} from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { devicesActions } from "../../store";
 
 const useStyles = makeStyles((theme) => ({
   allDevices: {
@@ -26,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: ".5rem",
     position: "relative",
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   infoInDevice: {
     display: "flex",
@@ -73,6 +79,13 @@ const useStyles = makeStyles((theme) => ({
 
 const DevicesInPanel = ({ filteredDevices, filteredPositions }) => {
   const classes = useStyles();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const goToMap = (id)=> {
+    dispatch(devicesActions.selectId(id));
+    navigate("/");
+  }
 
   if (
     !Array.isArray(filteredDevices) ||
@@ -85,7 +98,7 @@ const DevicesInPanel = ({ filteredDevices, filteredPositions }) => {
   return (
     <Box className={classes.allDevices}>
       {filteredDevices.map((device) => {
-        if(device.status === "offline") return null;
+        if (device.status === "offline") return null;
         return (
           <Box key={device.id} className={classes.device}>
             <InfoCar
@@ -136,6 +149,16 @@ const DevicesInPanel = ({ filteredDevices, filteredPositions }) => {
                         <AddressComponent
                           position={position}
                           style={{ margin: 0 }}
+                          extraTooltips={
+                            <Tooltip title="Ver no mapa" arrow>
+                              <IconButton onClick={()=> goToMap(device.id)}>
+                                <FontAwesomeIcon
+                                  icon={faMapLocationDot}
+                                  size="sm"
+                                />
+                              </IconButton>
+                            </Tooltip>
+                          }
                         />
                         <AttributesOfDevice position={position} />
                       </Box>
