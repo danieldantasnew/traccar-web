@@ -121,6 +121,7 @@ const MainPage = () => {
   const [filterMap, setFilterMap] = usePersistedState("filterMap", false);
 
   const {
+    totalStops,
     statusCardOpen,
     stopCard,
     setDevicesOpen,

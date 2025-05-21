@@ -21,6 +21,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { DynamicIconsComponent } from "./DynamicIcons";
 import { useDevices } from "../../Context/App";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   success: {
@@ -72,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
     display: "grid",
     gridTemplateColumns: "repeat(3, 1fr)",
     gap: "1rem",
-    maxHeight: '100%',
+    maxHeight: "100%",
   },
 
   fieldset: {
@@ -88,8 +89,8 @@ const useStyles = makeStyles((theme) => ({
 
   stopIconStyle: {
     "& g path": {
-      fill: "white"
-    }
+      fill: "white",
+    },
   },
 
   box: {
@@ -280,6 +281,9 @@ const AttributesOfDevice = ({ position }) => {
 
   const classes = useStyles();
   const { totalStops } = useDevices();
+  const selectedStop = Array.isArray(totalStops)
+    ? totalStops.find((stopDevice) => stopDevice.deviceId === position.deviceId)
+    : null;
 
   return (
     <div className={classes.cardDetails}>
@@ -299,12 +303,17 @@ const AttributesOfDevice = ({ position }) => {
               positionAttributes={positionAttributes}
             />
           ))}
-        {!!totalStops && (
+        {selectedStop && (
           <fieldset className={`${classes.fieldset} ${classes.red}`}>
             <legend className={`${classes.legend}`}>Total de Paradas</legend>
             <div className={`${classes.box}`}>
-              <DynamicIconsComponent category={"stop"} className={classes.stopIconStyle} />
-              <Typography className={`${classes.value}`}>{totalStops}</Typography>
+              <DynamicIconsComponent
+                category={"stop"}
+                className={classes.stopIconStyle}
+              />
+              <Typography className={`${classes.value}`}>
+                {selectedStop.total}
+              </Typography>
             </div>
           </fieldset>
         )}

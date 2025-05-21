@@ -9,6 +9,10 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import usePersistedState from "../common/util/usePersistedState";
 import DevicesInPanel from "./components/DevicesInPanel";
+import { useCatch } from "../reactHelper";
+import { useDevices } from "../Context/App";
+import dayjs from "dayjs";
+import { useLocation } from "react-router-dom";
 
 const styles = makeStyles((theme) => ({
   flexRow: {
@@ -46,6 +50,7 @@ const styles = makeStyles((theme) => ({
 
 const PanelDevices = () => {
   const classes = styles();
+  const location = useLocation();
   const positions = useSelector((state) => state.session.positions);
   const [filteredPositions, setFilteredPositions] = useState([]);
   const [filteredDevices, setFilteredDevices] = useState([]);
@@ -57,8 +62,37 @@ const PanelDevices = () => {
     groups: [],
   });
 
+  const [loading, setLoading] = useState(false);
+  const { totalStops, setTotalStops } = useDevices();
+  const from = dayjs().startOf("day");
+  const to = dayjs().endOf("day");
   const [devicesOn, setDevicesOn] = useState(0);
   const [devicesOff, setDevicesOff] = useState(0);
+
+  const handleStops = useCatch(async ({ deviceId, from, to }) => {
+    setLoading(true);
+    try {
+      const query = new URLSearchParams({ deviceId, from, to });
+      const response = await fetch(`/api/reports/stops?${query.toString()}`, {
+        headers: { Accept: "application/json" },
+      });
+
+      const json = await response.json();
+      if (Array.isArray(json) && json.length > 0)
+        setTotalStops((state) => {
+          const newStop = { total: json.length, deviceId: json[0].deviceId };
+          const existsStop = state.find((s) => s.deviceId === newStop.deviceId);
+
+          if (existsStop) {
+            return state.map((s) =>
+              s.deviceId === newStop.deviceId ? newStop : s
+            );
+          } else {
+            return [...state, newStop];
+          }
+        });
+    } catch (error) {}
+  });
 
   useFilter(
     keyword,
@@ -84,6 +118,29 @@ const PanelDevices = () => {
     }
   }, [filteredPositions]);
 
+  useEffect(() => {
+    const devicesSnapshot = [...filteredDevices];
+
+    const fetchStops = () => {
+      if (Array.isArray(devicesSnapshot) && devicesSnapshot.length > 0) {
+        for (const device of devicesSnapshot) {
+          handleStops({
+            deviceId: device.id,
+            from: from.toISOString(),
+            to: to.toISOString(),
+          });
+        }
+        setLoading(false);
+      }
+    };
+
+    fetchStops();
+
+    const interval = setInterval(fetchStops, 2 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <PageLayout
       menu={<SettingsMenu />}
@@ -93,13 +150,23 @@ const PanelDevices = () => {
         <Box className={`${classes.flexRow} ${classes.header}`}>
           <Box className={`${classes.flexRow} ${classes.powers}`}>
             <Tooltip title="Dispositivos Ligados" placement="bottom" arrow>
-              <Box sx={{backgroundColor: `${devicesOn ? '#EDF7ED !important': ''}`, color: `${devicesOn ? '#4CAF50 !important': ''}`}}>
+              <Box
+                sx={{
+                  backgroundColor: `${devicesOn ? "#EDF7ED !important" : ""}`,
+                  color: `${devicesOn ? "#4CAF50 !important" : ""}`,
+                }}
+              >
                 <FontAwesomeIcon icon={faPowerOff} size="lg" />
                 <Typography>{devicesOn}</Typography>
               </Box>
             </Tooltip>
             <Tooltip title="Dispositivos Desligados" placement="bottom" arrow>
-              <Box sx={{backgroundColor: `${devicesOff ? '#FFE6E6 !important': ''}`, color: `${devicesOff ? '#FF0000 !important': ''}`}}>
+              <Box
+                sx={{
+                  backgroundColor: `${devicesOff ? "#FFE6E6 !important" : ""}`,
+                  color: `${devicesOff ? "#FF0000 !important" : ""}`,
+                }}
+              >
                 <FontAwesomeIcon icon={faPowerOff} size="lg" />
                 <Typography>{devicesOff}</Typography>
               </Box>
@@ -107,7 +174,10 @@ const PanelDevices = () => {
           </Box>
           <Box>Filters</Box>
         </Box>
-        <DevicesInPanel filteredDevices={filteredDevices} filteredPositions={filteredPositions} />
+        <DevicesInPanel
+          filteredDevices={filteredDevices}
+          filteredPositions={filteredPositions}
+        />
       </Box>
     </PageLayout>
   );

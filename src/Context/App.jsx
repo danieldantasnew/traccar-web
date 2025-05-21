@@ -9,7 +9,7 @@ export const DevicesProvider = ({ children }) => {
   const [firstLoadDevice, setFirstLoadDevice] = useState(true);
 
   const [stopCard, setStopCard] = useState(null);
-  const [totalStops, setTotalStops] = useState(null);
+  const [totalStops, setTotalStops] = useState([]);
   const [staticRoutes, setStaticRoutes] = useState(true);
 
   const [alert, setAlert] = useState(false);
