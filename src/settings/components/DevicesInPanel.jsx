@@ -12,6 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { devicesActions } from "../../store";
+import { useDevices } from "../../Context/App";
 
 const useStyles = makeStyles((theme) => ({
   allDevices: {
@@ -81,11 +82,13 @@ const DevicesInPanel = ({ filteredDevices, filteredPositions }) => {
   const classes = useStyles();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { setStatusCardOpen } = useDevices();
 
-  const goToMap = (id)=> {
+  const goToMap = (id) => {
     dispatch(devicesActions.selectId(id));
+    setStatusCardOpen(true);
     navigate("/");
-  }
+  };
 
   if (
     !Array.isArray(filteredDevices) ||
@@ -151,7 +154,7 @@ const DevicesInPanel = ({ filteredDevices, filteredPositions }) => {
                           style={{ margin: 0 }}
                           extraTooltips={
                             <Tooltip title="Ver no mapa" arrow>
-                              <IconButton onClick={()=> goToMap(device.id)}>
+                              <IconButton onClick={() => goToMap(device.id)}>
                                 <FontAwesomeIcon
                                   icon={faMapLocationDot}
                                   size="sm"

@@ -15,7 +15,7 @@ import dayjs from "dayjs";
 import { useLocation } from "react-router-dom";
 import useFetchStop from "../hooks/useFetchStop";
 
-const styles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
   flexRow: {
     display: "flex",
     alignItems: "center",
@@ -50,7 +50,7 @@ const styles = makeStyles((theme) => ({
 }));
 
 const PanelDevices = () => {
-  const classes = styles();
+  const classes = useStyles();
   const positions = useSelector((state) => state.session.positions);
   const [filteredPositions, setFilteredPositions] = useState([]);
   const [filteredDevices, setFilteredDevices] = useState([]);

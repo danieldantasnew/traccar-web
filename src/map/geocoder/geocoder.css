@@ -250,9 +250,6 @@
 }
 
 @media (max-width: 520px) {
-  .custom-geocoder {
-    top: 25px;
-  }
   .maplibregl-ctrl-geocoder:has(.maplibregl-ctrl-geocoder--input:hover),
   .maplibregl-ctrl-geocoder:has(.maplibregl-ctrl-geocoder--input:focus) {
     max-width: 300px;
