@@ -5,6 +5,7 @@ import {
   Snackbar,
   Tooltip,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { useRef, useState } from "react";
 import AddressValue from "./AddressValue";
@@ -27,6 +28,7 @@ const handleCopyAddress = (copiedAddress, setAlertCopied, timeOutAlert) => {
 
 const AddressComponent = ({ position, labelAdress="Endereço atual", style }) => {
   const timeOutAlert = useRef();
+  const theme = useTheme();
   const [copiedAddress, setAddress] = useState(null);
   const [alertCopied, setAlertCopied] = useState(false);
 
@@ -60,7 +62,7 @@ const AddressComponent = ({ position, labelAdress="Endereço atual", style }) =>
           }}
         >
           <Typography
-            style={{
+            sx={{
               maxWidth: "340px",
               margin: 0,
               fontSize: ".95rem",
@@ -68,6 +70,9 @@ const AddressComponent = ({ position, labelAdress="Endereço atual", style }) =>
               whiteSpace: "nowrap",
               overflow: "hidden",
               textOverflow: "ellipsis",
+              [theme.breakpoints.down("sm")]: {
+                maxWidth: "200px",
+              }
             }}
           >
             <AddressValue

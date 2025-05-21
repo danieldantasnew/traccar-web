@@ -16,50 +16,61 @@ import {
   Modal,
   Select,
   Typography,
+  useTheme,
 } from "@mui/material";
 import SaveButton from "./SaveButton";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useCatch } from "../../reactHelper";
 import { devicesActions } from "../../store";
+import { makeStyles } from "@mui/styles";
 
-const box = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-};
-
-const boxInfo1 = {
-  display: "flex",
-  gap: ".5rem",
-  alignItems: "center",
-};
-
-const boxInfo2 = {
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "flex-start",
-  justifyContent: "space-between",
-  "& span": {
-    fontSize: ".8rem",
-    fontWeight: "500",
-    lineHeight: "1rem",
+const useStyles = makeStyles((theme) => ({
+  box: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: ".4rem",
   },
-};
 
-const icon = {
-  backgroundColor: "#E0E0E0",
-  padding: "8px",
-  borderRadius: "50%",
-  height: "36px",
-  width: "36px",
-  display: "grid",
-  alignItems: "center",
-  justifyContent: "center",
-};
+  boxInfo1: {
+    display: "flex",
+    gap: ".5rem",
+    alignItems: "center",
+  },
+
+  boxInfo2: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    "& span": {
+      fontSize: ".8rem",
+      fontWeight: "500",
+      lineHeight: "1rem",
+    },
+    [theme.breakpoints.down("lg")]: {
+      "& span": {
+        fontSize: ".75rem",
+      },
+    },
+  },
+  icon: {
+    backgroundColor: "#E0E0E0",
+    padding: "8px",
+    borderRadius: "50%",
+    height: "36px",
+    width: "36px",
+    display: "grid",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+}));
 
 const LinkDriver = ({ device }) => {
   const dispatch = useDispatch();
+  const classes = useStyles();
+  const theme = useTheme();
   const [modalSelectDriver, setModalSelectDriver] = useState(false);
   const [driverSelect, setDriverSelect] = useState("");
   const drivers = useSelector((state) => state.drivers.items);
@@ -186,15 +197,15 @@ const LinkDriver = ({ device }) => {
   }, [currentDriver]);
 
   return (
-    <Box sx={box}>
-      <Box sx={boxInfo1}>
-        <Box style={icon}>
+    <Box className={classes.box}>
+      <Box className={classes.boxInfo1}>
+        <Box className={classes.icon}>
           <FontAwesomeIcon
             icon={currentDriver ? faUser : faUserSlash}
             color="#676767"
           />
         </Box>
-        <Box sx={boxInfo2}>
+        <Box className={classes.boxInfo2}>
           <Typography component={"span"} color="#676767">
             Motorista
           </Typography>
@@ -208,12 +219,16 @@ const LinkDriver = ({ device }) => {
         onClick={() => setModalSelectDriver(true)}
         sx={{
           padding: "6px 12px",
+          fontSize: ".85rem",
           backgroundColor: `${background}`,
           color: `${text}`,
-          fontSize: ".85rem",
           "&:hover": {
             color: `${text}`,
             backgroundColor: `${secondary}`,
+          },
+          [theme.breakpoints.down("sm")]: {
+            padding: "4px 8px",
+            fontSize: ".7rem",
           },
         }}
         variant="contained"

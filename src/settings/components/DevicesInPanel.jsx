@@ -13,16 +13,26 @@ const useStyles = makeStyles((theme) => ({
     gridTemplateColumns: "repeat(2,1fr)",
     rowGap: "2rem",
     columnGap: "1rem",
+    paddingBottom: "1rem",
+    [theme.breakpoints.down("md")]: {
+      gridTemplateColumns: "repeat(1,1fr)",
+    },
+    [theme.breakpoints.up("xl")]: {
+      gridTemplateColumns: "repeat(3,1fr)",
+    },
   },
   device: {
     boxShadow: "0px 0px 4px 0px rgba(0,0,0,.5)",
     borderRadius: ".5rem",
     position: "relative",
+    display: "flex",
+    flexDirection: "column"
   },
   infoInDevice: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "space-between",
+    justifyContent: "space-between",
+    flexGrow: 1,
     gap: "2rem",
     padding: "1rem",
   },

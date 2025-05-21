@@ -6,13 +6,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import useFilter from "../main/useFilter";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import usePersistedState from "../common/util/usePersistedState";
 import DevicesInPanel from "./components/DevicesInPanel";
 import { useCatch } from "../reactHelper";
 import { useDevices } from "../Context/App";
 import dayjs from "dayjs";
 import { useLocation } from "react-router-dom";
+import useFetchStop from "../hooks/useFetchStop";
 
 const styles = makeStyles((theme) => ({
   flexRow: {
@@ -50,7 +51,6 @@ const styles = makeStyles((theme) => ({
 
 const PanelDevices = () => {
   const classes = styles();
-  const location = useLocation();
   const positions = useSelector((state) => state.session.positions);
   const [filteredPositions, setFilteredPositions] = useState([]);
   const [filteredDevices, setFilteredDevices] = useState([]);
@@ -63,36 +63,8 @@ const PanelDevices = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  const { totalStops, setTotalStops } = useDevices();
-  const from = dayjs().startOf("day");
-  const to = dayjs().endOf("day");
   const [devicesOn, setDevicesOn] = useState(0);
   const [devicesOff, setDevicesOff] = useState(0);
-
-  const handleStops = useCatch(async ({ deviceId, from, to }) => {
-    setLoading(true);
-    try {
-      const query = new URLSearchParams({ deviceId, from, to });
-      const response = await fetch(`/api/reports/stops?${query.toString()}`, {
-        headers: { Accept: "application/json" },
-      });
-
-      const json = await response.json();
-      if (Array.isArray(json) && json.length > 0)
-        setTotalStops((state) => {
-          const newStop = { total: json.length, deviceId: json[0].deviceId };
-          const existsStop = state.find((s) => s.deviceId === newStop.deviceId);
-
-          if (existsStop) {
-            return state.map((s) =>
-              s.deviceId === newStop.deviceId ? newStop : s
-            );
-          } else {
-            return [...state, newStop];
-          }
-        });
-    } catch (error) {}
-  });
 
   useFilter(
     keyword,
@@ -118,28 +90,7 @@ const PanelDevices = () => {
     }
   }, [filteredPositions]);
 
-  useEffect(() => {
-    const devicesSnapshot = [...filteredDevices];
-
-    const fetchStops = () => {
-      if (Array.isArray(devicesSnapshot) && devicesSnapshot.length > 0) {
-        for (const device of devicesSnapshot) {
-          handleStops({
-            deviceId: device.id,
-            from: from.toISOString(),
-            to: to.toISOString(),
-          });
-        }
-        setLoading(false);
-      }
-    };
-
-    fetchStops();
-
-    const interval = setInterval(fetchStops, 2 * 60 * 1000);
-
-    return () => clearInterval(interval);
-  }, []);
+  useFetchStop(setLoading, filteredDevices);
 
   return (
     <PageLayout

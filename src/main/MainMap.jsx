@@ -97,7 +97,7 @@ const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
   useEffect(() => {
     if (createMarkersStops.length > 0) {
       setTotalStops((state) => {
-        const newStop = { total: createMarkersStops.length, deviceId: createMarkersStops[0].deviceId };
+        const newStop = { total: createMarkersStops.length - 1, deviceId: createMarkersStops[0].deviceId };
 
         const existsStop = state.find((s) => s.deviceId === newStop.deviceId);
 
