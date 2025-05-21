@@ -4,16 +4,13 @@ import SettingsMenu from "./components/SettingsMenu";
 import { makeStyles } from "@mui/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
-import useFilter from "../main/useFilter";
+import useFilter from "./utils/useFilter";
 import { useSelector } from "react-redux";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import usePersistedState from "../common/util/usePersistedState";
 import DevicesInPanel from "./components/DevicesInPanel";
-import { useCatch } from "../reactHelper";
-import { useDevices } from "../Context/App";
-import dayjs from "dayjs";
-import { useLocation } from "react-router-dom";
 import useFetchStop from "../hooks/useFetchStop";
+import MainToolbar from "./components/MainToolbar";
 
 const useStyles = makeStyles((theme) => ({
   flexRow: {
@@ -55,11 +52,9 @@ const PanelDevices = () => {
   const [filteredPositions, setFilteredPositions] = useState([]);
   const [filteredDevices, setFilteredDevices] = useState([]);
   const [keyword, setKeyword] = useState("");
-  const [filterSort, setFilterSort] = usePersistedState("filterSort", "");
-  const [filterMap, setFilterMap] = usePersistedState("filterMap", false);
-  const [filter, setFilter] = usePersistedState("filter", {
-    statuses: [],
-    groups: [],
+  const [filter, setFilter] = useState({
+    devicesOn: [],
+    devicesOff: [],
   });
 
   const [loading, setLoading] = useState(false);
@@ -69,11 +64,9 @@ const PanelDevices = () => {
   useFilter(
     keyword,
     filter,
-    filterSort,
-    filterMap,
     positions,
     setFilteredDevices,
-    setFilteredPositions
+    setFilteredPositions,
   );
 
   useEffect(() => {
@@ -123,7 +116,12 @@ const PanelDevices = () => {
               </Box>
             </Tooltip>
           </Box>
-          <Box>Filters</Box>
+          <MainToolbar
+            setKeyword={setKeyword}
+            keyword={keyword}
+            filter={filter}
+            setFilter={setFilter}
+          />
         </Box>
         <DevicesInPanel
           filteredDevices={filteredDevices}

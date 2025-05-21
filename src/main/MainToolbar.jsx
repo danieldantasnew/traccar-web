@@ -56,7 +56,7 @@ const MainToolbar = ({
   phraseGroup,
 }) => {
   const classes = useStyles();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const t = useTranslation();
   const groups = useSelector((state) => state.groups.items);
   const devices = useSelector((state) => state.devices.items);
