@@ -43,11 +43,12 @@ const MainToolbar = ({ keyword, setKeyword, filter, setFilter }) => {
     <Toolbar className={classes.toolbar} style={{ minHeight: 0 }}>
       <OutlinedInput
         sx={{
-          "&:hover": { boxShadow: "0px 0px 0px 2px white" },
+          transition: ".3s",
+          "&:hover": { boxShadow: `0px 0px 0px 2px #2c76ac, 0px 0px 0px 2.8px #36abff` },
           "&:focus-within": {
-            outline: "1px solid white",
+            outline: "none",
             backgroundColor: "white",
-            boxShadow: "0px 0px 0px 2px white",
+            boxShadow: `0px 0px 0px 2px #2c76ac, 0px 0px 0px 2.8px #36abff`,
           },
         }}
         ref={inputRef}
