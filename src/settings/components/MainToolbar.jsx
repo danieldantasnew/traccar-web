@@ -61,7 +61,12 @@ const MainToolbar = ({ keyword, setKeyword, filter, setFilter }) => {
               edge="end"
               onClick={() => setFilterAnchorEl(inputRef.current)}
             >
-              <FontAwesomeIcon icon={faSliders} style={{ color: "#b3b3b3" }} />
+              <Badge color="info" variant="dot" invisible={!filter}>
+                <FontAwesomeIcon
+                  icon={faSliders}
+                  style={{ color: "#b3b3b3" }}
+                />
+              </Badge>
             </IconButton>
           </InputAdornment>
         }
@@ -80,12 +85,7 @@ const MainToolbar = ({ keyword, setKeyword, filter, setFilter }) => {
         <div className={classes.filterPanel}>
           <FormControl>
             <InputLabel>Filtrar por</InputLabel>
-            <Select
-              value={filter}
-              onChange={(e) =>
-                setFilter(e.target.value)
-              }
-            >
+            <Select value={filter} onChange={(e) => setFilter(e.target.value)}>
               <MenuItem value="">Nenhum</MenuItem>
               <MenuItem value="devicesOn">Dispositivos ligados</MenuItem>
               <MenuItem value="devicesOff">Dispositivos desligados</MenuItem>
