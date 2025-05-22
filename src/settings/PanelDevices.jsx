@@ -52,10 +52,7 @@ const PanelDevices = () => {
   const [filteredPositions, setFilteredPositions] = useState([]);
   const [filteredDevices, setFilteredDevices] = useState([]);
   const [keyword, setKeyword] = useState("");
-  const [filter, setFilter] = useState({
-    devicesOn: [],
-    devicesOff: [],
-  });
+  const [filter, setFilter] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [devicesOn, setDevicesOn] = useState(0);

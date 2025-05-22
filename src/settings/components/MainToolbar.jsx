@@ -33,12 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MainToolbar = ({
-  keyword,
-  setKeyword,
-  filter,
-  setFilter,
-}) => {
+const MainToolbar = ({ keyword, setKeyword, filter, setFilter }) => {
   const classes = useStyles();
   const devices = useSelector((state) => state.devices.items);
   const inputRef = useRef();
@@ -66,16 +61,7 @@ const MainToolbar = ({
               edge="end"
               onClick={() => setFilterAnchorEl(inputRef.current)}
             >
-              <Badge
-                color="info"
-                variant="dot"
-                invisible={!filter.devicesOn.length && !filter.devicesOff.length}
-              >
-                <FontAwesomeIcon
-                  icon={faSliders}
-                  style={{ color: "#b3b3b3" }}
-                />
-              </Badge>
+              <FontAwesomeIcon icon={faSliders} style={{ color: "#b3b3b3" }} />
             </IconButton>
           </InputAdornment>
         }
@@ -93,16 +79,16 @@ const MainToolbar = ({
       >
         <div className={classes.filterPanel}>
           <FormControl>
-            <InputLabel>{''}</InputLabel>
+            <InputLabel>Filtrar por</InputLabel>
             <Select
-              label={''}
-              value={filter.devicesOn}
+              value={filter}
               onChange={(e) =>
-                setFilter({ ...filter, devicesOn: e.target.value })
+                setFilter(e.target.value)
               }
-              multiple
             >
-              <MenuItem value="online"></MenuItem>
+              <MenuItem value="">Nenhum</MenuItem>
+              <MenuItem value="devicesOn">Dispositivos ligados</MenuItem>
+              <MenuItem value="devicesOff">Dispositivos desligados</MenuItem>
             </Select>
           </FormControl>
         </div>
