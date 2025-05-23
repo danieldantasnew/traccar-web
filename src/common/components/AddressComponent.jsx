@@ -32,10 +32,6 @@ const AddressComponent = ({ position, labelAdress="Endereço atual", style, extr
   const [copiedAddress, setCopiedAddress] = useState(null);
   const [alertCopied, setAlertCopied] = useState(false);
 
-  useEffect(()=> {
-    console.log(copiedAddress)
-  }, [copiedAddress])
-
   return (
     <Box style={style ? style : { margin: ".8rem 0" }}>
       <Snackbar
