@@ -39,14 +39,25 @@ const AddressValue = ({
         }
       });
 
-      if (nominatimResponse.ok) {
-        const data = await nominatimResponse.json();
-        if (data && data.display_name) {
-          setAddress(data.display_name);
-          if (setStateAddress) setStateAddress(data.display_name);
-          return;
-        }
+    if (nominatimResponse.ok) {
+      const data = await nominatimResponse.json();
+
+      if (data?.address) {
+        console.log(data.address)
+        const { road, neighbourhood, city_district, state, postcode, country } = data.address;
+        const addressString = `${road && road + ',' || ''} ${neighbourhood && neighbourhood + ','|| ''} ${city_district && city_district + ' -' || ''} ${state && state + ',' || ''} ${postcode && postcode + ',' || ''} ${country || ''}.`;
+
+        setAddress(addressString);
+        if (setStateAddress) setStateAddress(addressString);
+        return;
       }
+
+      if (data?.display_name) {
+        setAddress(data.display_name);
+        if (setStateAddress) setStateAddress(data.display_name);
+      }
+    }
+
 
       const serverResponse = await fetch(`/api/server/geocode?${query.toString()}`);
 
@@ -72,7 +83,7 @@ const AddressValue = ({
   return (
     <Tooltip
       title={address || errorMessage || "Carregando endereço..."}
-      placement="bottom-start"
+      placement="top"
       arrow
     >
       <span>{address || errorMessage || "Carregando endereço..."}</span>
