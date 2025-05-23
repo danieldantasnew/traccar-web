@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useCatch } from '../../reactHelper';
+import { Tooltip } from '@mui/material';
 
 const AddressValue = ({ latitude, longitude, originalAddress, setStateAddress }) => {
   const addressEnabled = useSelector((state) => state.session.server.geocoderEnabled);
@@ -40,7 +41,7 @@ const AddressValue = ({ latitude, longitude, originalAddress, setStateAddress })
     }
   });
 
-  return <>{address || errorMessage || "Carregando endereço..."}</>;
+  return <Tooltip title={address || errorMessage || "Carregando endereço..."} placement='top' arrow>{address || errorMessage || "Carregando endereço..."}</Tooltip>;
 };
 
 export default AddressValue;

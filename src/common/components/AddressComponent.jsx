@@ -7,7 +7,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AddressValue from "./AddressValue";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStreetView } from "@fortawesome/free-solid-svg-icons";
@@ -29,8 +29,12 @@ const handleCopyAddress = (copiedAddress, setAlertCopied, timeOutAlert) => {
 const AddressComponent = ({ position, labelAdress="Endereço atual", style, extraTooltips=<></> }) => {
   const timeOutAlert = useRef();
   const theme = useTheme();
-  const [copiedAddress, setAddress] = useState(null);
+  const [copiedAddress, setCopiedAddress] = useState(null);
   const [alertCopied, setAlertCopied] = useState(false);
+
+  useEffect(()=> {
+    console.log(copiedAddress)
+  }, [copiedAddress])
 
   return (
     <Box style={style ? style : { margin: ".8rem 0" }}>
@@ -79,7 +83,7 @@ const AddressComponent = ({ position, labelAdress="Endereço atual", style, extr
               latitude={position.latitude}
               longitude={position.longitude}
               originalAddress={position.address}
-              setStateAddress={setAddress}
+              setStateAddress={setCopiedAddress}
             />
           </Typography>
           <Box
