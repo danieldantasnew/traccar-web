@@ -1,6 +1,7 @@
-import { useState, useRef} from "react";
+import { useState, useRef } from "react";
 import { Menu, MenuItem, Box, Typography } from "@mui/material";
 import {
+  faBell,
   faClockRotateLeft,
   faEarthAmericas,
   faEllipsis,
@@ -19,12 +20,15 @@ import { useDevices } from "../../../Context/App";
 
 const styleRow = { display: "flex", gap: ".5rem" };
 
-const PlusOpt = ({ device, position, t, setRemoving,}) => {
+const PlusOpt = ({ device, position, t, setRemoving }) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
-  const {setStaticRoutes, staticRoutes } = useDevices();
-  const optsRef = useRef(null);
   const open = Boolean(anchorEl);
+
+  const [anchorElNotification, setAnchorElNotification] = useState(null);
+  const openNotifications = Boolean(anchorElNotification);
+  const { setStaticRoutes, staticRoutes } = useDevices();
+  const optsRef = useRef(null);
   const colorForAll = "#878787";
   const shareDisabled = useSelector(
     (state) => state.session.server.attributes.disableShare
@@ -87,7 +91,10 @@ const PlusOpt = ({ device, position, t, setRemoving,}) => {
           alignItems: "center",
           gap: ".2rem",
           backgroundColor: "white",
-          "&:hover": { backgroundColor: "#E0E0E0", transition: "background-color .3s" },
+          "&:hover": {
+            backgroundColor: "#E0E0E0",
+            transition: "background-color .3s",
+          },
         }}
         onClick={handleEventIcon}
         open={open}
@@ -126,12 +133,14 @@ const PlusOpt = ({ device, position, t, setRemoving,}) => {
         <MenuItem
           sx={styleRow}
           onClick={() => {
-            setStaticRoutes((staticRoutes)=> !staticRoutes) 
-            handleClose()}
-          }
+            setStaticRoutes((staticRoutes) => !staticRoutes);
+            handleClose();
+          }}
         >
           <FontAwesomeIcon icon={faRoute} size="lg" color={`${colorForAll}`} />
-          <Typography>Alterar rotas para {staticRoutes ? 'velocidade' : 'cor estática'}</Typography>
+          <Typography>
+            Alterar rotas para {staticRoutes ? "velocidade" : "cor estática"}
+          </Typography>
         </MenuItem>
         {position && (
           <>
@@ -149,15 +158,37 @@ const PlusOpt = ({ device, position, t, setRemoving,}) => {
               </MenuItem>
             )}
 
-            <MenuItem sx={styleRow}>
-              <DynamicIconsComponent
-                category={"bellRing"}
-                style={{ width: "20px" }}
-                color={`${colorForAll}`}
-              />
-              <Typography>Avise-me quando ligar</Typography>
+            <MenuItem
+              sx={styleRow}
+              onClick={(e) => setAnchorElNotification(e.currentTarget)}
+            >
+              <FontAwesomeIcon icon={faBell} style={{ height: "22px", width: "20px" }} color={`${colorForAll}`}/>
+              <Typography>Notificações ▲</Typography>
             </MenuItem>
-
+            <Menu
+              anchorEl={anchorElNotification}
+              open={openNotifications}
+              onClose={() => setAnchorElNotification(null)}
+              anchorOrigin={{ vertical: "top", horizontal: "right" }}
+              transformOrigin={{ vertical: "top", horizontal: "left" }}
+            >
+              <MenuItem sx={styleRow}>
+                <DynamicIconsComponent
+                  category={"bellRing"}
+                  style={{ width: "20px" }}
+                  color={`${colorForAll}`}
+                />
+                <Typography>Avise-me quando ligar</Typography>
+              </MenuItem>
+              <MenuItem sx={styleRow}>
+                              <DynamicIconsComponent
+                  category={"bellRing"}
+                  style={{ width: "20px" }}
+                  color={`${colorForAll}`}
+                />
+                <Typography>Avise-me quando desligar</Typography>
+              </MenuItem>
+            </Menu>
             <MenuItem sx={styleRow} onClick={() => navigate("/replay")}>
               <FontAwesomeIcon
                 icon={faClockRotateLeft}
