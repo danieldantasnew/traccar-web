@@ -7,7 +7,6 @@ import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import useFilter from "./utils/useFilter";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import usePersistedState from "../common/util/usePersistedState";
 import DevicesInPanel from "./components/DevicesInPanel";
 import useFetchStop from "../hooks/useFetchStop";
 import MainToolbar from "./components/MainToolbar";

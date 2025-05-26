@@ -4,7 +4,7 @@ import { useCatch } from "../reactHelper";
 import dayjs from "dayjs";
 
 const useFetchStop = (setLoading, dependencies) => {
-  const { totalStops, setTotalStops } = useDevices();
+  const { setTotalStops } = useDevices();
   const alreadyRendered = useRef(false);
   const from = dayjs().startOf("day");
   const to = dayjs().endOf("day");

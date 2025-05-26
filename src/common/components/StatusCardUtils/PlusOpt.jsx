@@ -1,8 +1,6 @@
 import { useState, useRef } from "react";
 import { Menu, MenuItem, Box, Typography } from "@mui/material";
 import {
-  faBell,
-  faCaretDown,
   faClockRotateLeft,
   faEarthAmericas,
   faEllipsis,
@@ -13,11 +11,11 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { DynamicIconsComponent } from "../DynamicIcons";
 import { useNavigate } from "react-router-dom";
 import { useCatchCallback } from "../../../reactHelper";
 import { useSelector } from "react-redux";
 import { useDevices } from "../../../Context/App";
+import Notifications from "./Notifications";
 
 const styleRow = { display: "flex", gap: ".5rem" };
 
@@ -26,9 +24,6 @@ const PlusOpt = ({ device, position, t, setRemoving }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const [arrowNotification, setArrowNotification] = useState(false);
-  const [anchorElNotification, setAnchorElNotification] = useState(null);
-  const openNotifications = Boolean(anchorElNotification);
   const { setStaticRoutes, staticRoutes } = useDevices();
   const optsRef = useRef(null);
   const colorForAll = "#878787";
@@ -159,65 +154,7 @@ const PlusOpt = ({ device, position, t, setRemoving }) => {
                 <Typography>Compartilhar localização</Typography>
               </MenuItem>
             )}
-
-            <MenuItem
-              sx={styleRow}
-              onClick={(e) => {
-                setAnchorElNotification(e.currentTarget);
-                setArrowNotification(true);
-              }}
-            >
-              <FontAwesomeIcon
-                icon={faBell}
-                style={{ height: "22px", width: "20px" }}
-                color={`${colorForAll}`}
-              />
-              <Typography
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100%",
-                }}
-              >
-                Notificações
-                <FontAwesomeIcon
-                  icon={faCaretDown}
-                  style={{
-                    transition: ".3s",
-                    transform: `${arrowNotification ? "rotate(-90deg)" : ""}`,
-                  }}
-                  color={`${colorForAll}`}
-                />
-              </Typography>
-            </MenuItem>
-            <Menu
-              anchorEl={anchorElNotification}
-              open={openNotifications}
-              onClose={() => {
-                setArrowNotification(false);
-                setAnchorElNotification(null);
-              }}
-              anchorOrigin={{ vertical: "top", horizontal: "right" }}
-              transformOrigin={{ vertical: "top", horizontal: "left" }}
-            >
-              <MenuItem sx={styleRow}>
-                <DynamicIconsComponent
-                  category={"bellRing"}
-                  style={{ width: "20px" }}
-                  color={`${colorForAll}`}
-                />
-                <Typography>Avise-me quando ligar</Typography>
-              </MenuItem>
-              <MenuItem sx={styleRow}>
-                <DynamicIconsComponent
-                  category={"bellRing"}
-                  style={{ width: "20px" }}
-                  color={`${colorForAll}`}
-                />
-                <Typography>Avise-me quando desligar</Typography>
-              </MenuItem>
-            </Menu>
+            <Notifications color={colorForAll} styleRow={styleRow}/>
             <MenuItem sx={styleRow} onClick={() => navigate("/replay")}>
               <FontAwesomeIcon
                 icon={faClockRotateLeft}

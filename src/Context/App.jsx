@@ -1,4 +1,7 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useCatch } from "../reactHelper";
+import { useDispatch } from "react-redux";
+import { notificationsActions } from "../store/notifications";
 
 const DevicesContext = createContext();
 
@@ -14,6 +17,21 @@ export const DevicesProvider = ({ children }) => {
 
   const [alert, setAlert] = useState(false);
 
+  const dispatch = useDispatch();
+
+  const getAllNotifications = useCatch(async () => {
+    const response = await fetch(`/api/notifications`);
+    if (response.ok) {
+      const json = await response.json();
+      dispatch(notificationsActions.add(json));
+    } else {
+      throw Error(await response.text());
+    }
+  });
+
+  useEffect(() => {
+    getAllNotifications();
+  }, []);
 
   return (
     <DevicesContext.Provider
