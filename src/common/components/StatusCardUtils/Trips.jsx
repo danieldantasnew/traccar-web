@@ -1,5 +1,6 @@
 import {
   faCircleStop,
+  faDiamondTurnRight,
   faFlagCheckered,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
@@ -38,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "0px 0px 4px 1px rgba(0,0,0,.1)",
     padding: "1rem 1rem 2rem 1rem",
     position: "relative",
-    marginBottom: "1rem",
+    marginBottom: "1.5rem",
     "& h2": {
       color: `${textColor}`,
       fontSize: "1.2rem",
@@ -76,6 +77,7 @@ const useStyles = makeStyles((theme) => ({
     gap: ".4rem",
   },
   verticalLine: {
+    backgroundColor: `${textColor}`,
     height: "100%",
     width: ".25rem",
     position: "absolute",
@@ -102,6 +104,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Trips = ({ backgroundColor, text, secondary, device }) => {
+  const [cardSelected, setCardSelected] = useState(null);
   const [trips, setTrips] = useState(null);
   const [loading, setLoading] = useState(false);
   const {
@@ -188,6 +191,11 @@ const Trips = ({ backgroundColor, text, secondary, device }) => {
     }
   }, [selectedItemOnTrip]);
 
+  const activateRoutes = (item, index) => {
+    setCardSelected(index);
+    setSelectedItemOnTrip(item);
+  }
+
   useEffect(() => {
     searchTrips({
       deviceId: device.id,
@@ -204,7 +212,7 @@ const Trips = ({ backgroundColor, text, secondary, device }) => {
             <div key={item + index} className={styles.box}>
               <div
                 className={styles.verticalLine}
-                style={{ backgroundColor }}
+                style={{ backgroundColor: `${cardSelected === index ? backgroundColor : textColor}`}}
               ></div>
               <div className={styles.flex}>
                 <span className={styles.span}>
@@ -313,17 +321,19 @@ const Trips = ({ backgroundColor, text, secondary, device }) => {
                 sx={{
                   position: "absolute",
                   right: "1rem",
-                  bottom: "1rem",
+                  top: "1rem",
+                  height: "auto",
                   backgroundColor,
                   color: text,
-                  padding: "0 1rem",
+                  padding: ".4rem 1rem",
                   fontSize: ".75rem",
                   "&:hover": {
                     backgroundColor: `${secondary}`,
                   },
                 }}
-                onClick={() => setSelectedItemOnTrip(item)}
+                onClick={() => activateRoutes(item, index)}
               >
+                <FontAwesomeIcon icon={faDiamondTurnRight} />
                 Ver rotas
               </Button>
             </div>

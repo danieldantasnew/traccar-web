@@ -88,7 +88,7 @@ const TabsDevice = ({ device, position, t }) => {
         </TabPanel>
       </Slide>
       <Slide direction="left" in={tabValue === "tab2"} mountOnEnter unmountOnExit>
-        <TabPanel value="tab2" sx={{padding: ".5rem", marginTop: ".8rem", overflowY: "auto", }}>
+        <TabPanel value="tab2" sx={{padding: ".5rem", margin: ".5rem 0", overflowY: "auto", }}>
           <Trips backgroundColor={background} text={text} secondary={secondary} device={device}/>
         </TabPanel>
       </Slide>
