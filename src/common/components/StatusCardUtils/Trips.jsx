@@ -330,10 +330,12 @@ const Trips = ({ backgroundColor, text, secondary, device }) => {
                   "&:hover": {
                     backgroundColor: `${secondary}`,
                   },
+                  display: "flex",
+                  gap: ".4rem",
                 }}
                 onClick={() => activateRoutes(item, index)}
               >
-                <FontAwesomeIcon icon={faDiamondTurnRight} />
+                <FontAwesomeIcon icon={faDiamondTurnRight} size="xl" />
                 Ver rotas
               </Button>
             </div>
