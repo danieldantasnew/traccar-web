@@ -11,6 +11,7 @@ import {
 import { Box, Slide, Tab, Typography } from "@mui/material";
 import LinkDriver from "../LinkDriver";
 import AttributesOfDevice from "../AttributesOfDevice";
+import Trips from "./Trips";
 
 const TabsDevice = ({ device, position, t }) => {
   if (!device) return null;
@@ -56,7 +57,7 @@ const TabsDevice = ({ device, position, t }) => {
           <Tab
             icon={<FontAwesomeIcon size="lg" icon={faRoute} />}
             iconPosition="top"
-            label="Rota"
+            label="Viagens"
             value="tab2"
           />
           <Tab
@@ -87,8 +88,8 @@ const TabsDevice = ({ device, position, t }) => {
         </TabPanel>
       </Slide>
       <Slide direction="left" in={tabValue === "tab2"} mountOnEnter unmountOnExit>
-        <TabPanel value="tab2" sx={{ padding: "0 .7rem", marginTop: ".8rem" }}>
-          Nada por aqui...
+        <TabPanel value="tab2" sx={{padding: ".5rem", marginTop: ".8rem", overflowY: "auto", }}>
+          <Trips backgroundColor={background} text={text} secondary={secondary} device={device}/>
         </TabPanel>
       </Slide>
       <Slide direction="left" in={tabValue === "tab3"} mountOnEnter unmountOnExit>

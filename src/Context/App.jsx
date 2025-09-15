@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useCatch } from "../reactHelper";
 import { useDispatch } from "react-redux";
 import { notificationsActions } from "../store/notifications";
+import { devicesActions } from "../store";
 
 const DevicesContext = createContext();
 
@@ -11,9 +12,17 @@ export const DevicesProvider = ({ children }) => {
   const [statusCardOpen, setStatusCardOpen] = useState(false);
   const [firstLoadDevice, setFirstLoadDevice] = useState(true);
 
+  const [routeTrips, setRouteTrips] = useState([]);
+  const [configsOnTrip, setConfigsOnTrip] = useState({
+    markers: null,
+  });
+  const [selectedItemOnTrip, setSelectedItemOnTrip] = useState(null);
+
   const [stopCard, setStopCard] = useState(null);
   const [totalStops, setTotalStops] = useState([]);
   const [staticRoutes, setStaticRoutes] = useState(true);
+
+  const [mainMapPositions, setMainMapPositions] = useState([]);
 
   const [alert, setAlert] = useState(false);
 
@@ -28,6 +37,16 @@ export const DevicesProvider = ({ children }) => {
       throw Error(await response.text());
     }
   });
+
+  const hideRoutes = () => {
+    setStopCard(null);
+    dispatch(devicesActions.selectId(null));
+  };
+
+  const hideRoutesTrips = () => {
+    setRouteTrips([]);
+    setSelectedItemOnTrip(null);
+  };
 
   useEffect(() => {
     getAllNotifications();
@@ -44,6 +63,16 @@ export const DevicesProvider = ({ children }) => {
         totalStops,
         staticRoutes,
         alert,
+        mainMapPositions,
+        routeTrips,
+        selectedItemOnTrip, 
+        configsOnTrip,
+        setConfigsOnTrip,
+        setSelectedItemOnTrip,
+        hideRoutes,
+        hideRoutesTrips,
+        setRouteTrips,
+        setMainMapPositions,
         setAlert,
         setStatusCardOpen,
         setFirstLoadDevice,

@@ -106,6 +106,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
     backgroundColor: "#fff",
     position: "relative",
+    flexShrink: 0,
   },
   red: {
     fill: "red",

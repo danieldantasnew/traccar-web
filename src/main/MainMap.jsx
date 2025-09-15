@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { use, useCallback, useEffect, useMemo, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +21,8 @@ import { useCatch } from "../reactHelper.js";
 import MapRoutePoints from "../map/MapRoutePoints.js";
 import MapRoutePath from "../map/MapRoutePath.js";
 import { useDevices } from "../Context/App.jsx";
+import MapCamera from "../map/MapCamera.js";
+import MapMarkers from "../map/MapMarkers.js";
 
 const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
   const theme = useTheme();
@@ -30,6 +32,9 @@ const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
   const [stops, setStops] = useState([]);
   const [positions, setPositions] = useState([]);
   const {
+    configsOnTrip,
+    routeTrips,
+    hideRoutesTrips,
     statusCardOpen,
     setStatusCardOpen,
     firstLoadDevice,
@@ -97,7 +102,10 @@ const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
   useEffect(() => {
     if (createMarkersStops.length > 0) {
       setTotalStops((state) => {
-        const newStop = { total: createMarkersStops.length - 1, deviceId: createMarkersStops[0].deviceId };
+        const newStop = {
+          total: createMarkersStops.length - 1,
+          deviceId: createMarkersStops[0].deviceId,
+        };
 
         const existsStop = state.find((s) => s.deviceId === newStop.deviceId);
 
@@ -144,6 +152,7 @@ const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
 
   useEffect(() => {
     if (devices[selectedId] && selectedId) {
+      if (routeTrips) hideRoutesTrips();
       handlePositionsAndStops({
         deviceId: selectedId,
         groupIds,
@@ -187,6 +196,20 @@ const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
                 key={`stops-${stops.length}`}
               />
             ) : null}
+          </>
+        )}
+        {routeTrips && routeTrips.length > 0 && (
+          <>
+            <MapRoutePath positions={routeTrips} />
+            <MapRoutePoints
+              positions={routeTrips}
+              colorStatic={false}
+              needFilterPosition={false}
+            />
+            <MapCamera positions={routeTrips} />
+            {configsOnTrip.markers && (
+              <MapMarkers markers={configsOnTrip.markers} />
+            )}
           </>
         )}
         <MapDefaultCamera />

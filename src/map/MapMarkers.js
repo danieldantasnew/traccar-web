@@ -81,6 +81,12 @@ const MapMarkers = ({ markers, showTitles }) => {
         },
       })),
     });
+
+    if (map.getLayer(id)) {
+      setTimeout(() => {
+        map.moveLayer(id);
+      }, 400);
+    }
   }, [showTitles, markers]);
 
   return null;

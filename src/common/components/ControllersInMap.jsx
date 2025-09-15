@@ -3,8 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { map } from "../../map/core/MapView";
 import { useAttributePreference } from "../util/preferences";
 import dimensions from "../theme/dimensions.js";
-import { useDispatch, useSelector } from "react-redux";
-import { devicesActions } from "../../store";
+import { useSelector } from "react-redux";
 import { faEyeSlash, faMapPin } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDevices } from "../../Context/App.jsx";
@@ -59,13 +58,12 @@ const ControllersInMap = ({
 }) => {
   const classes = useStyles();
   const selectZoom = useAttributePreference("web.selectZoom", 10);
-  const dispatch = useDispatch();
   const devices = useSelector((state) => state.devices.items);
   const unreads = useSelector((state) => state.events.unreads);
   const [animKey, setAnimKey] = useState(0);
   const timeOutRef = useRef();
 
-  const { setStopCard } = useDevices();
+  const { hideRoutes, routeTrips, hideRoutesTrips } = useDevices();
 
   const centerDevice = () => {
     map.easeTo({
@@ -75,13 +73,8 @@ const ControllersInMap = ({
     });
   };
 
-  const hideRoutes = () => {
-    setStopCard(null);
-    dispatch(devicesActions.selectId(null));
-  };
-
   const { background } =
-    devices[selectedDeviceId]?.attributes?.deviceColors || "#000";
+    devices[selectedDeviceId]?.attributes?.deviceColors || "#616161";
 
   useEffect(() => {
     if (unreads.length > 0) {
@@ -94,6 +87,11 @@ const ControllersInMap = ({
 
     return () => clearInterval(timeOutRef.current);
   }, [unreads.length]);
+
+  const hiddenItems = () => {
+    hideRoutes();
+    hideRoutesTrips();
+  };
 
   return (
     <Box className={classes.styleBox}>
@@ -116,31 +114,33 @@ const ControllersInMap = ({
         </Box>
       </Tooltip>
       {selectedDeviceId && (
-        <>
-          <Tooltip
-            className={classes.controls}
-            aria-label="Centralizar dispositivo"
-            title="Centralizar dispositivo"
-            placement="left"
-            arrow
-          >
-            <Box onClick={centerDevice}>
-              <FontAwesomeIcon icon={faMapPin} color={`${background}`} />
-            </Box>
-          </Tooltip>
-          <Tooltip
-            className={classes.controls}
-            aria-label="Ocultar rotas"
-            title="Ocultar rotas"
-            placement="left"
-            arrow
-          >
-            <Box onClick={hideRoutes}>
-              <FontAwesomeIcon icon={faEyeSlash} color={`${background}`} />
-            </Box>
-          </Tooltip>
-        </>
+        <Tooltip
+          className={classes.controls}
+          aria-label="Centralizar dispositivo"
+          title="Centralizar dispositivo"
+          placement="left"
+          arrow
+        >
+          <Box onClick={centerDevice}>
+            <FontAwesomeIcon icon={faMapPin} color={`${background}`} />
+          </Box>
+        </Tooltip>
       )}
+      {(selectedDeviceId || routeTrips && routeTrips.length > 0) && (
+          <>
+            <Tooltip
+              className={classes.controls}
+              aria-label="Ocultar rotas"
+              title="Ocultar rotas"
+              placement="left"
+              arrow
+            >
+              <Box onClick={() => hiddenItems()}>
+              <FontAwesomeIcon icon={faEyeSlash} color={`${background || "#616161"}`} />
+              </Box>
+            </Tooltip>
+          </>
+        )}
     </Box>
   );
 };
