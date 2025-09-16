@@ -1,9 +1,8 @@
-import { use, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useDispatch, useSelector } from "react-redux";
 import MapView from "../map/core/MapView";
-import MapSelectedDevice from "../map/main/MapSelectedDevice";
 import MapAccuracy from "../map/main/MapAccuracy";
 import MapGeofence from "../map/MapGeofence";
 import MapCurrentLocation from "../map/MapCurrentLocation";
@@ -38,8 +37,6 @@ const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
     configsOnTrip,
     routeTrips,
     hideRoutes,
-    hideRoutesTrips,
-    statusCardOpen,
     setStatusCardOpen,
     firstLoadDevice,
     setStopCard,
@@ -219,7 +216,6 @@ const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
           </>
         )}
         <MapDefaultCamera />
-        {statusCardOpen && <MapSelectedDevice />}
         <PoiMap />
       </MapView>
       <MapScale />

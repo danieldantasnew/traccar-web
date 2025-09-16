@@ -36,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
     gap: ".4rem",
     borderRadius: ".5rem",
     overflow: "hidden",
-    boxShadow: "0px 0px 4px 1px rgba(0,0,0,.1)",
     padding: "1rem 1rem 2rem 1rem",
     position: "relative",
     marginBottom: "1.5rem",
@@ -214,7 +213,7 @@ const Trips = ({ backgroundColor, text, secondary, device }) => {
     <div className={styles.container}>
       {trips && trips.length > 0
         ? trips.map((item, index) => (
-            <div key={item + index} className={styles.box}>
+            <div key={item + index} className={styles.box} style={{ boxShadow: `${cardSelected === index ? `0px 0px 0px 2px ${backgroundColor}` : "0px 0px 4px 1px rgba(0,0,0,.1)"}`}}>
               <div
                 className={styles.verticalLine}
                 style={{ backgroundColor: `${cardSelected === index ? backgroundColor : textColor}`}}
