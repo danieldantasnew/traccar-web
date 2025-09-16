@@ -89,7 +89,7 @@ const ControllersInMap = ({
   }, [unreads.length]);
 
   const hiddenItems = () => {
-    hideRoutes();
+    hideRoutes(true);
     hideRoutesTrips();
   };
 

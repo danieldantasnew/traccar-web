@@ -109,6 +109,7 @@ const Trips = ({ backgroundColor, text, secondary, device }) => {
   const [loading, setLoading] = useState(false);
   const {
     hideRoutes,
+    hideRoutesTrips,
     selectedItemOnTrip,
     setConfigsOnTrip,
     setSelectedItemOnTrip,
@@ -187,7 +188,7 @@ const Trips = ({ backgroundColor, text, secondary, device }) => {
         throw Error(await response.text());
       }
     } else {
-      setRouteTrips(null);
+      setRouteTrips([]);
     }
   }, [selectedItemOnTrip]);
 
@@ -202,6 +203,10 @@ const Trips = ({ backgroundColor, text, secondary, device }) => {
       from: from.toISOString(),
       to: to.toISOString(),
     });
+
+    return ()=> {
+      hideRoutesTrips();
+    }
   }, []);
 
   if (loading) return <SpinLoading backgroundColor={backgroundColor} />;

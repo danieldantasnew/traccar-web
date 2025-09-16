@@ -29,11 +29,15 @@ const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
   const dispatch = useDispatch();
   const desktop = useMediaQuery(theme.breakpoints.up("md"));
   const devices = useSelector((state) => state.devices.items);
-  const [stops, setStops] = useState([]);
-  const [positions, setPositions] = useState([]);
+
   const {
+    stops,
+    positions,
+    setPositions,
+    setStops,
     configsOnTrip,
     routeTrips,
+    hideRoutes,
     hideRoutesTrips,
     statusCardOpen,
     setStatusCardOpen,
@@ -151,8 +155,11 @@ const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
   });
 
   useEffect(() => {
-    if (devices[selectedId] && selectedId) {
-      if (routeTrips) hideRoutesTrips();
+    if (
+      devices[selectedId] &&
+      selectedId &&
+      routeTrips.length === 0
+    ) {
       handlePositionsAndStops({
         deviceId: selectedId,
         groupIds,
@@ -160,8 +167,7 @@ const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
         to: to.toISOString(),
       });
     } else {
-      setPositions([]);
-      setStops([]);
+      hideRoutes();
     }
   }, [selectedId, selectedPosition]);
 

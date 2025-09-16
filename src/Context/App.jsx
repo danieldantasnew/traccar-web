@@ -22,6 +22,8 @@ export const DevicesProvider = ({ children }) => {
   const [totalStops, setTotalStops] = useState([]);
   const [staticRoutes, setStaticRoutes] = useState(true);
 
+  const [stops, setStops] = useState([]);
+  const [positions, setPositions] = useState([]);
   const [mainMapPositions, setMainMapPositions] = useState([]);
 
   const [alert, setAlert] = useState(false);
@@ -38,9 +40,11 @@ export const DevicesProvider = ({ children }) => {
     }
   });
 
-  const hideRoutes = () => {
+  const hideRoutes = (closeDevice = false) => {
     setStopCard(null);
-    dispatch(devicesActions.selectId(null));
+    setPositions([]);
+    setStops([]);
+    if(closeDevice) dispatch(devicesActions.selectId(null));
   };
 
   const hideRoutesTrips = () => {
@@ -67,6 +71,10 @@ export const DevicesProvider = ({ children }) => {
         routeTrips,
         selectedItemOnTrip, 
         configsOnTrip,
+        stops, 
+        positions, 
+        setPositions,
+        setStops,
         setConfigsOnTrip,
         setSelectedItemOnTrip,
         hideRoutes,
