@@ -3,6 +3,7 @@ import AddressComponent from "../AddressComponent";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faCircleStop,
   faFileLines,
   faMapPin,
   faRoute,
@@ -61,9 +62,9 @@ const TabsDevice = ({ device, position, t }) => {
             value="tab2"
           />
           <Tab
-            icon={<FontAwesomeIcon size="lg" icon={faMapPin} />}
+            icon={<FontAwesomeIcon size="lg" icon={faCircleStop} />}
             iconPosition="top"
-            label="Destinos Próximos"
+            label="Paradas"
             value="tab3"
           />
           <Tab

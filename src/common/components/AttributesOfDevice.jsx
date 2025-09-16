@@ -10,6 +10,7 @@ import {
   faBatteryHalf,
   faBatteryQuarter,
   faBatteryThreeQuarters,
+  faCircleStop,
   faClock,
   faExpand,
   faGaugeHigh,
@@ -19,9 +20,7 @@ import {
   faSatellite,
   faSignsPost,
 } from "@fortawesome/free-solid-svg-icons";
-import { DynamicIconsComponent } from "./DynamicIcons";
 import { useDevices } from "../../Context/App";
-import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   success: {
@@ -307,10 +306,7 @@ const AttributesOfDevice = ({ position }) => {
           <fieldset className={`${classes.fieldset} ${classes.red}`}>
             <legend className={`${classes.legend}`}>Total de Paradas</legend>
             <div className={`${classes.box}`}>
-              <DynamicIconsComponent
-                category={"stop"}
-                className={classes.stopIconStyle}
-              />
+              <FontAwesomeIcon icon={faCircleStop}/>
               <Typography className={`${classes.value}`}>
                 {selectedStop.total}
               </Typography>

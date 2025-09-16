@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     flexShrink: 0,
   },
   box: {
+    transition: "all .3s ease",
     display: "flex",
     flexDirection: "column",
     gap: ".4rem",
