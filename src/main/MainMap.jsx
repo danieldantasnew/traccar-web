@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,12 +16,54 @@ import MapGeocoder from "../map/geocoder/MapGeocoder";
 import MapScale from "../map/MapScale";
 import MapMarkersStops from "../map/MapMarkersStops.js";
 import dayjs from "dayjs";
-import { useCatch } from "../reactHelper.js";
 import MapRoutePoints from "../map/MapRoutePoints.js";
 import MapRoutePath from "../map/MapRoutePath.js";
 import { useDevices } from "../Context/App.jsx";
 import MapCamera from "../map/MapCamera.js";
 import MapMarkers from "../map/MapMarkers.js";
+import useFetchPositionsAndStops from "../hooks/useFetchPositionsAndStops.jsx";
+
+const buildMarkersStops = (stops, positions, devices) => {
+  if (!stops || !positions || !devices) return [];
+
+  return stops.map((stop, index) => {
+    const stopPosition = positions.find(
+      (position) => position.id === stop.positionId
+    );
+    const device = devices[stop.deviceId] || {};
+    const attributes = device?.attributes || {};
+    const { background, text, secondary } = attributes?.deviceColors || {
+      background: "black",
+      icon: "red",
+      text: "white",
+      secondary: "blue",
+    };
+    const model = device?.model || "";
+    const safeStopPosition = Object.fromEntries(
+      Object.entries(stopPosition || {}).filter(([key]) => key !== "attributes")
+    );
+    const attributesStopPosition = stopPosition?.attributes || {};
+
+    return {
+      ...safeStopPosition,
+      ...attributesStopPosition,
+      model,
+      latitude: stop.latitude,
+      longitude: stop.longitude,
+      stopped: `${index == 0 ? "INI" : index}`,
+      background,
+      text,
+      secondary,
+      address: stop.address,
+      averageSpeed: stop.averageSpeed,
+      deviceId: stop.deviceId,
+      deviceName: stop.deviceName,
+      duration: stop.duration,
+      endTime: stop.endTime,
+      startTime: stop.startTime,
+    };
+  });
+};
 
 const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
   const theme = useTheme();
@@ -48,6 +90,11 @@ const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
   const groupIds = useSelector((state) => state.reports.groupIds);
   const from = dayjs().startOf("day");
   const to = dayjs().endOf("day");
+  const { handlePositionsAndStops } = useFetchPositionsAndStops({
+    setPositions,
+    setStops,
+    setLoading,
+  });
 
   const onMarkerClick = useCallback(
     (_, deviceId) => {
@@ -56,56 +103,17 @@ const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
     [dispatch]
   );
 
-  const createMarkersStops = useMemo(() => {
-    if (!stops || !positions || !devices) return [];
-
-    return stops.map((stop, index) => {
-      const stopPosition = positions.find(
-        (position) => position.id === stop.positionId
-      );
-      const device = devices[stop.deviceId] || {};
-      const attributes = device?.attributes || {};
-      const { background, text, secondary } = attributes?.deviceColors || {
-        background: "black",
-        icon: "red",
-        text: "white",
-        secondary: "blue",
-      };
-      const model = device?.model || "";
-      const safeStopPosition = Object.fromEntries(
-        Object.entries(stopPosition || {}).filter(
-          ([key]) => key !== "attributes"
-        )
-      );
-      const attributesStopPosition = stopPosition?.attributes || {};
-
-      return {
-        ...safeStopPosition,
-        ...attributesStopPosition,
-        model,
-        latitude: stop.latitude,
-        longitude: stop.longitude,
-        stopped: `${index == 0 ? "INI" : index}`,
-        background,
-        text,
-        secondary,
-        address: stop.address,
-        averageSpeed: stop.averageSpeed,
-        deviceId: stop.deviceId,
-        deviceName: stop.deviceName,
-        duration: stop.duration,
-        endTime: stop.endTime,
-        startTime: stop.startTime,
-      };
-    });
-  }, [stops, positions, devices]);
+  const markersStop = useMemo(
+    () => buildMarkersStops(stops, positions, devices),
+    [stops, positions, devices]
+  );
 
   useEffect(() => {
-    if (createMarkersStops.length > 0) {
+    if (markersStop.length > 0) {
       setTotalStops((state) => {
         const newStop = {
-          total: createMarkersStops.length - 1,
-          deviceId: createMarkersStops[0].deviceId,
+          total: markersStop.length - 1,
+          deviceId: markersStop[0].deviceId,
         };
 
         const existsStop = state.find((s) => s.deviceId === newStop.deviceId);
@@ -119,44 +127,10 @@ const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
         }
       });
     }
-  }, [createMarkersStops, setTotalStops]);
-
-  const handlePositionsAndStops = useCatch(async ({ deviceId, from, to }) => {
-    setLoading(true);
-    const query = new URLSearchParams({ deviceId, from, to });
-
-    const fetchPositions = fetch(`/api/positions?${query.toString()}`).then(
-      async (response) => {
-        if (response.ok) {
-          const positions = await response.json();
-          setPositions(positions);
-        } else {
-          throw Error(await response.text());
-        }
-      }
-    );
-
-    const fetchStops = fetch(`/api/reports/stops?${query.toString()}`, {
-      headers: { Accept: "application/json" },
-    }).then(async (response) => {
-      if (response.ok) {
-        const json = await response.json();
-        setStops(json);
-      } else {
-        throw Error(await response.text());
-      }
-    });
-
-    await Promise.all([fetchPositions, fetchStops]);
-    setLoading(false);
-  });
+  }, [markersStop, setTotalStops]);
 
   useEffect(() => {
-    if (
-      devices[selectedId] &&
-      selectedId &&
-      routeTrips.length === 0
-    ) {
+    if (devices[selectedId] && selectedId && routeTrips.length === 0) {
       handlePositionsAndStops({
         deviceId: selectedId,
         groupIds,
@@ -194,7 +168,7 @@ const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
             <MapRoutePath positions={positions} staticColor={staticRoutes} />
             {stops?.length > 0 ? (
               <MapMarkersStops
-                markers={createMarkersStops}
+                markers={markersStop}
                 setStopCard={setStopCard}
                 key={`stops-${stops.length}`}
               />
