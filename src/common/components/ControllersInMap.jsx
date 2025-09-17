@@ -4,13 +4,22 @@ import { map } from "../../map/core/MapView";
 import { useAttributePreference } from "../util/preferences";
 import dimensions from "../theme/dimensions.js";
 import { useSelector } from "react-redux";
-import { faEyeSlash, faMapPin } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEyeSlash,
+  faInfo,
+  faMapPin,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDevices } from "../../Context/App.jsx";
 import BellOn from "./IconsAnimated/BellOn.jsx";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
+  "@keyframes fadeIn": {
+    "0%": { opacity: 0, transform: "translateX(-50%) scale(0)" },
+    "80%": { opacity: 1, transform: "translateX(0) scale(1.2)" },
+    "100%": { opacity: 1, transform: "translateX(0) scale(1)" },
+  },
   styleBox: {
     position: "fixed",
     zIndex: 8,
@@ -32,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "0px 0px 1px 1.5px rgba(0, 0, 0, 0.1)",
     padding: "4px",
     borderRadius: "4px",
+    animation: "$fadeIn .4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards",
     "&:hover": {
       backgroundColor: "rgb(245, 245, 245)",
     },
@@ -50,11 +60,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const ControlButton = ({ title, classes, children }) => {
+  return (
+    <Tooltip
+      className={classes.controls}
+      aria-label={`${title}`}
+      title={`${title}`}
+      placement="left"
+      arrow
+    >
+      {children}
+    </Tooltip>
+  );
+};
+
 const ControllersInMap = ({
   position,
   selectedDeviceId,
   onClick,
   notificationsButtonRef,
+  setStatusCardOpen,
 }) => {
   const classes = useStyles();
   const selectZoom = useAttributePreference("web.selectZoom", 10);
@@ -63,7 +88,7 @@ const ControllersInMap = ({
   const [animKey, setAnimKey] = useState(0);
   const timeOutRef = useRef();
 
-  const { hideRoutes, routeTrips, hideRoutesTrips } = useDevices();
+  const { hideRoutes, hideRoutesTrips } = useDevices();
 
   const centerDevice = () => {
     map.easeTo({
@@ -93,14 +118,27 @@ const ControllersInMap = ({
     hideRoutesTrips();
   };
 
+  const buttonOpc = [
+    {
+      title: "Centralizar dispositivo",
+      icon: faMapPin,
+      action: centerDevice,
+    },
+    {
+      title: "Ocultar rotas",
+      icon: faEyeSlash,
+      action: hiddenItems,
+    },
+    {
+      title: "Ver informações do dispositivo",
+      icon: faInfo,
+      action: () => setStatusCardOpen(true),
+    },
+  ];
+
   return (
     <Box className={classes.styleBox}>
-      <Tooltip
-        className={classes.controls}
-        title="Notificações"
-        placement="left"
-        arrow
-      >
+      <ControlButton classes={classes} title="Notificações">
         <Box onClick={onClick} tabIndex={0} ref={notificationsButtonRef}>
           <BellOn
             key={animKey}
@@ -112,35 +150,19 @@ const ControllersInMap = ({
             className={`${!!unreads.length ? classes.notifications : ""}`}
           ></Box>
         </Box>
-      </Tooltip>
+      </ControlButton>
       {selectedDeviceId && (
-        <Tooltip
-          className={classes.controls}
-          aria-label="Centralizar dispositivo"
-          title="Centralizar dispositivo"
-          placement="left"
-          arrow
-        >
-          <Box onClick={centerDevice}>
-            <FontAwesomeIcon icon={faMapPin} color={`${background}`} />
-          </Box>
-        </Tooltip>
+        buttonOpc.map((button, index) => (
+          <ControlButton classes={classes} title={button.title} key={index}>
+            <Box onClick={button.action}>
+              <FontAwesomeIcon
+                icon={button.icon}
+                color={`${background}`}
+              />
+            </Box>
+          </ControlButton>
+        ))
       )}
-      {(selectedDeviceId || routeTrips && routeTrips.length > 0) && (
-          <>
-            <Tooltip
-              className={classes.controls}
-              aria-label="Ocultar rotas"
-              title="Ocultar rotas"
-              placement="left"
-              arrow
-            >
-              <Box onClick={() => hiddenItems()}>
-              <FontAwesomeIcon icon={faEyeSlash} color={`${background || "#616161"}`} />
-              </Box>
-            </Tooltip>
-          </>
-        )}
     </Box>
   );
 };
