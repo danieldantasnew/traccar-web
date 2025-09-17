@@ -1,18 +1,15 @@
 import { useState } from "react";
-import AddressComponent from "../AddressComponent";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleStop,
   faFileLines,
-  faMapPin,
   faRoute,
   faTerminal,
 } from "@fortawesome/free-solid-svg-icons";
-import { Box, Slide, Tab, Typography } from "@mui/material";
-import LinkDriver from "../LinkDriver";
-import AttributesOfDevice from "../AttributesOfDevice";
+import { Box, Slide, Tab } from "@mui/material";
 import Trips from "./Trips";
+import Summary from "./Summary";
 
 const TabsDevice = ({ device, position, t }) => {
   if (!device) return null;
@@ -77,15 +74,7 @@ const TabsDevice = ({ device, position, t }) => {
       </Box>
       <Slide direction="right" in={tabValue === "tab1"} mountOnEnter unmountOnExit>
         <TabPanel value="tab1" sx={{ padding: ".7rem .5rem", height: '100%' }}>
-          {position ?(
-            <Box sx={{display: 'flex', flexDirection: 'column', gap: '.8rem', justifyContent: 'space-between',  height: '100%'}}>
-              <Box sx={{maxHeight: "264px", overflow: 'auto'}}>
-                <AddressComponent position={position} />
-                <AttributesOfDevice position={position} device={device} />
-              </Box>
-              <LinkDriver device={device} />
-            </Box>
-          ): <Typography>Nada por aqui...</Typography>}
+          <Summary backgroundColor={background} position={position} device={device}/>
         </TabPanel>
       </Slide>
       <Slide direction="left" in={tabValue === "tab2"} mountOnEnter unmountOnExit>
