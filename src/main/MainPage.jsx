@@ -123,6 +123,7 @@ const MainPage = () => {
   const {
     statusCardOpen,
     stopCard,
+    setStatusCardOpen,
     setDevicesOpen,
     setFirstLoadDevice,
     setStaticRoutes,
@@ -208,6 +209,7 @@ const MainPage = () => {
         selectedDeviceId={selectedDeviceId}
         onClick={onEventsClick}
         notificationsButtonRef={notificationsButtonRef}
+        setStatusCardOpen={setStatusCardOpen}
       />
       {selectedDeviceId && stopCard && <StopCard stop={stopCard} />}
     </div>
