@@ -50,7 +50,7 @@ const MapSelectedDevice = () => {
 
         lastUserZoomTime.current = Date.now();
       }
-    }, 1000);
+    }, 30000);
 
     return () => clearInterval(interval);
   }, [position, selectZoom, mapFollow]);

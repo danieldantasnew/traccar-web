@@ -22,6 +22,7 @@ import { useDevices } from "../Context/App.jsx";
 import MapCamera from "../map/MapCamera.js";
 import MapMarkers from "../map/MapMarkers.js";
 import useFetchPositionsAndStops from "../hooks/useFetchPositionsAndStops.jsx";
+import MapSelectedDevice from "../map/main/MapSelectedDevice.js";
 
 const buildMarkersStops = (stops, positions, devices) => {
   if (!stops || !positions || !devices) return [];
@@ -145,6 +146,7 @@ const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
   return (
     <>
       <MapView>
+        <MapSelectedDevice/>
         <MapOverlay />
         <MapGeofence />
         <MapAccuracy positions={filteredPositions} />
