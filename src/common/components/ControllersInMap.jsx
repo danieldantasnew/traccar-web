@@ -1,7 +1,6 @@
 import { Box, Tooltip } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { map } from "../../map/core/MapView";
-import { useAttributePreference } from "../util/preferences";
 import dimensions from "../theme/dimensions.js";
 import { useSelector } from "react-redux";
 import {
@@ -82,7 +81,6 @@ const ControllersInMap = ({
   setStatusCardOpen,
 }) => {
   const classes = useStyles();
-  const selectZoom = useAttributePreference("web.selectZoom", 10);
   const devices = useSelector((state) => state.devices.items);
   const unreads = useSelector((state) => state.events.unreads);
   const [animKey, setAnimKey] = useState(0);
@@ -93,7 +91,7 @@ const ControllersInMap = ({
   const centerDevice = () => {
     map.easeTo({
       center: [position.longitude, position.latitude],
-      zoom: Math.max(map.getZoom(), selectZoom),
+      zoom: 16,
       offset: [0, -dimensions.popupMapOffset / 2],
     });
   };

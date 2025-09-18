@@ -1,8 +1,7 @@
-// MapPositionsWithClusters.jsx
 import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { map } from "./core/MapView.jsx";
-import mapboxgl from "mapbox-gl"; // se for MapLibre: import maplibregl from "maplibre-gl";
+import mapboxgl from "mapbox-gl";
 import "./css/mapPositions.css";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons.jsx";
 import { Tooltip } from "@mui/material";
@@ -15,6 +14,7 @@ import {
 import { getRandomColor } from "../common/util/colors.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
+import dimensions from "../common/theme/dimensions.js";
 
 const MapPositions = ({
   positions,
@@ -24,12 +24,19 @@ const MapPositions = ({
   setStops,
   MainMap,
 }) => {
-  // Map key -> { marker, root, type, id }
   const markersRef = useRef(new Map());
   const clusterIndex = useRef(null);
 
   const devices = useSelector((state) => state.devices.items);
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
+
+  const centerDevice = (position) => {
+    map.easeTo({
+      center: [position.lng, position.lat],
+      zoom: 18,
+      offset: [0, -dimensions.popupMapOffset / 2],
+    });
+  };
 
   const devicesPropsKey = positions
     .map((p) => {
@@ -39,7 +46,6 @@ const MapPositions = ({
     })
     .join("|");
 
-  // --- util de limpeza de todos os markers ---
   const clearAllMarkers = () => {
     markersRef.current.forEach(({ marker, root }) => {
       try {
@@ -57,7 +63,6 @@ const MapPositions = ({
   useEffect(() => {
     if (!map) return;
     if (!positions || positions.length === 0) {
-
       clearAllMarkers();
       clusterIndex.current = null;
       return;
@@ -79,11 +84,10 @@ const MapPositions = ({
 
     clusterIndex.current = new Supercluster({
       radius: 60,
-      maxZoom: 13,
+      maxZoom: 18,
     }).load(features);
 
     renderClusters();
-
   }, [positions, devicesPropsKey, map]);
 
   useEffect(() => {
@@ -128,7 +132,10 @@ const MapPositions = ({
           }
         } else {
           const el = document.createElement("div");
-          const size = Math.min(70, 30 + Math.round(Math.log10(count || 1) * 18));
+          const size = Math.min(
+            70,
+            30 + Math.round(Math.log10(count || 1) * 18)
+          );
           el.style.width = `${size}px`;
           el.style.height = `${size}px`;
           el.style.borderRadius = "50%";
@@ -137,15 +144,46 @@ const MapPositions = ({
           el.style.justifyContent = "center";
           el.style.cursor = "pointer";
           el.style.boxShadow = "0 1px 4px rgba(0,0,0,0.4)";
-          el.style.background = "rgba(0,120,255,0.8)";
+          el.style.background = "rgba(0,120,255,0.85)";
           el.style.color = "#fff";
           el.style.fontWeight = "700";
           el.className = "cluster-marker";
 
           const root = createRoot(el);
           root.render(
-            <Tooltip title={`${count} dispositivos`} followCursor arrow>
-              <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Tooltip
+              title={`${count} dispositivos`}
+              followCursor
+              arrow
+              slotProps={{
+                popper: {
+                  modifiers: [
+                    {
+                      name: "offset",
+                      options: {
+                        offset: [0, 28],
+                      },
+                    },
+                  ],
+                },
+                tooltip: {
+                  sx: {
+                    maxWidth: 500,
+                    whiteSpace: "pre-line",
+                    fontSize: ".75rem",
+                  },
+                },
+              }}
+            >
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 <span>{count}</span>
               </div>
             </Tooltip>
@@ -154,20 +192,33 @@ const MapPositions = ({
           const onClick = (e) => {
             e.stopPropagation();
             try {
-              const expansionZoom = clusterIndex.current.getClusterExpansionZoom(clusterId);
+              const expansionZoom =
+                clusterIndex.current.getClusterExpansionZoom(clusterId);
               map.easeTo({
                 center: [lng, lat],
                 zoom: expansionZoom,
               });
             } catch (err) {
-              map.easeTo({ center: [lng, lat], zoom: Math.min(20, map.getZoom() + 2) });
+              map.easeTo({
+                center: [lng, lat],
+                zoom: Math.min(20, map.getZoom() + 2),
+              });
             }
           };
           el.addEventListener("click", onClick);
 
-          const marker = new mapboxgl.Marker(el).setLngLat([lng, lat]).addTo(map);
+          const marker = new mapboxgl.Marker(el)
+            .setLngLat([lng, lat])
+            .addTo(map);
 
-          markersRef.current.set(key, { marker, root, type: "cluster", id: clusterId, el, onClick });
+          markersRef.current.set(key, {
+            marker,
+            root,
+            type: "cluster",
+            id: clusterId,
+            el,
+            onClick,
+          });
         }
       } else {
         const positionId = props.positionId;
@@ -188,11 +239,13 @@ const MapPositions = ({
           const device = devices[deviceId];
           const ignition = props.attrs?.ignition || props.attrs?.motion;
           const speed = props.speed;
-          const deviceColors = (device?.attributes?.deviceColors) || getRandomColor();
+          const deviceColors =
+            device?.attributes?.deviceColors || getRandomColor();
           const { background, text, icon } = deviceColors;
 
           el.style.backgroundColor = background || "transparent";
           el.style.color = text || "#000";
+
 
           const root = createRoot(el);
           root.render(
@@ -201,7 +254,9 @@ const MapPositions = ({
                 device
                   ? `${device.name} - ${formatTime(device.lastUpdate)} - ${
                       ignition ? "Ligado" : "Desligado"
-                    } ${speed ? `(${formatSpeedNoTranslation(speed, "kmh")})` : ""}`
+                    } ${
+                      speed ? `(${formatSpeedNoTranslation(speed, "kmh")})` : ""
+                    }`
                   : ""
               }
               followCursor
@@ -212,7 +267,7 @@ const MapPositions = ({
                     {
                       name: "offset",
                       options: {
-                        offset: [0, 24],
+                        offset: [0, 28],
                       },
                     },
                   ],
@@ -227,6 +282,7 @@ const MapPositions = ({
               }}
             >
               <div
+                onClick={()=> centerDevice({lng, lat})}
                 style={{
                   display: "flex",
                   gap: ".4rem",
@@ -266,7 +322,13 @@ const MapPositions = ({
             .setLngLat([lng, lat])
             .addTo(map);
 
-          markersRef.current.set(key, { marker, root, type: "point", id: positionId, el });
+          markersRef.current.set(key, {
+            marker,
+            root,
+            type: "point",
+            id: positionId,
+            el,
+          });
         }
       }
     });
