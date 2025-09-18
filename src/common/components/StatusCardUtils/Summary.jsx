@@ -31,7 +31,7 @@ const Summary = ({ backgroundColor, position, device }) => {
         to: to.toISOString(),
       });
     }
-  }, [positions]);
+  }, []);
 
   if (!position) return <Typography>Nada por aqui...</Typography>;
   if (loading) return <SpinLoading backgroundColor={backgroundColor} />;
