@@ -142,10 +142,6 @@ const StopCard = ({ stop, }) => {
                 color={`${stop.text}`}
                 sx={{ display: "flex", alignItems: "center", gap: ".4rem" }}
               >
-                <FontAwesomeIcon
-                  icon={faMapLocationDot}
-                  style={{ fontSize: "26px" }}
-                />
                 Dados da Parada
               </Typography>
               <Tooltip
