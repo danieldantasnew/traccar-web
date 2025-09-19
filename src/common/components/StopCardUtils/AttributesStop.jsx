@@ -38,7 +38,7 @@ const OrganizeBox = ({ icon, sizeIcon, title, value, color }) => {
 };
 
 const AttributesStop = ({ stop, classes }) => {
-  const sizeIcons = "1.3rem";
+  const sizeIcons = "1rem";
   const color = "#616161"
   return (
     <Box sx={{ padding: "1rem .5rem" }} className={classes.grid}>
