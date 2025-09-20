@@ -5,7 +5,7 @@ import {
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useEffect, useState } from "react";
 import { useCatch, useEffectAsync } from "../../../reactHelper";
@@ -195,7 +195,7 @@ const Trips = ({ backgroundColor, text, secondary, device }) => {
   const activateRoutes = (item, index) => {
     setCardSelected(index);
     setSelectedItemOnTrip(item);
-  }
+  };
 
   useEffect(() => {
     searchTrips({
@@ -204,148 +204,160 @@ const Trips = ({ backgroundColor, text, secondary, device }) => {
       to: to.toISOString(),
     });
 
-    return ()=> {
+    return () => {
       hideRoutesTrips();
-    }
+    };
   }, []);
 
   if (loading) return <SpinLoading backgroundColor={backgroundColor} />;
+  if (!trips || trips.length == 0)
+    return <Typography>Sem viagens por hoje...</Typography>;
   return (
     <div className={styles.container}>
-      {trips && trips.length > 0
-        ? trips.map((item, index) => (
-            <div key={item + index} className={styles.box} style={{ boxShadow: `${cardSelected === index ? `0px 0px 0px 2px ${backgroundColor}` : "0px 0px 4px 1px rgba(0,0,0,.1)"}`}}>
-              <div
-                className={styles.verticalLine}
-                style={{ backgroundColor: `${cardSelected === index ? backgroundColor : textColor}`}}
-              ></div>
-              <div className={styles.flex}>
-                <span className={styles.span}>
+      {trips.map((item, index) => (
+          <div
+            key={item + index}
+            className={styles.box}
+            style={{
+              boxShadow: `${
+                cardSelected === index
+                  ? `0px 0px 0px 2px ${backgroundColor}`
+                  : "0px 0px 4px 1px rgba(0,0,0,.1)"
+              }`,
+            }}
+          >
+            <div
+              className={styles.verticalLine}
+              style={{
+                backgroundColor: `${
+                  cardSelected === index ? backgroundColor : textColor
+                }`,
+              }}
+            ></div>
+            <div className={styles.flex}>
+              <span className={styles.span}>
+                <FontAwesomeIcon
+                  icon={faFlagCheckered}
+                  style={{ height: "24px", width: "24px" }}
+                  color={`white`}
+                />
+              </span>
+              <h2>Dados da Viagem</h2>
+            </div>
+            <div className={styles.dataTrip}>
+              <div className={styles.containerTimeLine}>
+                <span>
                   <FontAwesomeIcon
-                    icon={faFlagCheckered}
-                    style={{ height: "24px", width: "24px" }}
-                    color={`white`}
+                    style={{
+                      height: "14px",
+                      width: "14px",
+                      padding: ".2rem 0",
+                    }}
+                    color={`${textColor}`}
+                    icon={faLocationDot}
                   />
                 </span>
-                <h2>Dados da Viagem</h2>
+                <div className={styles.timeLine}></div>
+                <span>
+                  <FontAwesomeIcon
+                    style={{
+                      height: "14px",
+                      width: "14px",
+                      padding: ".3rem 0",
+                    }}
+                    color={`${textColor}`}
+                    icon={faCircleStop}
+                  />
+                </span>
               </div>
-              <div className={styles.dataTrip}>
-                <div className={styles.containerTimeLine}>
-                  <span>
-                    <FontAwesomeIcon
-                      style={{
-                        height: "14px",
-                        width: "14px",
-                        padding: ".2rem 0",
-                      }}
-                      color={`${textColor}`}
-                      icon={faLocationDot}
-                    />
-                  </span>
-                  <div className={styles.timeLine}></div>
-                  <span>
-                    <FontAwesomeIcon
-                      style={{
-                        height: "14px",
-                        width: "14px",
-                        padding: ".3rem 0",
-                      }}
-                      color={`${textColor}`}
-                      icon={faCircleStop}
-                    />
-                  </span>
-                </div>
+              <div>
                 <div>
-                  <div>
-                    <h3>
-                      {item.startAddress
-                        ? item.startAddress
+                  <h3>
+                    {item.startAddress ? item.startAddress : "Não identificado"}
+                  </h3>
+                  <p>
+                    {item.startTime
+                      ? formatTime(item.startTime, "seconds")
+                      : "Não identificado"}
+                  </p>
+                </div>
+                <div style={{ margin: ".5rem 0", paddingBottom: "2rem" }}>
+                  <p>
+                    Vel. Média:{" "}
+                    <strong>
+                      {item.averageSpeed
+                        ? formatSpeed(
+                            speedToKnots(item.averageSpeed, "kmh"),
+                            speedUnit,
+                            t
+                          )
                         : "Não identificado"}
-                    </h3>
-                    <p>
-                      {item.startTime
-                        ? formatTime(item.startTime, "seconds")
+                    </strong>
+                  </p>
+                  <p>
+                    Vel. Máxima:{" "}
+                    <strong>
+                      {item.maxSpeed
+                        ? formatSpeed(
+                            speedToKnots(item.maxSpeed, "kmh"),
+                            speedUnit,
+                            t
+                          )
                         : "Não identificado"}
-                    </p>
-                  </div>
-                  <div style={{ margin: ".5rem 0", paddingBottom: "2rem" }}>
-                    <p>
-                      Vel. Média:{" "}
-                      <strong>
-                        {item.averageSpeed
-                          ? formatSpeed(
-                              speedToKnots(item.averageSpeed, "kmh"),
-                              speedUnit,
-                              t
-                            )
-                          : "Não identificado"}
-                      </strong>
-                    </p>
-                    <p>
-                      Vel. Máxima:{" "}
-                      <strong>
-                        {item.maxSpeed
-                          ? formatSpeed(
-                              speedToKnots(item.maxSpeed, "kmh"),
-                              speedUnit,
-                              t
-                            )
-                          : "Não identificado"}
-                      </strong>
-                    </p>
-                    <p>
-                      Distância:{" "}
-                      <strong>
-                        {item.distance
-                          ? formatDistance(item.distance, distanceUnit, t)
-                          : "Não identificado"}
-                      </strong>
-                    </p>
-                    <p>
-                      Duração:{" "}
-                      <strong>
-                        {item.duration
-                          ? formatNumericHours(item.duration, t)
-                          : "Não identificado"}
-                      </strong>
-                    </p>
-                  </div>
-                  <div style={{ position: "absolute", bottom: "-12px" }}>
-                    <h3>
-                      {item.endAddress ? item.endAddress : "Não identificado"}
-                    </h3>
-                    <p>
-                      {item.endTime
-                        ? formatTime(item.endTime, "seconds")
+                    </strong>
+                  </p>
+                  <p>
+                    Distância:{" "}
+                    <strong>
+                      {item.distance
+                        ? formatDistance(item.distance, distanceUnit, t)
                         : "Não identificado"}
-                    </p>
-                  </div>
+                    </strong>
+                  </p>
+                  <p>
+                    Duração:{" "}
+                    <strong>
+                      {item.duration
+                        ? formatNumericHours(item.duration, t)
+                        : "Não identificado"}
+                    </strong>
+                  </p>
+                </div>
+                <div style={{ position: "absolute", bottom: "-12px" }}>
+                  <h3>
+                    {item.endAddress ? item.endAddress : "Não identificado"}
+                  </h3>
+                  <p>
+                    {item.endTime
+                      ? formatTime(item.endTime, "seconds")
+                      : "Não identificado"}
+                  </p>
                 </div>
               </div>
-              <Button
-                sx={{
-                  position: "absolute",
-                  right: "1rem",
-                  top: "1rem",
-                  height: "auto",
-                  backgroundColor,
-                  color: text,
-                  padding: ".4rem 1rem",
-                  fontSize: ".75rem",
-                  "&:hover": {
-                    backgroundColor: `${secondary}`,
-                  },
-                  display: "flex",
-                  gap: ".4rem",
-                }}
-                onClick={() => activateRoutes(item, index)}
-              >
-                <FontAwesomeIcon icon={faDiamondTurnRight} size="xl" />
-                Ver rotas
-              </Button>
             </div>
-          ))
-        : "Sem viagens por hoje..."}
+            <Button
+              sx={{
+                position: "absolute",
+                right: "1rem",
+                top: "1rem",
+                height: "auto",
+                backgroundColor,
+                color: text,
+                padding: ".4rem 1rem",
+                fontSize: ".75rem",
+                "&:hover": {
+                  backgroundColor: `${secondary}`,
+                },
+                display: "flex",
+                gap: ".4rem",
+              }}
+              onClick={() => activateRoutes(item, index)}
+            >
+              <FontAwesomeIcon icon={faDiamondTurnRight} size="xl" />
+              Ver rotas
+            </Button>
+          </div>
+        ))}
     </div>
   );
 };
