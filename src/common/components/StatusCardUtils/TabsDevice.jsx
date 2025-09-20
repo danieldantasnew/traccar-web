@@ -10,6 +10,7 @@ import {
 import { Box, Slide, Tab } from "@mui/material";
 import Trips from "./Trips";
 import Summary from "./Summary";
+import Stops from "./Stops";
 
 const TabsDevice = ({ device, position, t }) => {
   if (!device) return null;
@@ -83,8 +84,8 @@ const TabsDevice = ({ device, position, t }) => {
         </TabPanel>
       </Slide>
       <Slide direction="left" in={tabValue === "tab3"} mountOnEnter unmountOnExit>
-        <TabPanel value="tab3" sx={{ padding: "0 .7rem", marginTop: ".8rem" }}>
-          Nada por aqui...
+        <TabPanel value="tab3" sx={{ padding: "0 .7rem", marginTop: ".8rem",  overflowY: "auto", }}>
+          <Stops backgroundColor={background} text={text} secondary={secondary}/>
         </TabPanel>
       </Slide>
       <Slide direction="left" in={tabValue === "tab4"} mountOnEnter unmountOnExit>
