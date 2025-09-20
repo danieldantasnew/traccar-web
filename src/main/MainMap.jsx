@@ -23,48 +23,7 @@ import MapCamera from "../map/MapCamera.js";
 import MapMarkers from "../map/MapMarkers.js";
 import useFetchPositionsAndStops from "../hooks/useFetchPositionsAndStops.jsx";
 import MapSelectedDevice from "../map/main/MapSelectedDevice.js";
-
-const buildMarkersStops = (stops, positions, devices) => {
-  if (!stops || !positions || !devices) return [];
-
-  return stops.map((stop, index) => {
-    const stopPosition = positions.find(
-      (position) => position.id === stop.positionId
-    );
-    const device = devices[stop.deviceId] || {};
-    const attributes = device?.attributes || {};
-    const { background, text, secondary } = attributes?.deviceColors || {
-      background: "black",
-      icon: "red",
-      text: "white",
-      secondary: "blue",
-    };
-    const model = device?.model || "";
-    const safeStopPosition = Object.fromEntries(
-      Object.entries(stopPosition || {}).filter(([key]) => key !== "attributes")
-    );
-    const attributesStopPosition = stopPosition?.attributes || {};
-
-    return {
-      ...safeStopPosition,
-      ...attributesStopPosition,
-      model,
-      latitude: stop.latitude,
-      longitude: stop.longitude,
-      stopped: `${index == 0 ? "INI" : index}`,
-      background,
-      text,
-      secondary,
-      address: stop.address,
-      averageSpeed: stop.averageSpeed,
-      deviceId: stop.deviceId,
-      deviceName: stop.deviceName,
-      duration: stop.duration,
-      endTime: stop.endTime,
-      startTime: stop.startTime,
-    };
-  });
-};
+import { buildStops } from "../common/util/buildStops.js";
 
 const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
   const theme = useTheme();
@@ -105,7 +64,7 @@ const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
   );
 
   const markersStop = useMemo(
-    () => buildMarkersStops(stops, positions, devices),
+    () => buildStops(stops, positions, devices),
     [stops, positions, devices]
   );
 
