@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { map } from "./core/MapView";
 import { findFonts } from "./core/mapUtil";
-import dimensions from "../common/theme/dimensions";
 import centerInMap from "../common/util/centerInMap";
 
 const MapMarkersStops = ({ markers, setStopCard }) => {

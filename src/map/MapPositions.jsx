@@ -14,7 +14,6 @@ import {
 import { getRandomColor } from "../common/util/colors.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
-import dimensions from "../common/theme/dimensions.js";
 import centerInMap from "../common/util/centerInMap.js";
 
 const MapPositions = ({
