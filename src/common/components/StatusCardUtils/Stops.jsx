@@ -120,11 +120,10 @@ const Stops = ({ backgroundColor, text, secondary }) => {
     }
   }, []);
 
-    const stopsBuilded = useMemo(
-      () => buildStops(stops, positions, devices),
-      [stops, positions, devices]
-    );
-
+  const stopsBuilded = useMemo(
+    () => buildStops(stops, positions, devices),
+    [stops, positions, devices]
+  );
 
   if (loading) return <SpinLoading backgroundColor={backgroundColor} />;
   if (!stopsBuilded || stopsBuilded.length == 0)
@@ -132,112 +131,115 @@ const Stops = ({ backgroundColor, text, secondary }) => {
   return (
     <div className={styles.container}>
       {stopsBuilded.map((item, index) => (
+        <div
+          key={item + index}
+          className={styles.box}
+          style={{
+            boxShadow: `${
+              cardSelected === index
+                ? `0px 0px 0px 2px ${backgroundColor}`
+                : "0px 0px 4px 1px rgba(0,0,0,.1)"
+            }`,
+          }}
+        >
           <div
-            key={item + index}
-            className={styles.box}
+            className={styles.verticalLine}
             style={{
-              boxShadow: `${
-                cardSelected === index
-                  ? `0px 0px 0px 2px ${backgroundColor}`
-                  : "0px 0px 4px 1px rgba(0,0,0,.1)"
+              backgroundColor: `${
+                cardSelected === index ? backgroundColor : textColor
               }`,
             }}
-          >
-            <div
-              className={styles.verticalLine}
-              style={{
-                backgroundColor: `${
-                  cardSelected === index ? backgroundColor : textColor
-                }`,
-              }}
-            ></div>
-            <div className={styles.flex}>
-              <span className={styles.span}>{item.stopped}</span>
-              <h2>Resumo da Parada</h2>
-            </div>
-            <div className={styles.flex} style={{ marginTop: ".6rem" }}>
-              <span>
-                <FontAwesomeIcon color={`${textColor}`} icon={faLocationDot} />
-              </span>
-              <h3>{item.address ? item.address : "Não identificado"}</h3>
-            </div>
-            <div style={{ marginLeft: "1.15rem" }}>
-              <div className={styles.flex}>
-                <p>
-                  Início:{" "}
-                  <strong>
-                    {" "}
-                    {item.startTime
-                      ? formatTime(item.startTime, "seconds")
-                      : "Não identificado"}
-                  </strong>
-                </p>
-                <span
-                  style={{
-                    height: "4px",
-                    width: "4px",
-                    borderRadius: "50%",
-                    marginTop: "2px",
-                    backgroundColor: `${textColor}`,
-                  }}
-                ></span>
-                <p>
-                  Fim:{" "}
-                  <strong>
-                    {" "}
-                    {item.startTime
-                      ? formatTime(item.endTime, "seconds")
-                      : "Não identificado"}
-                  </strong>
-                </p>
-              </div>
-              <div className={styles.flex}>
-                <p>
-                  Duração:{" "}
-                  <strong>
-                    {" "}
-                    {item.duration
-                      ? formatNumericHours(item.duration, t)
-                      : "Não identificado"}
-                  </strong>
-                </p>
-              </div>
-              <div className={styles.flex}>
-                <p>
-                  Dispositivo estava:{" "}
-                  <strong>
-                    {" "}
-                    {item.ignition
-                      ? "Ligado"
-                      : "Desligado"}
-                  </strong>
-                </p>
-              </div>
-            </div>
-
-            <Button
-              sx={{
-                position: "absolute",
-                right: "1rem",
-                top: "1rem",
-                height: "auto",
-                backgroundColor,
-                color: text,
-                padding: ".4rem 1rem",
-                fontSize: ".75rem",
-                "&:hover": {
-                  backgroundColor: `${secondary}`,
-                },
-                display: "flex",
-                gap: ".4rem",
-              }}
-              onClick={() => centerDevice(item, index)}
-            >
-              <FontAwesomeIcon icon={faMapLocationDot} size="lg" />
-              Ver no mapa
-            </Button>
+          ></div>
+          <div className={styles.flex}>
+            <span className={styles.span}>{item.stopped}</span>
+            <h2>Resumo da Parada</h2>
           </div>
-        ))}
+          <div className={styles.flex} style={{ marginTop: ".6rem" }}>
+            <span>
+              <FontAwesomeIcon color={`${textColor}`} icon={faLocationDot} />
+            </span>
+            <h3>{item.address ? item.address : "Não identificado"}</h3>
+          </div>
+          <div style={{ marginLeft: "1.15rem" }}>
+            <div className={styles.flex}>
+              <p>
+                Início:{" "}
+                <strong>
+                  {" "}
+                  {item.startTime
+                    ? formatTime(item.startTime, "seconds")
+                    : "Não identificado"}
+                </strong>
+              </p>
+              <span
+                style={{
+                  height: "4px",
+                  width: "4px",
+                  borderRadius: "50%",
+                  marginTop: "2px",
+                  backgroundColor: `${textColor}`,
+                }}
+              ></span>
+              <p>
+                Fim:{" "}
+                <strong>
+                  {" "}
+                  {item.startTime
+                    ? formatTime(item.endTime, "seconds")
+                    : "Não identificado"}
+                </strong>
+              </p>
+            </div>
+            <div className={styles.flex}>
+              <p>
+                Duração:{" "}
+                <strong>
+                  {" "}
+                  {item.duration
+                    ? formatNumericHours(item.duration, t)
+                    : "Não identificado"}
+                </strong>
+              </p>
+            </div>
+            <div className={styles.flex}>
+              <p>
+                Dispositivo estava:{" "}
+                <strong> {item.ignition ? "Ligado" : "Desligado"}</strong>
+              </p>
+            </div>
+            {item.stopped === "INI" && (
+              <div className={styles.flex}>
+                <p style={{ color: 'green' }}>
+                  <strong>Dispositivo estava na garagem*</strong>
+                </p>
+              </div>
+            )}
+          </div>
+
+          <Button
+            sx={{
+              boxShadow: "0px 0px 4px 2px rgba(0,0,0,.1)",
+              position: "absolute",
+              right: "1rem",
+              top: "1rem",
+              height: "auto",
+              backgroundColor,
+              color: text,
+              padding: ".4rem 1rem",
+              fontSize: ".75rem",
+              "&:hover": {
+                backgroundColor: `${secondary}`,
+              },
+              display: "flex",
+              gap: ".4rem",
+            }}
+            onClick={() => centerDevice(item, index)}
+          >
+            <FontAwesomeIcon icon={faMapLocationDot} size="lg" />
+            Ver no mapa
+          </Button>
+        </div>
+      ))}
     </div>
   );
 };
