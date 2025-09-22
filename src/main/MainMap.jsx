@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo } from "react";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useDispatch, useSelector } from "react-redux";
-import MapView from "../map/core/MapView";
+import MapView, { map } from "../map/core/MapView";
 import MapAccuracy from "../map/main/MapAccuracy";
 import MapGeofence from "../map/MapGeofence";
 import MapCurrentLocation from "../map/MapCurrentLocation";
@@ -101,6 +101,10 @@ const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
       hideRoutes();
     }
   }, [selectedId, selectedPosition]);
+
+  useEffect(()=> {
+    map.scrollZoom.setWheelZoomRate(1/120);
+  }, [])
 
   return (
     <>
