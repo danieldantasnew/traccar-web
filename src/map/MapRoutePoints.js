@@ -1,11 +1,15 @@
 import { useId, useCallback, useEffect, useState } from "react";
 import { map } from "./core/MapView";
+import maplibregl from "maplibre-gl";
 import getSpeedColor from "../common/util/colors";
 import { findFonts } from "./core/mapUtil";
 import { SpeedLegendControl } from "./legend/MapSpeedLegend";
 import { useTranslation } from "../common/components/LocalizationProvider";
 import { useAttributePreference } from "../common/util/preferences";
 import { useSelector } from "react-redux";
+import { formatTime } from "../common/util/formatter";
+import dimensions from "../common/theme/dimensions";
+
 
 const distanceBetweenPoints = (lat1, lon1, lat2, lon2) => {
   const R = 6371000; // Raio da Terra em metros.
@@ -85,13 +89,38 @@ const MapRoutePoints = ({
   const selectedId = useSelector((state) => state.devices.selectedId);
   const [zoomLevel, setZoomLevel] = useState(map.getZoom());
 
-  const onMouseEnter = () => (map.getCanvas().style.cursor = "pointer");
+  const centerPoint = (position) => {
+    map.easeTo({
+      center: [position.lng, position.lat],
+      zoom: 18,
+      offset: [0, -dimensions.popupMapOffset / 2],
+    });
+  };
+
+  const onMouseEnter = (event) => (map.getCanvas().style.cursor = "pointer");
+
   const onMouseLeave = () => (map.getCanvas().style.cursor = "");
 
   const onMarkerClick = useCallback(
     (event) => {
       event.preventDefault();
       const feature = event.features[0];
+      const coordinates = feature.geometry.coordinates.slice();
+      const deviceTime = feature.properties.time;
+      const ghostPoint = feature.properties.isGhost;
+
+      if (deviceTime || ghostPoint) {
+        centerPoint(event.lngLat)
+        const message = ghostPoint ? `Ponto fantasma: criado apenas para melhorar a visualização.` : `Dispositivo passou por aqui ${formatTime(deviceTime, "seconds").toLowerCase()}`
+        while (Math.abs(event.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += event.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+
+        new maplibregl.Popup()
+          .setLngLat(coordinates)
+          .setHTML(message)
+          .addTo(map);
+      }
       if (onClick) {
         onClick(feature.properties.id, feature.properties.index);
       }
@@ -159,7 +188,7 @@ const MapRoutePoints = ({
           } else if (zoomLevel < 13) {
             step = Math.max(10, Math.floor(processedPositions.length / 45));
           } else if (zoomLevel < 15) {
-            step = 16
+            step = 16;
           } else {
             step = 8;
           }
@@ -192,8 +221,8 @@ const MapRoutePoints = ({
         },
         properties: {
           index,
-          id: position.id,
           rotation: position.course,
+          time: position.deviceTime,
           color:
             colorStatic && devices[selectedId]
               ? background

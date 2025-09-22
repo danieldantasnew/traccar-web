@@ -57,3 +57,34 @@
   height: 20px;
   width: 20px;
 }
+
+.maplibregl-popup-close-button {
+  color: #fff
+}
+
+.maplibregl-popup-tip {
+  border-top-color: #686868e7 !important;
+  animation: fadeIn .3s cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
+}
+
+.maplibregl-popup-content {
+  background: #686868e7 !important;
+  color: #ffffff !important;
+  padding: .5rem 1rem !important;
+  border-radius: .25rem !important;
+  font-size: .8rem;
+  font-weight: 500;
+  text-wrap: wrap;
+  animation: fadeIn .3s cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
