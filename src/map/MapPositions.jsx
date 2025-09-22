@@ -15,6 +15,7 @@ import { getRandomColor } from "../common/util/colors.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import dimensions from "../common/theme/dimensions.js";
+import centerInMap from "../common/util/centerInMap.js";
 
 const MapPositions = ({
   positions,
@@ -29,14 +30,6 @@ const MapPositions = ({
 
   const devices = useSelector((state) => state.devices.items);
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
-
-  const centerDevice = (position) => {
-    map.easeTo({
-      center: [position.lng, position.lat],
-      zoom: 18,
-      offset: [0, -dimensions.popupMapOffset / 2],
-    });
-  };
 
   const devicesPropsKey = positions
     .map((p) => {
@@ -282,7 +275,7 @@ const MapPositions = ({
               }}
             >
               <div
-                onClick={()=> centerDevice({lng, lat})}
+                onClick={()=> centerInMap({lng, lat})}
                 style={{
                   display: "flex",
                   gap: ".4rem",

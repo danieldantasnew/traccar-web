@@ -8,7 +8,7 @@ import { useTranslation } from "../common/components/LocalizationProvider";
 import { useAttributePreference } from "../common/util/preferences";
 import { useSelector } from "react-redux";
 import { formatTime } from "../common/util/formatter";
-import dimensions from "../common/theme/dimensions";
+import centerInMap from "../common/util/centerInMap";
 
 
 const distanceBetweenPoints = (lat1, lon1, lat2, lon2) => {
@@ -89,14 +89,6 @@ const MapRoutePoints = ({
   const selectedId = useSelector((state) => state.devices.selectedId);
   const [zoomLevel, setZoomLevel] = useState(map.getZoom());
 
-  const centerPoint = (position) => {
-    map.easeTo({
-      center: [position.lng, position.lat],
-      zoom: 18,
-      offset: [0, -dimensions.popupMapOffset / 2],
-    });
-  };
-
   const onMouseEnter = (event) => (map.getCanvas().style.cursor = "pointer");
 
   const onMouseLeave = () => (map.getCanvas().style.cursor = "");
@@ -110,7 +102,7 @@ const MapRoutePoints = ({
       const ghostPoint = feature.properties.isGhost;
 
       if (deviceTime || ghostPoint) {
-        centerPoint(event.lngLat)
+        centerInMap(event.lngLat)
         const message = ghostPoint ? `Ponto fantasma: criado apenas para melhorar a visualização.` : `Dispositivo passou por aqui ${formatTime(deviceTime, "seconds").toLowerCase()}`
         while (Math.abs(event.lngLat.lng - coordinates[0]) > 180) {
           coordinates[0] += event.lngLat.lng > coordinates[0] ? 360 : -360;

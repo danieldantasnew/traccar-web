@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { map } from "./core/MapView";
 import { findFonts } from "./core/mapUtil";
 import dimensions from "../common/theme/dimensions";
+import centerInMap from "../common/util/centerInMap";
 
 const MapMarkersStops = ({ markers, setStopCard }) => {
   const sourceId = "stops-layer";
@@ -16,19 +17,11 @@ const MapMarkersStops = ({ markers, setStopCard }) => {
       if (!source) return;
       source.getClusterExpansionZoom(clusterId, (err, zoom) => {
         if (err) return;
-        map.easeTo({
-          center: feature.geometry.coordinates,
-          zoom,
-          offset: [0, -dimensions.popupMapOffset / 2],
-        });
+        centerInMap(feature.geometry.coordinates, zoom, true);
       });
     } else {
       setStopCard(feature.properties);
-      map.easeTo({
-        center: [feature.properties.longitude, feature.properties.latitude],
-        zoom: 18,
-        offset: [0, -dimensions.popupMapOffset / 2],
-      });
+      centerInMap(feature.properties, 16)
     }
   };
 

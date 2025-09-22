@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDevices } from "../../Context/App.jsx";
 import BellOn from "./IconsAnimated/BellOn.jsx";
 import { makeStyles } from "@mui/styles";
+import centerInMap from "../util/centerInMap.js";
 
 const useStyles = makeStyles((theme) => ({
   "@keyframes fadeIn": {
@@ -88,14 +89,6 @@ const ControllersInMap = ({
 
   const { hideRoutes, hideRoutesTrips } = useDevices();
 
-  const centerDevice = () => {
-    map.easeTo({
-      center: [position.longitude, position.latitude],
-      zoom: 16,
-      offset: [0, -dimensions.popupMapOffset / 2],
-    });
-  };
-
   const { background } =
     devices[selectedDeviceId]?.attributes?.deviceColors || "#616161";
 
@@ -120,7 +113,7 @@ const ControllersInMap = ({
     {
       title: "Centralizar dispositivo",
       icon: faMapPin,
-      action: centerDevice,
+      action: ()=> centerInMap(position, 16),
     },
     {
       title: "Ocultar rotas",

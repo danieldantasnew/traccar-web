@@ -16,6 +16,7 @@ import { map } from "../../../map/core/MapView";
 import { formatNumericHours, formatTime } from "../../util/formatter";
 import { useTranslation } from "../LocalizationProvider";
 import { buildStops } from "../../util/buildStops";
+import centerInMap from "../../util/centerInMap";
 
 const textColor = "#444555";
 
@@ -102,11 +103,7 @@ const Stops = ({ backgroundColor, text, secondary }) => {
 
   const centerDevice = (position, index) => {
     setCardSelected(index);
-    map.easeTo({
-      center: [position.longitude, position.latitude],
-      zoom: 20,
-      offset: [0, -dimensions.popupMapOffset / 2],
-    });
+    centerInMap(position, 20);
   };
 
   useEffect(() => {

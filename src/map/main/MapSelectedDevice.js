@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import dimensions from '../../common/theme/dimensions';
 import { map } from '../core/MapView';
 import { useAttributePreference } from '../../common/util/preferences';
+import centerInMap from '../../common/util/centerInMap';
 
 const MapSelectedDevice = () => {
   const currentId = useSelector((state) => state.devices.selectedId);
@@ -27,12 +28,7 @@ const MapSelectedDevice = () => {
 
   useEffect(() => {
     if (position) {
-      map.easeTo({
-        center: [position.longitude, position.latitude],
-        zoom: Math.max(map.getZoom(), selectZoom),
-        offset: [0, -dimensions.popupMapOffset / 2],
-      });
-
+      centerInMap(position, Math.max(map.getZoom(), selectZoom));
       lastUserZoomTime.current = Date.now();
     }
   }, [currentId]);
@@ -42,12 +38,7 @@ const MapSelectedDevice = () => {
       const timeSinceLastZoom = Date.now() - lastUserZoomTime.current;
 
       if (timeSinceLastZoom >= 2000 && position && mapFollow) {
-        map.easeTo({
-          center: [position.longitude, position.latitude],
-          zoom: Math.max(map.getZoom(), selectZoom),
-          offset: [0, -dimensions.popupMapOffset / 2],
-        });
-
+        centerInMap(position, Math.max(map.getZoom(), selectZoom));
         lastUserZoomTime.current = Date.now();
       }
     }, 30000);
