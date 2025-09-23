@@ -102,7 +102,7 @@ const MapRoutePoints = ({
       const ghostPoint = feature.properties.isGhost;
 
       if (deviceTime || ghostPoint) {
-        centerInMap(event.lngLat)
+        centerInMap(event.lngLat, 20);
         const message = ghostPoint ? `Ponto fantasma: criado apenas para melhorar a visualização.` : `Dispositivo passou por aqui ${formatTime(deviceTime, "seconds").toLowerCase()}`
         while (Math.abs(event.lngLat.lng - coordinates[0]) > 180) {
           coordinates[0] += event.lngLat.lng > coordinates[0] ? 360 : -360;
