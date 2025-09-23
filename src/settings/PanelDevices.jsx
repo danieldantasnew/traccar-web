@@ -1,5 +1,5 @@
 import { Box, Tooltip, Typography } from "@mui/material";
-import PageLayout from "../common/components/PageLayout";
+import PageLayout from "../common/components/PageLayout.jsx";
 import SettingsMenu from "./components/SettingsMenu";
 import { makeStyles } from "@mui/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,9 +7,9 @@ import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import useFilter from "./utils/useFilter";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import DevicesInPanel from "./components/DevicesInPanel";
-import useFetchStop from "../hooks/useFetchStop";
-import MainToolbar from "./components/MainToolbar";
+import DevicesInPanel from "./components/DevicesInPanel.jsx";
+import useFetchStop from "../hooks/useFetchStop.jsx";
+import MainToolbar from "./components/MainToolbar.jsx";
 
 const useStyles = makeStyles((theme) => ({
   flexRow: {
