@@ -11,7 +11,6 @@ import {
   faMapLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import dimensions from "../../theme/dimensions";
 import { map } from "../../../map/core/MapView";
 import { formatNumericHours, formatTime } from "../../util/formatter";
 import { useTranslation } from "../LocalizationProvider";
@@ -91,7 +90,7 @@ const Stops = ({ backgroundColor, text, secondary }) => {
   const [cardSelected, setCardSelected] = useState(null);
   const selectedId = useSelector((state) => state.devices.selectedId);
   const groupIds = useSelector((state) => state.reports.groupIds);
-  const { positions, setPositions, stops, setStops } = useDevices();
+  const { positions, setPositions, stops, setStops, setStopCard } = useDevices();
   const [loading, setLoading] = useState(false);
   const from = dayjs().startOf("day");
   const to = dayjs().endOf("day");
@@ -102,6 +101,7 @@ const Stops = ({ backgroundColor, text, secondary }) => {
   });
 
   const centerDevice = (position, index) => {
+    setStopCard(position);
     setCardSelected(index);
     centerInMap(position, 20);
   };
