@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import dimensions from '../../common/theme/dimensions';
 import { map } from '../core/MapView';
 import { useAttributePreference } from '../../common/util/preferences';
 import centerInMap from '../../common/util/centerInMap';

@@ -109,7 +109,7 @@ const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
   return (
     <>
       <MapView>
-        <MapSelectedDevice/>
+        {/* <MapSelectedDevice/> */}
         <MapOverlay />
         <MapGeofence />
         <MapAccuracy positions={filteredPositions} />
