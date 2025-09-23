@@ -64,6 +64,7 @@
 
 .maplibregl-popup-tip {
   border-top-color: #686868e7 !important;
+  border-bottom-color: #686868e7 !important;
   animation: fadeIn .3s cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
 }
 
