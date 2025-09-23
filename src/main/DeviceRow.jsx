@@ -30,6 +30,7 @@ import {
   faGaugeHigh,
 } from "@fortawesome/free-solid-svg-icons";
 import { DynamicIconsComponent } from "../common/components/DynamicIcons";
+import centerInMap from "../common/util/centerInMap";
 
 dayjs.extend(relativeTime);
 
@@ -93,6 +94,7 @@ const DeviceRow = ({ device, setStatusCardOpen, setDevicesOpen }) => {
       </>
     );
   };
+  
 
   return (
     <ListItemButton
@@ -101,6 +103,7 @@ const DeviceRow = ({ device, setStatusCardOpen, setDevicesOpen }) => {
         setDevicesOpen(false);
         dispatch(devicesActions.selectId(device.id));
         setStatusCardOpen(true);
+        centerInMap(position, 20);
       }}
       disabled={!admin && device.disabled}
     >
