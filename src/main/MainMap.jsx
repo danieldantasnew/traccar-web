@@ -129,6 +129,7 @@ const MainMap = ({ filteredPositions, selectedPosition, setLoading }) => {
               positions={positions}
               colorStatic={staticRoutes}
               needFilterPosition={true}
+              enableGhostPoints={!(routeTrips && routeTrips.length > 0)}
             />
             <MapRoutePath positions={positions} staticColor={staticRoutes} />
             {stops?.length > 0 ? (
