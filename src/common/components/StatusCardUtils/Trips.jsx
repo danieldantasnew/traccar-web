@@ -20,6 +20,8 @@ import {
 import { useAttributePreference } from "../../util/preferences";
 import { useTranslation } from "../LocalizationProvider";
 import { useDevices } from "../../../Context/App";
+import centerInMap from "../../util/centerInMap";
+
 
 const textColor = "#444555";
 
@@ -192,6 +194,8 @@ const Trips = ({ backgroundColor, text, secondary, device }) => {
   }, [selectedItemOnTrip]);
 
   const activateRoutes = (item, index) => {
+    const coodinates = [item.startLon, item.startLat];
+    centerInMap(item, 20, coodinates);
     setCardSelected(index);
     setSelectedItemOnTrip(item);
     setTotalStops([]);
