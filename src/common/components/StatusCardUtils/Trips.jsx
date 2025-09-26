@@ -109,11 +109,11 @@ const Trips = ({ backgroundColor, text, secondary, device }) => {
   const [loading, setLoading] = useState(false);
   const {
     hideRoutes,
-    hideRoutesTrips,
     selectedItemOnTrip,
     setConfigsOnTrip,
     setSelectedItemOnTrip,
     setRouteTrips,
+    setTotalStops,
   } = useDevices();
   const styles = useStyles();
   const t = useTranslation();
@@ -195,6 +195,7 @@ const Trips = ({ backgroundColor, text, secondary, device }) => {
   const activateRoutes = (item, index) => {
     setCardSelected(index);
     setSelectedItemOnTrip(item);
+    setTotalStops([]);
   };
 
   useEffect(() => {
@@ -203,10 +204,6 @@ const Trips = ({ backgroundColor, text, secondary, device }) => {
       from: from.toISOString(),
       to: to.toISOString(),
     });
-
-    return () => {
-      hideRoutesTrips();
-    };
   }, []);
 
   if (loading) return <SpinLoading backgroundColor={backgroundColor} />;

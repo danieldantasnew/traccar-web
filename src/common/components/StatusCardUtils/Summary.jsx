@@ -12,7 +12,7 @@ import SpinLoading from "../SpinLoading";
 const Summary = ({ backgroundColor, position, device }) => {
   const selectedId = useSelector((state) => state.devices.selectedId);
   const groupIds = useSelector((state) => state.reports.groupIds);
-  const { positions, setPositions, setStops } = useDevices();
+  const { positions, setPositions, setStops, hideRoutesTrips } = useDevices();
   const [loading, setLoading] = useState(false);
   const from = dayjs().startOf("day");
   const to = dayjs().endOf("day");
@@ -23,6 +23,7 @@ const Summary = ({ backgroundColor, position, device }) => {
   });
 
   useEffect(() => {
+    hideRoutesTrips();
     if (positions && positions.length == 0 && selectedId) {
       handlePositionsAndStops({
         deviceId: selectedId,

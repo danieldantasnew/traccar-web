@@ -109,16 +109,12 @@ const StopCard = ({ stop, }) => {
   const theme = useTheme();
   const desktop = useMediaQuery(theme.breakpoints.down("md"));
   const [axisY, setAxisY] = useState(0);
-  const {setStopCard, setStatusCardOpen} = useDevices();
+  const {setStopCard} = useDevices();
 
   const onClose = () => {
     setZoom(false);
     setAxisY(0);
   };
-
-  useEffect(() => {
-    setStatusCardOpen(false);
-  }, []);
 
   if (!stop) return null;
   return (

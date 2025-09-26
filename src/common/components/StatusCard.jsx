@@ -242,7 +242,6 @@ const StatusCard = ({ deviceId, position }) => {
   };
 
   useEffect(() => {
-    setStopCard(null);
     if (device) setZoom(true);
   }, [device]);
 

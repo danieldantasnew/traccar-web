@@ -90,7 +90,7 @@ const Stops = ({ backgroundColor, text, secondary }) => {
   const [cardSelected, setCardSelected] = useState(null);
   const selectedId = useSelector((state) => state.devices.selectedId);
   const groupIds = useSelector((state) => state.reports.groupIds);
-  const { positions, setPositions, stops, setStops, setStopCard } = useDevices();
+  const { positions, setPositions, stops, setStops, setStopCard, hideRoutesTrips } = useDevices();
   const [loading, setLoading] = useState(false);
   const from = dayjs().startOf("day");
   const to = dayjs().endOf("day");
@@ -107,6 +107,7 @@ const Stops = ({ backgroundColor, text, secondary }) => {
   };
 
   useEffect(() => {
+    hideRoutesTrips();
     if (positions && positions.length == 0 && selectedId) {
       handlePositionsAndStops({
         deviceId: selectedId,
