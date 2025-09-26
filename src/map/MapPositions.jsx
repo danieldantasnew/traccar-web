@@ -307,7 +307,7 @@ const MapPositions = ({
           el.addEventListener("click", (event) => {
             event.stopPropagation();
             onClick(positionId, deviceId);
-            setStatusCardOpen(true);
+            if(setStatusCardOpen) setStatusCardOpen(true);
           });
 
           const marker = new mapboxgl.Marker(el)
