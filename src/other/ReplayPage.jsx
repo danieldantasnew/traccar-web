@@ -215,7 +215,7 @@ const ReplayPage = () => {
                 <IconButton onClick={() => setIndex((index) => index + 1)} disabled={playing || index >= positions.length - 1}>
                   <FastForwardIcon />
                 </IconButton>
-                {formatTime(positions[index].fixTime, 'seconds')}
+                {positions[index]?.fixTime && formatTime(positions[index].fixTime, 'seconds')}
               </div>
             </>
           ) : (
