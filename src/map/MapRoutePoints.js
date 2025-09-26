@@ -7,7 +7,7 @@ import { SpeedLegendControl } from "./legend/MapSpeedLegend";
 import { useTranslation } from "../common/components/LocalizationProvider";
 import { useAttributePreference } from "../common/util/preferences";
 import { useSelector } from "react-redux";
-import { formatTime } from "../common/util/formatter";
+import { formatSpeedNoTranslation, formatTime } from "../common/util/formatter";
 import centerInMap from "../common/util/centerInMap";
 
 
@@ -64,6 +64,7 @@ const createGhostPositions = (positions, spacing = 50) => {
           speed: ghostSpeed,
           course: ghostCourse,
           isGhost: true,
+          deviceTime: start.deviceTime,
         };
 
         ghostPositions.push(ghostPoint);
@@ -81,6 +82,7 @@ const MapRoutePoints = ({
   colorStatic,
   needFilterPosition,
   speedRoutes,
+  enableGhostPoints,
 }) => {
   const id = useId();
   const t = useTranslation();
@@ -102,8 +104,10 @@ const MapRoutePoints = ({
       const ghostPoint = feature.properties.isGhost;
 
       if (deviceTime || ghostPoint) {
-        centerInMap(event.lngLat, 20);
-        const message = ghostPoint ? `Ponto fantasma: criado apenas para melhorar a visualização.` : `Dispositivo passou por aqui ${formatTime(deviceTime, "seconds").toLowerCase()}`
+        centerInMap(event.lngLat, 17);
+        const message = ghostPoint ? `PF - Última velocidade conhecida (${formatSpeedNoTranslation(feature.properties.speed, "kmh")})` : 
+        `${formatTime(deviceTime, "seconds")} - (${formatSpeedNoTranslation(feature.properties.speed, "kmh")})`
+        
         while (Math.abs(event.lngLat.lng - coordinates[0]) > 180) {
           coordinates[0] += event.lngLat.lng > coordinates[0] ? 360 : -360;
         }
@@ -171,7 +175,7 @@ const MapRoutePoints = ({
   useEffect(() => {
     if (!map.getSource(id)) return;
 
-    const processedPositions = createGhostPositions(positions, 50);
+    const processedPositions = enableGhostPoints ? createGhostPositions(positions, 50) : positions;
     const finalPositions = needFilterPosition
       ? processedPositions.filter((_, index) => {
           let step;
@@ -220,6 +224,7 @@ const MapRoutePoints = ({
               ? background
               : getSpeedColor(position.speed, minSpeed, maxSpeed),
           isGhost: position.isGhost || false,
+          speed: position.speed,
         },
       })),
     };
