@@ -11,7 +11,6 @@ import {
   faMapLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { map } from "../../../map/core/MapView";
 import { formatNumericHours, formatTime } from "../../util/formatter";
 import { useTranslation } from "../LocalizationProvider";
 import { buildStops } from "../../util/buildStops";
