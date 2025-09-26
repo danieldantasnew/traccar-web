@@ -17,7 +17,6 @@ import {
   formatSpeed,
   formatTime,
 } from "../../util/formatter";
-import { speedToKnots } from "../../util/converter";
 import { useAttributePreference } from "../../util/preferences";
 import { useTranslation } from "../LocalizationProvider";
 import { useDevices } from "../../../Context/App";
@@ -283,11 +282,7 @@ const Trips = ({ backgroundColor, text, secondary, device }) => {
                     Vel. Média:{" "}
                     <strong>
                       {item.averageSpeed
-                        ? formatSpeed(
-                            speedToKnots(item.averageSpeed, "kmh"),
-                            speedUnit,
-                            t
-                          )
+                        ? formatSpeed(item.averageSpeed, speedUnit, t)
                         : "Não identificado"}
                     </strong>
                   </p>
@@ -295,11 +290,7 @@ const Trips = ({ backgroundColor, text, secondary, device }) => {
                     Vel. Máxima:{" "}
                     <strong>
                       {item.maxSpeed
-                        ? formatSpeed(
-                            speedToKnots(item.maxSpeed, "kmh"),
-                            speedUnit,
-                            t
-                          )
+                        ? formatSpeed(item.maxSpeed, speedUnit, t)
                         : "Não identificado"}
                     </strong>
                   </p>
