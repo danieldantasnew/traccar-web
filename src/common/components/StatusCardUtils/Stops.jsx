@@ -86,10 +86,18 @@ const Stops = ({ backgroundColor, text, secondary }) => {
   const styles = useStyles();
   const t = useTranslation();
   const devices = useSelector((state) => state.devices.items);
-  const [cardSelected, setCardSelected] = useState(null);
   const selectedId = useSelector((state) => state.devices.selectedId);
   const groupIds = useSelector((state) => state.reports.groupIds);
-  const { positions, setPositions, stops, setStops, setStopCard, hideRoutesTrips } = useDevices();
+  const {
+    positions,
+    setPositions,
+    stops,
+    setStops,
+    setStopCard,
+    hideRoutesTrips,
+    stopCardSelected,
+    setStopCardSelected,
+  } = useDevices();
   const [loading, setLoading] = useState(false);
   const from = dayjs().startOf("day");
   const to = dayjs().endOf("day");
@@ -99,9 +107,9 @@ const Stops = ({ backgroundColor, text, secondary }) => {
     setLoading,
   });
 
-  const centerDevice = (position, index) => {
+  const centerDevice = (position) => {
     setStopCard(position);
-    setCardSelected(index);
+    setStopCardSelected(position.stopped);
     centerInMap(position, 20);
   };
 
@@ -133,7 +141,7 @@ const Stops = ({ backgroundColor, text, secondary }) => {
           className={styles.box}
           style={{
             boxShadow: `${
-              cardSelected === index
+              stopCardSelected === item.stopped
                 ? `0px 0px 0px 2px ${backgroundColor}`
                 : "0px 0px 4px 1px rgba(0,0,0,.1)"
             }`,
@@ -143,7 +151,7 @@ const Stops = ({ backgroundColor, text, secondary }) => {
             className={styles.verticalLine}
             style={{
               backgroundColor: `${
-                cardSelected === index ? backgroundColor : textColor
+                stopCardSelected === item.stopped ? backgroundColor : textColor
               }`,
             }}
           ></div>
@@ -206,7 +214,7 @@ const Stops = ({ backgroundColor, text, secondary }) => {
             </div>
             {item.stopped === "INI" && (
               <div className={styles.flex}>
-                <p style={{ color: 'green' }}>
+                <p style={{ color: "green" }}>
                   <strong>Dispositivo estava na garagem*</strong>
                 </p>
               </div>
@@ -230,7 +238,7 @@ const Stops = ({ backgroundColor, text, secondary }) => {
               display: "flex",
               gap: ".4rem",
             }}
-            onClick={() => centerDevice(item, index)}
+            onClick={() => centerDevice(item)}
           >
             <FontAwesomeIcon icon={faMapLocationDot} size="lg" />
             Ver no mapa

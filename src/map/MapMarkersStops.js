@@ -2,9 +2,11 @@ import { useEffect } from "react";
 import { map } from "./core/MapView";
 import { findFonts } from "./core/mapUtil";
 import centerInMap from "../common/util/centerInMap";
+import { useDevices } from "../Context/App";
 
 const MapMarkersStops = ({ markers, setStopCard }) => {
   const sourceId = "stops-layer";
+  const { setStopCardSelected } = useDevices();
 
   const handleClick = (e) => {
     const feature = e.features && e.features[0];
@@ -19,8 +21,9 @@ const MapMarkersStops = ({ markers, setStopCard }) => {
         centerInMap(feature.geometry.coordinates, zoom, true);
       });
     } else {
+      setStopCardSelected(feature.properties.stopped)
       setStopCard(feature.properties);
-      centerInMap(feature.properties, 16)
+      centerInMap(feature.properties, 16);
     }
   };
 
@@ -62,15 +65,7 @@ const MapMarkersStops = ({ markers, setStopCard }) => {
         filter: ["has", "point_count"],
         paint: {
           "circle-color": "#000",
-          "circle-radius": [
-            "step",
-            ["get", "point_count"],
-            20,
-            10,
-            30,
-            30,
-            40,
-          ],
+          "circle-radius": ["step", ["get", "point_count"], 20, 10, 30, 30, 40],
           "circle-opacity": 1,
           "circle-stroke-width": 1.6,
           "circle-stroke-color": "#fff",
@@ -134,33 +129,8 @@ const MapMarkersStops = ({ markers, setStopCard }) => {
   useEffect(() => {
     if (!map || !map.getSource(sourceId)) return;
 
-    const features = markers.map(({
-      model,
-      sat,
-      ignition,
-      odometer,
-      accuracy,
-      attributes,
-      latitude,
-      longitude,
-      stopped,
-      background,
-      text,
-      secondary,
-      address,
-      averageSpeed,
-      deviceId,
-      deviceName,
-      duration,
-      endTime,
-      startTime,
-    }) => ({
-      type: "Feature",
-      geometry: {
-        type: "Point",
-        coordinates: [longitude, latitude],
-      },
-      properties: {
+    const features = markers.map(
+      ({
         model,
         sat,
         ignition,
@@ -180,8 +150,35 @@ const MapMarkersStops = ({ markers, setStopCard }) => {
         duration,
         endTime,
         startTime,
-      },
-    }));
+      }) => ({
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [longitude, latitude],
+        },
+        properties: {
+          model,
+          sat,
+          ignition,
+          odometer,
+          accuracy,
+          attributes,
+          latitude,
+          longitude,
+          stopped,
+          background,
+          text,
+          secondary,
+          address,
+          averageSpeed,
+          deviceId,
+          deviceName,
+          duration,
+          endTime,
+          startTime,
+        },
+      })
+    );
 
     map.getSource(sourceId).setData({
       type: "FeatureCollection",
