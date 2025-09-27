@@ -9,6 +9,7 @@ import { useAttributePreference } from "../common/util/preferences";
 import { useSelector } from "react-redux";
 import { formatSpeedNoTranslation, formatTime } from "../common/util/formatter";
 import centerInMap from "../common/util/centerInMap";
+import { useDevices } from "../Context/App";
 
 
 const distanceBetweenPoints = (lat1, lon1, lat2, lon2) => {
@@ -90,6 +91,7 @@ const MapRoutePoints = ({
   const devices = useSelector((state) => state.devices.items);
   const selectedId = useSelector((state) => state.devices.selectedId);
   const [zoomLevel, setZoomLevel] = useState(map.getZoom());
+  const { popupMarkerPoint } = useDevices();
 
   const onMouseEnter = (event) => (map.getCanvas().style.cursor = "pointer");
 
@@ -112,10 +114,12 @@ const MapRoutePoints = ({
           coordinates[0] += event.lngLat.lng > coordinates[0] ? 360 : -360;
         }
 
-        new maplibregl.Popup()
+        const popup = new maplibregl.Popup()
           .setLngLat(coordinates)
           .setHTML(message)
           .addTo(map);
+
+        popupMarkerPoint.current = popup;
       }
       if (onClick) {
         onClick(feature.properties.id, feature.properties.index);
@@ -162,6 +166,10 @@ const MapRoutePoints = ({
       map.off("mouseleave", id, onMouseLeave);
       map.off("click", id, onMarkerClick);
       map.off("zoom", updateZoomLevel);
+
+      if(popupMarkerPoint.current) {
+        popupMarkerPoint.current._onClose();
+      }
 
       if (map.getLayer(id)) {
         map.removeLayer(id);
@@ -257,7 +265,7 @@ const MapRoutePoints = ({
     );
     map.addControl(control, "bottom-left");
 
-    return () => map.removeControl(control);
+    return () => map.removeControl(control)
   }, [positions, speedUnit, t, speedRoutes]);
 
   return null;

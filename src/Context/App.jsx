@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useCatch } from "../reactHelper";
 import { useDispatch } from "react-redux";
 import { notificationsActions } from "../store/notifications";
@@ -27,6 +27,8 @@ export const DevicesProvider = ({ children }) => {
   const [positions, setPositions] = useState([]);
   const [mainMapPositions, setMainMapPositions] = useState([]);
 
+  const popupMarkerPoint = useRef(null);
+
   const [alert, setAlert] = useState(false);
 
   const dispatch = useDispatch();
@@ -41,7 +43,15 @@ export const DevicesProvider = ({ children }) => {
     }
   });
 
+  const closePopUpMarkerPoint = ()=> {
+    if(popupMarkerPoint.current) {
+      popupMarkerPoint.current._onClose();
+      popupMarkerPoint.current = null;
+    }
+  }
+
   const hideRoutes = (closeDevice = false) => {
+    closePopUpMarkerPoint();
     setStopCard(null);
     setPositions([]);
     setStops([]);
@@ -50,6 +60,7 @@ export const DevicesProvider = ({ children }) => {
   };
 
   const hideRoutesTrips = () => {
+    closePopUpMarkerPoint();
     setRouteTrips([]);
     setSelectedItemOnTrip(null);
   };
@@ -61,6 +72,7 @@ export const DevicesProvider = ({ children }) => {
   return (
     <DevicesContext.Provider
       value={{
+        popupMarkerPoint,
         devicesOpen,
         heightMenuNavMobile,
         statusCardOpen,
