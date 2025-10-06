@@ -119,9 +119,9 @@ const useStyles = makeStyles((theme) => ({
   },
 
   gray: {
-    fill: "gray",
-    border: "2px solid gray",
-    color: "gray",
+    fill: "#949494ff",
+    border: "2px solid #949494ff",
+    color: "#949494ff",
   },
 
   brownLight: {
@@ -252,7 +252,7 @@ const StatusRow = ({ position, keys, positionAttributes }) => {
   if (keys == "address" || keys == "fixTime") return null;
   const battery = keys == "batteryLevel" ? position.attributes[keys] : null;
   return (
-    <fieldset className={`${classes.fieldset} ${classes[getColor(keys)]}`}>
+    <fieldset className={`${classes.fieldset} ${(position?.[keys] || position?.attributes?.[keys]) ? classes[getColor(keys)] : classes.gray}`}>
       <legend className={`${classes.legend}`}>
         {positionAttributes[keys].name}
       </legend>
@@ -303,7 +303,7 @@ const AttributesOfDevice = ({ position }) => {
             />
           ))}
         {selectedStop && (
-          <fieldset className={`${classes.fieldset} ${classes.red}`}>
+          <fieldset className={`${classes.fieldset} ${selectedStop.total ? classes.red : classes.gray}`}>
             <legend className={`${classes.legend}`}>Total de Paradas</legend>
             <div className={`${classes.box}`}>
               <FontAwesomeIcon icon={faCircleStop}/>

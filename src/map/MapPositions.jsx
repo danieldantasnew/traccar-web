@@ -246,6 +246,7 @@ const MapPositions = ({
                     key={device?.name}
                     category={device?.category}
                     color={icon}
+                    className={"mainIcon"}
                   />
                   <div className="marker-text">
                     <p>{device?.model}</p>

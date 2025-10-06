@@ -67,13 +67,18 @@
 }
 
 .marker:hover {
-  border: 2px solid rgb(0, 0, 0);
+  border: 2.5px solid rgb(0, 0, 0);
   z-index: 3;
 }
 
+.marker:hover .mainIcon,
+.marker:hover .mainIcon path  {
+  background-color: rgba(145, 145, 145, 0.466);
+}
+
 .marker:hover::after {
-  border-bottom: 2px solid rgb(0, 0, 0);
-  border-right: 2px solid rgb(0, 0, 0);
+  border-bottom: 2.5px solid rgb(0, 0, 0);
+  border-right: 2.5px solid rgb(0, 0, 0);
 }
 
 .maplibregl-ctrl-bottom-left {
