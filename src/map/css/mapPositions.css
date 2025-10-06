@@ -1,110 +1,141 @@
 .marker {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: .5rem;
-    padding: 4px;
-    border-radius: 4px;
-    font-size: 10px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    width: 100px;
-    height: 28px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  padding: 4px;
+  border-radius: 4px;
+  font-size: 10px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.markerActive {
+  z-index: 4000000 !important;
 }
 
 .marker svg {
-    width: 20px !important;
-    max-height: 20px;
-    background-color: rgba(255, 255, 255, 0.356);
-    padding: 4px;
-    border-radius: .2rem;
-    display: flex;
-    align-items: center;
+  width: 20px !important;
+  max-height: 20px;
+  background-color: rgba(255, 255, 255, 0.356);
+  padding: 4px;
+  border-radius: 0.2rem;
+  display: flex;
+  align-items: center;
 }
 
 .marker path {
-    fill: rgb(255, 255, 255);
+  fill: rgb(255, 255, 255);
 }
 
 .marker p {
-    margin: 0;
-    line-height: 16px;
+  margin: 0;
+  line-height: 16px;
 }
 
 .marker-text p {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    max-width: 72px;
-    width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 72px;
+  width: 100%;
 }
 
 .marker p:first-child {
-    font-size: 12px;
-    font-weight: bold;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .marker::after {
-    content: '';
-    position: absolute;
-    bottom: -6px;
-    left: 50%;
-    transform: translateX(-50%) rotate(45deg);
-    width: 7px;
-    height: 7px;
-    background-color: inherit;
-    border-left: 2px solid transparent;
-    border-top: 2px solid transparent;
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 7px;
+  height: 7px;
+  background-color: inherit;
+  border-left: 2px solid transparent;
+  border-top: 2px solid transparent;
 }
 
 .marker:hover {
-    border: 2px solid rgb(0, 0, 0);
-    z-index: 2;
+  border: 2px solid rgb(0, 0, 0);
+  z-index: 3;
 }
 
 .marker:hover::after {
-    border-bottom: 2px solid rgb(0, 0, 0);
-    border-right: 2px solid rgb(0, 0, 0);
+  border-bottom: 2px solid rgb(0, 0, 0);
+  border-right: 2px solid rgb(0, 0, 0);
 }
 
 .maplibregl-ctrl-bottom-left {
-    left: 0 !important;
-    z-index: 1;
+  left: 0 !important;
+  z-index: 1;
 }
 
 .maplibregl-ctrl-top-right {
-    top: .3rem;
+  top: 0.3rem;
 }
 
 .cluster-marker {
-    background: #4CAF50;
-    color: white;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .ignitionIcon {
-    background-color: #4CAF50;
-    width: 12px;
-    height: 12px;
-    padding: 2px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: -6px;
-    left: -7px;
-  }
+  background: #4caf50;
+  color: white;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-  .ignitionIcon svg {
-    background-color: transparent;
+.ignitionIcon {
+  background-color: #4caf50;
+  width: 12px;
+  height: 12px;
+  padding: 2px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -6px;
+  left: -7px;
+}
+
+.ignitionIcon svg {
+  background-color: transparent;
+}
+
+.deviceIsActive {
+  display: block;
+  border-radius: 4px;
+  width: 100%;
+  height: 110%;
+  z-index: -1;
+  animation: pulse 1.5s ease-out infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: 85%;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.9;
   }
-  
+  100% {
+    transform: translate(-50%, -50%) scale(1.6);
+    opacity: 0;
+  }
+}

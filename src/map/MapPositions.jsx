@@ -52,49 +52,6 @@ const MapPositions = ({
     markersRef.current.clear();
   };
 
-  useEffect(() => {
-    if (!map) return;
-    if (!positions || positions.length === 0) {
-      clearAllMarkers();
-      clusterIndex.current = null;
-      return;
-    }
-
-    const features = positions.map((p) => ({
-      type: "Feature",
-      geometry: {
-        type: "Point",
-        coordinates: [p.longitude, p.latitude],
-      },
-      properties: {
-        positionId: p.id,
-        deviceId: p.deviceId,
-        speed: p.speed,
-        attrs: p.attributes || {},
-      },
-    }));
-
-    clusterIndex.current = new Supercluster({
-      radius: 60,
-      maxZoom: 18,
-    }).load(features);
-
-    renderClusters();
-  }, [positions, devicesPropsKey, map]);
-
-  useEffect(() => {
-    if (!map) return;
-    const onMoveEnd = () => renderClusters();
-    const onZoomEnd = () => renderClusters();
-    map.on("moveend", onMoveEnd);
-    map.on("zoomend", onZoomEnd);
-
-    return () => {
-      map.off("moveend", onMoveEnd);
-      map.off("zoomend", onZoomEnd);
-    };
-  }, [map, clusterIndex.current]);
-
   const renderClusters = () => {
     if (!map || !clusterIndex.current) return;
 
@@ -226,7 +183,6 @@ const MapPositions = ({
           }
         } else {
           const el = document.createElement("div");
-          el.className = "marker";
 
           const device = devices[deviceId];
           const ignition = props.attrs?.ignition || props.attrs?.motion;
@@ -234,10 +190,6 @@ const MapPositions = ({
           const deviceColors =
             device?.attributes?.deviceColors || getRandomColor();
           const { background, text, icon } = deviceColors;
-
-          el.style.backgroundColor = background || "transparent";
-          el.style.color = text || "#000";
-
 
           const root = createRoot(el);
           root.render(
@@ -274,32 +226,39 @@ const MapPositions = ({
               }}
             >
               <div
-                onClick={()=> centerInMap({lng, lat})}
-                style={{
-                  display: "flex",
-                  gap: ".4rem",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  padding: "1px",
-                  maxWidth: "100%",
-                }}
+                style={{ width: "100px", height: "28px" }}
+                onClick={() => centerInMap({ lng, lat })}
               >
-                <DynamicIconsComponent
-                  key={device?.name}
-                  category={device?.category}
-                  color={icon}
-                />
-                <div className="marker-text">
-                  <p>{device?.model}</p>
-                  <p>{device?.name}</p>
+                {selectedDeviceId == device.id ? (
+                  <span
+                    style={{ backgroundColor: background }}
+                    className="deviceIsActive"
+                  ></span>
+                ) : null}
+                <div
+                  style={{
+                    backgroundColor: background || "transparent",
+                    color: text || "#000",
+                  }}
+                  className={(selectedDeviceId == device.id ) ? "marker markerActive" :  "marker"}
+                >
+                  <DynamicIconsComponent
+                    key={device?.name}
+                    category={device?.category}
+                    color={icon}
+                  />
+                  <div className="marker-text">
+                    <p>{device?.model}</p>
+                    <p>{device?.name}</p>
+                  </div>
+                  {ignition ? (
+                    <span className="ignitionIcon">
+                      <FontAwesomeIcon icon={faPowerOff} size="lg" />
+                    </span>
+                  ) : (
+                    ""
+                  )}
                 </div>
-                {ignition ? (
-                  <span className="ignitionIcon">
-                    <FontAwesomeIcon icon={faPowerOff} size="lg" />
-                  </span>
-                ) : (
-                  ""
-                )}
               </div>
             </Tooltip>
           );
@@ -307,7 +266,7 @@ const MapPositions = ({
           el.addEventListener("click", (event) => {
             event.stopPropagation();
             onClick(positionId, deviceId);
-            if(setStatusCardOpen) setStatusCardOpen(true);
+            if (setStatusCardOpen) setStatusCardOpen(true);
           });
 
           const marker = new mapboxgl.Marker(el)
@@ -355,7 +314,56 @@ const MapPositions = ({
       setPositions([]);
       setStops([]);
     }
-  }, [selectedDeviceId, MainMap]);
+
+    if(!map) return;
+    if(selectedDeviceId || devicesPropsKey) {
+      clearAllMarkers();
+      renderClusters();
+    }
+  }, [selectedDeviceId, devicesPropsKey, MainMap]);
+
+    useEffect(() => {
+    if (!map) return;
+    if (!positions || positions.length === 0) {
+      clearAllMarkers();
+      clusterIndex.current = null;
+      return;
+    }
+
+    const features = positions.map((p) => ({
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [p.longitude, p.latitude],
+      },
+      properties: {
+        positionId: p.id,
+        deviceId: p.deviceId,
+        speed: p.speed,
+        attrs: p.attributes || {},
+      },
+    }));
+
+    clusterIndex.current = new Supercluster({
+      radius: 60,
+      maxZoom: 18,
+    }).load(features);
+
+    renderClusters();
+  }, [positions, map]);
+
+  useEffect(() => {
+    if (!map) return;
+    const onMoveEnd = () => renderClusters();
+    const onZoomEnd = () => renderClusters();
+    map.on("moveend", onMoveEnd);
+    map.on("zoomend", onZoomEnd);
+
+    return () => {
+      map.off("moveend", onMoveEnd);
+      map.off("zoomend", onZoomEnd);
+    };
+  }, [map, clusterIndex.current]);
 
   return null;
 };
