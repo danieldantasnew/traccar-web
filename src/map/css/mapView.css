@@ -89,3 +89,7 @@
     transform: scale(1);
   }
 }
+
+.maplibregl-user-location-accuracy-circle {
+  z-index: 0 !important;
+}
