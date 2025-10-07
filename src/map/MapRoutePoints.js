@@ -1,8 +1,8 @@
 import { useId, useCallback, useEffect, useState } from "react";
 import { map } from "./core/MapView";
 import maplibregl from "maplibre-gl";
-import getSpeedColor from "../common/util/colors";
-import { findFonts } from "./core/mapUtil";
+import getSpeedColor, { setSvgToPngForMap } from "../common/util/colors";
+import arrow from "../resources/images/icon/arrow.svg";
 import { SpeedLegendControl } from "./legend/MapSpeedLegend";
 import { useTranslation } from "../common/components/LocalizationProvider";
 import { useAttributePreference } from "../common/util/preferences";
@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 import { formatSpeedNoTranslation, formatTime } from "../common/util/formatter";
 import centerInMap from "../common/util/centerInMap";
 import { useDevices } from "../Context/App";
-
 
 const distanceBetweenPoints = (lat1, lon1, lat2, lon2) => {
   const R = 6371000; // Raio da Terra em metros.
@@ -107,9 +106,16 @@ const MapRoutePoints = ({
 
       if (deviceTime || ghostPoint) {
         centerInMap(event.lngLat, 17);
-        const message = ghostPoint ? `PF - Última velocidade conhecida (${formatSpeedNoTranslation(feature.properties.speed, "kmh")})` : 
-        `${formatTime(deviceTime, "seconds")} - (${formatSpeedNoTranslation(feature.properties.speed, "kmh")})`
-        
+        const message = ghostPoint
+          ? `PF - Última velocidade conhecida (${formatSpeedNoTranslation(
+              feature.properties.speed,
+              "kmh"
+            )})`
+          : `${formatTime(deviceTime, "seconds")} - (${formatSpeedNoTranslation(
+              feature.properties.speed,
+              "kmh"
+            )})`;
+
         while (Math.abs(event.lngLat.lng - coordinates[0]) > 180) {
           coordinates[0] += event.lngLat.lng > coordinates[0] ? 360 : -360;
         }
@@ -129,37 +135,68 @@ const MapRoutePoints = ({
   );
 
   useEffect(() => {
+    if (!map) return;
+
     const updateZoomLevel = () => setZoomLevel(map.getZoom());
 
-    map.addSource(id, {
-      type: "geojson",
-      data: { type: "FeatureCollection", features: [] },
-    });
-
-    map.addLayer({
-      id,
-      type: "symbol",
-      source: id,
-      paint: { "text-color": ["get", "color"] },
-      layout: {
-        "text-font": findFonts(map),
-        "text-field": "▲",
-        "text-size": 26,
-        "text-allow-overlap": true,
-        "text-rotate": ["get", "rotation"],
-      },
-    });
-
-    map.on("mouseenter", id, onMouseEnter);
-    map.on("mouseleave", id, onMouseLeave);
-    map.on("click", id, onMarkerClick);
-    map.on("zoom", updateZoomLevel);
-
-    map.once("styledata", () => {
-      if (map.getLayer(id)) {
-        map.moveLayer(id);
+    const setupLayer = async () => {
+      if (!map.isStyleLoaded()) {
+        map.once("styledata", setupLayer);
+        return;
       }
-    });
+
+      if (!map.hasImage("custom-marker")) {
+        try {
+          const blob = await setSvgToPngForMap(arrow);
+          const url = URL.createObjectURL(blob);
+
+          const image = await map.loadImage(url);
+          map.addImage("custom-marker", image.data, { sdf: true });
+
+          URL.revokeObjectURL(url);
+        } catch (err) {
+          console.error("Erro ao carregar imagem:", err);
+        }
+      }
+
+
+      if (!map.getSource(id)) {
+        map.addSource(id, {
+          type: "geojson",
+          data: { type: "FeatureCollection", features: [] },
+        });
+      }
+
+      if (!map.getLayer(id)) {
+        map.addLayer({
+          id,
+          type: "symbol",
+          source: id,
+          paint: {
+            "icon-color": ["get", "color"],
+          },
+          layout: {
+            "icon-image": "custom-marker",
+            "icon-size": 0.7,
+            "icon-allow-overlap": true,
+            "icon-rotate": ["get", "rotation"],
+          },
+        });
+      }
+
+      map.on("mouseenter", id, onMouseEnter);
+      map.on("mouseleave", id, onMouseLeave);
+      map.on("click", id, onMarkerClick);
+      map.on("zoom", updateZoomLevel);
+
+      map.once("styledata", () => {
+        if (map.getLayer(id)) {
+          map.moveLayer(id);
+        }
+      });
+    };
+
+    setupLayer();
 
     return () => {
       map.off("mouseenter", id, onMouseEnter);
@@ -167,23 +204,21 @@ const MapRoutePoints = ({
       map.off("click", id, onMarkerClick);
       map.off("zoom", updateZoomLevel);
 
-      if(popupMarkerPoint.current) {
+      if (popupMarkerPoint.current) {
         popupMarkerPoint.current._onClose();
       }
 
-      if (map.getLayer(id)) {
-        map.removeLayer(id);
-      }
-      if (map.getSource(id)) {
-        map.removeSource(id);
-      }
+      if (map.getLayer(id)) map.removeLayer(id);
+      if (map.getSource(id)) map.removeSource(id);
     };
-  }, [onMarkerClick, id]);
+  }, [map, id, onMarkerClick]);
 
   useEffect(() => {
     if (!map.getSource(id)) return;
 
-    const processedPositions = enableGhostPoints ? createGhostPositions(positions, 50) : positions;
+    const processedPositions = enableGhostPoints
+      ? createGhostPositions(positions, 50)
+      : positions;
     const finalPositions = needFilterPosition
       ? processedPositions.filter((_, index) => {
           let step;
@@ -265,7 +300,7 @@ const MapRoutePoints = ({
     );
     map.addControl(control, "bottom-left");
 
-    return () => map.removeControl(control)
+    return () => map.removeControl(control);
   }, [positions, speedUnit, t, speedRoutes]);
 
   return null;

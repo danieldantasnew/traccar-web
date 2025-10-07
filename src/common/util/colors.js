@@ -68,4 +68,42 @@ export const getRandomColor = () => {
   };
 };
 
+export const setSvgToPngForMap = async (svgUrl) => {
+  const response = await fetch(svgUrl);
+  const svgText = await response.text();
+
+  const parser = new DOMParser();
+  const svgDoc = parser.parseFromString(svgText, "image/svg+xml");
+  const svgElement = svgDoc.documentElement;
+
+  svgElement.querySelectorAll('[fill]').forEach(el => el.setAttribute('fill', 'white'));
+  svgElement.querySelectorAll('[stroke]').forEach(el => el.setAttribute('stroke', 'white'));
+
+  const serializer = new XMLSerializer();
+  const updatedSvg = serializer.serializeToString(svgElement);
+
+  const img = new Image();
+  const svgBlob = new Blob([updatedSvg], { type: "image/svg+xml;charset=utf-8" });
+  const url = URL.createObjectURL(svgBlob);
+
+  return new Promise((resolve, reject) => {
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width || 16;
+      canvas.height = img.height || 16;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+
+      canvas.toBlob((blob) => {
+        URL.revokeObjectURL(url);
+        resolve(blob);
+      }, "image/png");
+    };
+    img.onerror = (err) => reject(err);
+    img.src = url;
+  });
+};
+
+
+
 export default getSpeedColor;
