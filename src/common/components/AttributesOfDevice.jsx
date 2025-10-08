@@ -21,6 +21,7 @@ import {
   faSignsPost,
 } from "@fortawesome/free-solid-svg-icons";
 import { useDevices } from "../../Context/App";
+import getSpeedColor from "../util/colors";
 
 const useStyles = makeStyles((theme) => ({
   success: {
@@ -119,9 +120,9 @@ const useStyles = makeStyles((theme) => ({
   },
 
   gray: {
-    fill: "#949494ff",
-    border: "2px solid #949494ff",
-    color: "#949494ff",
+    fill: "#949494ff !important",
+    border: "2px solid #949494ff !important",
+    color: "#949494ff !important",
   },
 
   brownLight: {
@@ -249,10 +250,28 @@ const getIcon = (name, batteryLevel, classes) => {
 
 const StatusRow = ({ position, keys, positionAttributes }) => {
   const classes = useStyles();
+  let speedColor = null;
   if (keys == "address" || keys == "fixTime") return null;
   const battery = keys == "batteryLevel" ? position.attributes[keys] : null;
+
+  if (keys == "speed") {
+    speedColor = getSpeedColor(null, null, null, position[keys]);
+    speedColor = {
+      fill: `${speedColor}`,
+      border: `2px solid ${speedColor}`,
+      color: `${speedColor}`,
+    };
+  }
+
   return (
-    <fieldset className={`${classes.fieldset} ${(position?.[keys] || position?.attributes?.[keys]) ? classes[getColor(keys)] : classes.gray}`}>
+    <fieldset
+      className={`${classes.fieldset} ${
+        position?.[keys] || position?.attributes?.[keys]
+          ? classes[getColor(keys, position)]
+          : classes.gray
+      }`}
+      style={speedColor ? speedColor : {}}
+    >
       <legend className={`${classes.legend}`}>
         {positionAttributes[keys].name}
       </legend>
@@ -303,10 +322,14 @@ const AttributesOfDevice = ({ position }) => {
             />
           ))}
         {selectedStop && (
-          <fieldset className={`${classes.fieldset} ${selectedStop.total ? classes.red : classes.gray}`}>
+          <fieldset
+            className={`${classes.fieldset} ${
+              selectedStop.total ? classes.red : classes.gray
+            }`}
+          >
             <legend className={`${classes.legend}`}>Total de Paradas</legend>
             <div className={`${classes.box}`}>
-              <FontAwesomeIcon icon={faCircleStop}/>
+              <FontAwesomeIcon icon={faCircleStop} />
               <Typography className={`${classes.value}`}>
                 {selectedStop.total}
               </Typography>
